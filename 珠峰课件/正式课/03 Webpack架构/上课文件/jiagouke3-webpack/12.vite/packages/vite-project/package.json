@@ -1,0 +1,39 @@
+{
+  "name": "@vite2/vite-project",
+  "version": "0.1.3",
+  "description": "this is a vite project",
+  "keywords": [
+    "vite",
+    "project"
+  ],
+  "author": "Your Name <you@example.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:zhufengpeixun/zhufengwebpack202108.git"
+  },
+  "scripts": {
+    "dev": "vite"
+  },
+  "gitHead": "c975e7534c670c7cda45efc425b6bc8da13270dd",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^1.6.2",
+    "@vue/compiler-sfc": "^3.2.11",
+    "dedent": "^0.7.0",
+    "vite": "^2.5.8",
+    "vue": "3"
+  }
+}

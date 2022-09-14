@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <div id="app">  block  -> [span]
+        <div>hello zf</div>
+        <div><span>{{name}}今年{{age}}岁了</span></div>
+    </div> -->
+    <!-- 不稳定序列 不稳定我就增加一个block-->
+    <!-- <div>
+        <div id="app" v-if="flag">
+            <div>hello zf</div>
+            <div><span>{{name}}今年{{age}}岁了</span></div>
+        </div>
+        <div id="app" v-else>
+            <div>hello zf</div>
+            <span>{{name}}今年{{age}}岁了</span>
+        </div>
+    </div> -->
+
+
+    <div>
+        <div v-for="a in list"></div>
+        <div>{{xxx}}</div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.0-beta.5/vue.global.js"></script>
+    <script>
+        let { renderList : _renderList, Fragment : _Fragment, openBlock : _openBlock, createElementBlock : _createElementBlock, toDisplayString : _toDisplayString, createElementVNode : _createElementVNode }  = Vue
+
+         function render(_ctx, _cache, $props, $setup, $data, $options) {
+            return (_openBlock(), _createElementBlock("div", null, [
+                (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_ctx.list, (a) => {
+                    return (_openBlock(), _createElementBlock("div"))
+                }), 256 /* UNKEYED_FRAGMENT */ )),
+                _createElementVNode("div", null, _toDisplayString(_ctx.xxx), 1 /* TEXT */ )
+            ]))
+        }
+        console.log(render({list:[1,2,3]}))
+    </script>
+    <!-- <script>
+        import { createElementVNode as _createElementVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode } from "vue"
+
+        export function render(_ctx, _cache, $props, $setup, $data, $options) {
+            return (_openBlock(), _createElementBlock("div", null, [
+                (_ctx.flag) ?
+                (_openBlock(), _createElementBlock("div", {
+                    key: 0,
+                    id: "app"
+                }, [
+                    _createElementVNode("div", null, "hello zf"),
+                    _createElementVNode("div", null, [
+                        _createElementVNode("span", null, _toDisplayString(_ctx.name) + "今年" + _toDisplayString(_ctx.age) + "岁了", 1 /* TEXT */ )
+                    ])
+                ])) :
+                (_openBlock(), _createElementBlock("div", {
+                    key: 1,
+                    id: "app"
+                }, [
+                    _createElementVNode("div", null, "hello zf"),
+                    _createElementVNode("span", null, _toDisplayString(_ctx.name) + "今年" + _toDisplayString(_ctx.age) + "岁了", 1 /* TEXT */ )
+                ]))
+            ]))
+        }
+    </script> -->
+
+
+    <!-- 
+    <script>
+        let { createElementVNode : _createElementVNode, toDisplayString : _toDisplayString, openBlock : _openBlock, createElementBlock : _createElementBlock } = Vue
+
+         function render(_ctx, _cache, $props, $setup, $data, $options) {
+            return (_openBlock(), _createElementBlock("div", { id: "app" }, [
+                _createElementVNode("div", null, "hello zf"),
+                _createElementVNode("div", null, [
+                    _createElementVNode("span", null, _toDisplayString(_ctx.name) + "今年" + _toDisplayString(_ctx.age) + "岁了", 1 /* TEXT */ )
+                ])
+            ]))
+        }
+        console.log(render({name:'zf',age:12})) // instance.proxy  
+    </script> -->
+
+
+    <!-- 
+        Vue3和Vue2的区别
+        项目架构上做对比 Vue3 monorepo的方式可以让我们一个项目下管理多个项目，每个包可以单独发布和使用 （依赖关系）
+        Vue3 （reactivity -> runtime-core -> runtime-dom ） runtime-only
+            （ compiler-dom  -> compiler-core ) 模板编译相比vue2做了哪些优化
+
+        Vue3 基于TS， OptionsApi 缺陷就是不能tree-shaking  compositionApi 对tree-shaking 支持比较友好
+
+        内部优化
+        Vue3 proxy (好处就是可以支持数组和对象，不用以上来就递归，不用改写属性的get和set)
+        Vue3中 采用了compositionApi 实现了方便代码的复用 （解决了mixin的问题- 命名冲突 数据来源不明确）
+        Vue3 diff算法 内部用的是 最长递增子序列 + 暴力的递归比对 （全量比对浪费性能)
+        Vue3中的优化 模板编译 BlockTree  （block 块）   模板编译 （template-》 render）函数‘
+        
+        将html语法进行解析 解析成一颗ast语法树  -> 对这颗树进行优化（标记哪些节点是变化） patchFlag(可以非常明确的知道哪些是变化哪些没变，这样做diff之前我可以筛选出只比较变化了的属性 靶向更新) -》 生成render函数
+       
+        block节点拥有了一个功能可以收集动态的节点 dynmanicChildren 把动态的属性收集到这里，下次更新的时候 按照数组的方式来进行更新  (把树的diff变成了数组的diff)
+
+        block 他有很多地方解决不了  block无法解决节点不稳定的情况，会导致更新失败。 我们会给导致不稳定的标签增加block， 这样就组成了一个blockTree  (靶向更新 你得有一体目标 1,2,3 -> 1,2,3,4 只能采用全量diff 因为没有对应的目标去比对)
+        Vue3 里面在编译的时候 采用blockTree + patchFlag的方式
+        Vue3 静态提升，属性提升，字符串化 , 事件缓存
+
+     -->
+</body>
+
+</html>

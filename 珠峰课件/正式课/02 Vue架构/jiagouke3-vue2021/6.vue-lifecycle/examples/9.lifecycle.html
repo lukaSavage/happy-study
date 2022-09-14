@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">{{count}}</div>
+    <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
+
+    <script>
+        let { createApp, onMounted, onBeforeMount, onBeforeUpdate, onUpdated, reactive, getCurrentInstance, h } = VueRuntimeDOM;
+
+        // 在调用setup之前先将实例暴露到全局上, 之后调用setup，内部会调用生命周期，调用的时候getCurrentInstance 拿到的就是刚才放到全局上的 
+
+        let App = {
+            setup() { // beforeCreate  compositionApi的入口
+                console.log(this);
+                const state = reactive({ count: 0 })
+                onMounted(() => {
+                    let instance = getCurrentInstance()
+                    console.log('挂载完成', instance)
+                });
+
+                onBeforeMount(() => {
+                    console.log('挂载前')
+                });
+                onBeforeUpdate(() => {
+                    console.log('更新前')
+                })
+                onUpdated(() => {
+                    console.log('更新后')
+                });
+                setTimeout(() => {
+                    state.count++;
+                }, 1000);
+                return ()=>{
+                    return h('h1',state.count)
+                }
+            }
+        }
+        createApp(App).mount('#app')
+    </script>
+</body>
+
+</html>

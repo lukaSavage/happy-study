@@ -1,0 +1,5 @@
+
+
+function index(){
+    return 'hello';
+}

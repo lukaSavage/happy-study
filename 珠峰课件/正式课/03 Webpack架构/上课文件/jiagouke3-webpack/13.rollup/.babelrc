@@ -1,0 +1,10 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "modules":false //告诉babel不要把es module import和export写法转换掉
+            }
+        ]
+    ]
+}

@@ -1,0 +1,184 @@
+{
+    "hash": "978be137ce960a80206a",
+    "version": "5.51.1",
+    "time": 315,
+    "builtAt": 1630209529129,
+    "publicPath": "auto",
+    "outputPath": "C:\\aproject\\zhufengwebpack202108\\4.flow\\dist",
+    "assetsByChunkName": {
+      "main": [
+        "main.js"
+      ]
+    },
+    "assets": [
+      {
+        "type": "asset",
+        "name": "main.js",
+        "size": 167,
+        "emitted": false,
+        "comparedForEmit": true,
+        "cached": false,
+        "info": {
+          "javascriptModule": false,
+          "size": 167
+        },
+        "chunkNames": [
+          "main"
+        ],
+        "chunkIdHints": [],
+        "auxiliaryChunkNames": [],
+        "auxiliaryChunkIdHints": [],
+        "related": {},
+        "chunks": [
+          "main"
+        ],
+        "auxiliaryChunks": [],
+        "isOverSizeLimit": false
+      }
+    ],
+    "chunks": [
+      {
+        "rendered": true,
+        "initial": true,
+        "entry": true,
+        "recorded": false,
+        "size": 1,
+        "sizes": {
+          "javascript": 1
+        },
+        "names": [
+          "main"
+        ],
+        "idHints": [],
+        "runtime": [
+          "main"
+        ],
+        "files": [
+          "main.js"
+        ],
+        "auxiliaryFiles": [],
+        "hash": "96059f304bd45125c9e3",
+        "childrenByOrder": {},
+        "id": "main",
+        "siblings": [],
+        "parents": [],
+        "children": [],
+        "origins": [
+          {
+            "module": "",
+            "moduleIdentifier": "",
+            "moduleName": "",
+            "loc": "main",
+            "request": "./src/index.js"
+          }
+        ]
+      }
+    ],
+    "modules": [
+      {
+        "type": "module",
+        "moduleType": "javascript/auto",
+        "layer": null,
+        "size": 1,
+        "sizes": {
+          "javascript": 1
+        },
+        "built": true,
+        "codeGenerated": true,
+        "buildTimeExecuted": false,
+        "cached": false,
+        "identifier": "C:\\aproject\\zhufengwebpack202108\\4.flow\\src\\index.js",
+        "name": "./src/index.js",
+        "nameForCondition": "C:\\aproject\\zhufengwebpack202108\\4.flow\\src\\index.js",
+        "index": 0,
+        "preOrderIndex": 0,
+        "index2": 0,
+        "postOrderIndex": 0,
+        "cacheable": true,
+        "optional": false,
+        "orphan": false,
+        "issuer": null,
+        "issuerName": null,
+        "issuerPath": null,
+        "failed": false,
+        "errors": 0,
+        "warnings": 0,
+        "id": "./src/index.js",
+        "issuerId": null,
+        "chunks": [
+          "main"
+        ],
+        "assets": [],
+        "reasons": [
+          {
+            "moduleIdentifier": null,
+            "module": null,
+            "moduleName": null,
+            "resolvedModuleIdentifier": null,
+            "resolvedModule": null,
+            "type": "entry",
+            "active": true,
+            "explanation": "",
+            "userRequest": "./src/index.js",
+            "loc": "main",
+            "moduleId": null,
+            "resolvedModuleId": null
+          }
+        ],
+        "usedExports": null,
+        "providedExports": null,
+        "optimizationBailout": [],
+        "depth": 0
+      }
+    ],
+    "entrypoints": {
+      "main": {
+        "name": "main",
+        "chunks": [
+          "main"
+        ],
+        "assets": [
+          {
+            "name": "main.js",
+            "size": 167
+          }
+        ],
+        "filteredAssets": 0,
+        "assetsSize": 167,
+        "auxiliaryAssets": [],
+        "filteredAuxiliaryAssets": 0,
+        "auxiliaryAssetsSize": 0,
+        "children": {},
+        "childAssets": {},
+        "isOverSizeLimit": false
+      }
+    },
+    "namedChunkGroups": {
+      "main": {
+        "name": "main",
+        "chunks": [
+          "main"
+        ],
+        "assets": [
+          {
+            "name": "main.js",
+            "size": 167
+          }
+        ],
+        "filteredAssets": 0,
+        "assetsSize": 167,
+        "auxiliaryAssets": [],
+        "filteredAuxiliaryAssets": 0,
+        "auxiliaryAssetsSize": 0,
+        "children": {},
+        "childAssets": {},
+        "isOverSizeLimit": false
+      }
+    },
+    "errors": [],
+    "errorsCount": 0,
+    "warnings": [],
+    "warningsCount": 0,
+    "children": []
+  }
+  

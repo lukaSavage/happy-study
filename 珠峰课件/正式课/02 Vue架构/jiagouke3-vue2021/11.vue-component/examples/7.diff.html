@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <div id="app">
+        <li v-for="(item,index) of arr" :key="item" >
+            <input type="text">
+            {{item}}
+        </li>
+        <button @click="addFruit">添加</button>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                arr: ['香蕉','苹果','橘子']
+            },
+            methods:{
+                addFruit(){
+                    this.arr.unshift('柠檬'); // 这个操作会在尾部追了一项
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

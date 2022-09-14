@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- [_c('my', [_c('div', [_v(_s(name))])])], 1)  {default:[_c('div', [_v(_s(name))])])]} -->  
+        <!-- 创建一个组件 组件的孩子是 _c('div', [_v(_s(name))])] 父组件中渲染 已经变成了虚拟节点  -->
+        <!-- <my>
+            <div slot-scope="{a}">{{a}}</div>
+            <!-- function(a){return _ _c('div', {}, [_v(_s(a))])} -->
+        </my> -->
+
+        <div @click.passive="xxx"></div>
+    </div>
+    <script src="../dist/vue.js"></script>
+    <script>
+        Vue.component('my',{
+            template:`<div> <slot a=1></slot> </div> ` // _t("title") _t("content")
+            // 在子组件中渲染的时候 会将数据传递给刚才解析后的函数进行渲染
+        })
+        new Vue({
+            el: '#app',
+            data:{
+                name:'zf'
+            },
+            methods:{
+                changeName(newVal){
+                    this.name = newVal
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

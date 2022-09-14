@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 组件化的优点：复用 好维护  （组件级更新） 组件的三大特性 属性 样式 插槽 webcomponent -->
+    <div id="app">
+      
+    </div>
+    <!-- 渲染页面 -》  -->
+    <script src="../dist/vue.js"></script>
+  
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                name:'zf',
+                age:12
+            },
+            computed:{
+                firstname(){
+                    console.log('ok')
+                    return this.name + this.age
+                }
+            }
+        })
+        setTimeout(() => {
+            vm.name = 'jw';
+            vm.firstname
+        }, 3000);
+       
+
+
+
+    </script>
+</body>
+
+</html>

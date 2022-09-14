@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <functional-component a="1" b=2 c=3 @a="a"></functional-component>
+    </div>
+    <script src="../dist/vue.js"></script>
+    <script>
+        // diff 算法在哪里？patch  patchVnode
+        Vue.component('functionalComponent', { // 不用去调用组件init
+            props:{
+                a:{type:String},
+                b:{type:String} // attr {c=3}  props {a:1，b:2}
+            },
+           // functional: true, // 函数式组件
+          
+            render(h) { // 路由中的router-link 函数式组件
+                return h('div', 'hello')
+            }
+        })
+        new Vue({
+            methods:{
+                a(){
+
+                }
+            },
+            el: '#app'
+        })
+
+
+        // debugger;
+        // Vue.component('my',function(resolve){ // Vue.extend({}) => Sub.cid
+        //     setTimeout(() => {
+        //         resolve({ // 会获取reoslve中的结果调用Vue.exnted方法产生组件的构造函数
+        //             render(h){
+        //                 return h('div','my')
+        //             }
+        //         })
+        //     }, 1000);
+        // })
+        // new Vue({
+        //     el:'#app'
+        // })
+
+        //  Vue.component('my', { // _vnode
+        //     props:{
+        //         a:{type:Number}
+        //     },
+        //     render(h) {
+        //         return h('div',this.a) // subtree
+        //     }
+        // })
+        // let vm = new Vue({
+        //     el: '#app',
+        //     data(){
+        //         return {a:1}
+        //     }
+        // })
+
+        // setTimeout(() => {
+        //     vm.a = 100;
+        // }, 1000);
+
+        // // my组件本身会产生一个虚拟节点
+        // // h(div)也是一个虚拟节点
+        // let vm = new Vue({
+        //     el: '#app',
+        //     render(h) {
+        //         return h('my') 
+        //     }
+        // })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+{
+  "name": "11.vite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "eslint --ext .ts,vue src/** --quiet",
+    "lint:fix": "eslint --ext .ts,vue src/** --quiet --fix",
+    "test": "jest",
+    "prepare": "husky install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.3.4",
+    "less": "^4.1.1",
+    "sass": "^1.41.0",
+    "vue": "^3.2.11"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "@vitejs/plugin-vue": "^1.6.2",
+    "@vue/compiler-sfc": "^3.2.11",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/test-utils": "^2.0.0-rc.14",
+    "babel-jest": "^27.0.0-next.11",
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-vue": "^7.17.0",
+    "husky": "^7.0.2",
+    "jest": "^27.0.0-next.11",
+    "lint-staged": "^11.1.2",
+    "mockjs": "^1.1.0",
+    "prettier": "^2.4.0",
+    "ts-jest": "^27.0.0-next.12",
+    "vite": "^2.5.7",
+    "vite-plugin-mock": "^2.9.6",
+    "vue-jest": "^5.0.0-alpha.10"
+  },
+  "lint-staged": {
+    "*.js": "eslint"
+  }
+}
