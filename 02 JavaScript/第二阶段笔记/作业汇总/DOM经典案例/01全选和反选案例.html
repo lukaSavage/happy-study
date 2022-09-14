@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+	  	* {
+	  		padding: 0;
+	  		margin: 0;
+	  		list-style: none;
+	  	}
+	  	#box {
+	  		width: 500px;
+	  		box-shadow: 0 0 10px #000;
+	  		margin: 100px auto;
+	  		padding: 10px;
+	  	}
+	  	h2 {
+	  		text-align: center;
+	  		margin-bottom: 10px;
+	  	}
+	  	#footer {
+	  		text-align: center;
+	  		margin-top: 10px;
+	  	}        
+    </style>
+</head>
+<body>
+    <div id="box">
+        <section id="head">
+            <h2>网络歌曲表单</h2>
+            <hr>
+        </secion>
+        <secton id="banner">
+            <input type="checkbox">
+            <span>这是第1首歌</span><br />
+            <input type="checkbox">
+            <span>这是第2首歌</span><br />
+            <input type="checkbox">
+            <span>这是第3首歌</span><br />
+            <input type="checkbox">
+            <span>这是第4首歌</span><br />
+            <input type="checkbox">
+            <span>这是第5首歌</span><br />
+        </section>
+        <hr>
+        <section id="footer">
+            <input type="checkbox" id="btn1">
+            <span>全选和取消选中</span>
+            <input type="button" value="反选" id="btn2">
+        </section>
+    </div>
+<!-- <script src="./jquery-1.12.4.js"></script> -->
+<script>
+
+window.onload=function(){
+//  method1:原生JS方法(for循环版)
+method1();
+
+
+
+function method1(){
+    var inputs=document.querySelectorAll('#banner input');
+    var btn1=document.getElementById('btn1');
+    var btn2=document.getElementById('btn2');
+    btn1.onclick=function(){
+        for(var i=0;i<inputs.length;i++){
+            inputs[i].checked=this.checked;
+        }
+    }
+    for(var i=0;i<inputs.length;i++){       
+        inputs[i].onclick=function(){   
+            //调用判断函数
+            judge();
+        }
+    }
+    /* --------------------------------- */
+    btn2.onclick=function(){
+        for(var i=0;i<inputs.length;i++){
+            inputs[i].checked=!inputs[i].checked;
+            //调用判断函数
+            judge();
+        }       
+    }
+    //判断函数
+    function judge(){
+        var flag=true;
+        for(var j=0;j<inputs.length;j++){
+            if(!inputs[j].checked){
+                flag=false;
+                break;
+            }
+        }
+        btn1.checked=flag;
+    }
+
+}
+
+
+}
+
+
+
+//jQuery(注意：隐式迭代用于相同操作的遍历，而each方法用于不同操作的时候的遍历)
+    // $(function(){
+    //     $("#a").click(function(){
+    //         $("#banner input").prop("checked",$(this).prop("checked"));
+    //     })
+    //     $("#banner input").click(function(){
+    //         if($("#banner input:checked").length==$("#banner input").length){
+    //             $("#a").prop("checked",true);
+    //         }else{
+    //             $("#a").prop("checked",false);           
+    //         }
+    //     })
+    //     $("#b").click(function(){
+    //         $("#banner input").each(function(){
+	// 		    if($(this).prop("checked")){         
+	// 		    	$(this).prop("checked", false);
+	// 		    }else{
+	// 		    	$(this).prop("checked", true);
+	// 		    }
+    //         })
+    //     })
+    // })
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <select id="select">
+        <option value="0">广东</option>
+        <option value="1">广西</option>
+        <option value="2">福建</option>
+        <option value="3">湖南</option>
+        <option value="4">江西</option>
+    </select>
+    <select id="two"></select>
+<script>
+    var cityList = [
+            ['广州', '深圳', '东莞', '惠州', '佛山'],
+            ['南宁', '桂林', '柳州', '百色', '北海'],
+            ['福州', '厦门', '漳州', '泉州', '三明'],
+            ['长沙', '常德', '岳阳', '湘潭', '衡阳'],
+            ['南昌', '赣州', '景德镇', '九江', '上饶']
+        ];
+    select.onchange=function(){
+        // 清空two这边的option
+        two.length=0;
+        var citys=cityList[select.selectedIndex];
+        citys.forEach(function(item,index){
+            two.appendChild(new Option(item));
+        })
+    }
+    //让其一打开页面便有信息
+    select.onchange();
+    
+    
+</script>
+</body>
+</html>

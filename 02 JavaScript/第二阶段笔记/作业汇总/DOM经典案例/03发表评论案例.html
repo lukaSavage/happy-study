@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #box{
+            width: 800px;
+            border: 1px solid #ccc;
+            margin: 100px auto;
+            padding: 20px;
+        }
+
+        #my_textarea{
+            width: 80%;
+            height: 120px;
+            resize: none;
+            outline-color: red;
+        }
+
+        .box-top{
+            margin-bottom: 20px;
+        }
+
+        #ul{
+            margin: 0 80px;
+        }
+
+        #ul li{
+            border-bottom: 1px dashed #ccc;
+            color: red;
+            line-height: 44px;
+        }
+
+        #ul li a{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+   <div id="box">
+       <div class="box-top">
+           <label for="my_textarea">发表评论：</label>
+           <textarea id="my_textarea" cols="60" rows="10"></textarea>
+           <button id="btn">发表</button>
+       </div>
+       <ul id="ul">
+
+       </ul>
+   </div>
+<!-- <script src="jquery-1.12.4.js"></script> -->
+<script>	
+//原生js方法
+window.onload=function(){
+	var textarea=document.getElementById("my_textarea");
+	var btn=document.getElementById("btn");
+    var ul=document.getElementById("ul");
+    
+    btn.onclick=function(){
+        if(textarea.value==""){
+            alert("内容不能为空");
+            return;
+        }else{
+            var li=document.createElement('li');
+            li.innerHTML="<span>"+textarea.value+"</span><a href='javaScript:;'>删除</a>";
+            ul.insertBefore(li,ul.children[0]);
+            textarea.value='';
+            var a=li.children[1];
+            a.onclick=function(){
+                this.parentElement.remove();
+            }
+        }
+    }
+
+
+
+
+}
+
+</script>
+</body>
+</html>

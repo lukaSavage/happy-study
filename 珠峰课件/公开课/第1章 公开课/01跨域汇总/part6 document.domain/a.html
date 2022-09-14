@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <iframe src="http://b.xxx.cn:3000/b.html" id="frame" frameborder="0" onload="load()"></iframe>
+
+    <script>
+        /* 
+            使用document.domain的前提：必须要使用一级域名和二级域名，并且二级域名要相同
+
+        
+        
+        */
+        document.domain = 'xxx.cn';
+        function load() {
+            console.log(frame.contentWindow.a);
+        }
+
+    </script>
+</body>
+
+</html>

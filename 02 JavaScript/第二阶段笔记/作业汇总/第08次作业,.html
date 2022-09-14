@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> -->
+    <title>我爱学习，学习使我快乐，啦啦啦啦啦啦啦啦！</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 500px;
+            
+            
+        }
+        th,td{
+            
+            padding: 10px;
+        }
+    </style> 
+</head>
+<body>
+    <div class="box">
+        姓名：<input type="text" id="name"><br>
+        年龄：<input type="text" id="age"><br>
+        职业：<input type="text" id="profession"><br>
+        <button onclick="add()">添加</button>
+    </div>
+    <table border="1">
+        <caption>这是一个测试表格</caption>
+            <tr>
+                <th>序列号</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>职业</th>
+                <th>delete</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>曹操</td>
+                <td>18</td>
+                <td>战士</td>
+                <td><button onclick="deleted(this)">删除</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>安其拉</td>
+                <td>15</td>
+                <td>法师</td>
+                <td><button onclick="deleted(this)">删除</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>刘备</td>
+                <td>22</td>
+                <td>皇帝</td>
+                <td><button onclick="deleted(this)">删除</button></td>
+            </tr>       
+    </table>
+<script>
+    var table=document.querySelector('table');
+    function add(){       
+        var box=document.querySelector('.box');
+        var name=box.querySelector('#name');
+        var tr=table.insertRow();
+        tr.insertCell(0).innerHTML=tr.rowIndex;
+        tr.insertCell(1).innerHTML=box.querySelector('#name').value;
+        tr.insertCell(2).innerHTML=box.querySelector('#age').value;
+        tr.insertCell(3).innerHTML=box.querySelector('#profession').value;
+        tr.insertCell(4).innerHTML='<button onclick="deleted(this)">删除</button>';  
+    }
+    function deleted(btn){
+        table.deleteRow(btn.parentNode.parentNode.rowIndex);
+    }
+
+</script>  
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        #carousel{
+            width: 440px;
+            height: 220px;
+            background-color: pink;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #carousel ul{
+            position: absolute;
+            left: 0;
+            width: 600%;
+            transition: all 0.3s ease;
+        }
+        #carousel ul li{
+            float: left;
+        }
+        #carousel ul img{
+            width: 440px;
+            vertical-align: middle;
+        }
+        .control{
+            position: absolute;
+            width: 100%;
+            height: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+        .control span{
+            position: absolute;
+            width: 24px;
+            height: 36px;
+            cursor: pointer;
+        }
+        .control .left{
+            background: url(images/left.png);
+            left: 0;
+        }
+        .control .right{
+            background: url(images/right.png);
+            right: 0;
+        }
+        #carousel ol{
+            position: absolute;
+            width: 130px;
+            height: 21px;
+            bottom: 6px;
+            right: 20px;
+        }
+        #carousel ol li{
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            float: left;
+            margin-left: 8px;
+            cursor: pointer; 
+            background: transparent url(images/bilibili00.png) no-repeat 0px -17px;
+        }
+        #carousel ol li:hover{
+            background: transparent url(images/bilibili00.png) no-repeat 0px -32px;
+        }
+        #carousel ol li.active{
+            background: transparent url(images/bilibili00.png) no-repeat 0px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="carousel">
+        <ul>
+            <li><a href="javascript:;"><img src="./images/bilibili01.jpg" alt=""></a></li>
+            <li><a href="javascript:;"><img src="./images/bilibili02.jpg" alt=""></a></li>
+            <li><a href="javascript:;"><img src="./images/bilibili03.jpg" alt=""></a></li>
+            <li><a href="javascript:;"><img src="./images/bilibili04.jpg" alt=""></a></li>
+            <li><a href="javascript:;"><img src="./images/bilibili05.jpg" alt=""></a></li>
+        </ul>
+        <div class="control">
+            <span class="left"></span>
+            <span class="right"></span>
+        </div>
+        <ol>
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ol>
+    </div> 
+<script>
+window.onload=function(){
+    var carousel=document.querySelector("#carousel");
+    var carousel_w=carousel.offsetWidth;
+    var ul=carousel.children[0];
+    var lis1=ul.children;
+    var lis2=carousel.children[2].children;
+    var lis1Index=0,lis2Index=0,timer=null;
+    var control=document.querySelector(".control");
+    var firstImg=lis1[0];
+    var left=document.querySelector(".control").children[0];
+    var right=document.querySelector(".control").children[1];
+    ul.appendChild(firstImg.cloneNode(true));
+    //左右按钮事件
+    left.onclick=function(){
+        func_left();
+    }
+    right.onclick=function(){
+        func_right();     
+    }
+    //鼠标进入ol事件
+    for(var i=0;i<lis2.length;i++){
+        (function(i){
+            lis2[i].onclick=function(){
+                for(var j=0;j<lis2.length;j++){
+                    lis2[j].className="";
+                    this.className="active";
+                }
+                ul.style.transform="translateX("+(-carousel_w*i)+"px)";
+                lis1Index=i;
+                lis2Index=i;
+            }
+        })(i)   
+    }
+    //自动轮播
+    timer=setInterval(function(){
+        func_right();
+    },2000)
+    //鼠标进入carousel事件
+    carousel.onmouseover=function(){
+        control.style.display="block";
+        clearInterval(timer);
+    }
+    carousel.onmouseout=function(){
+        control.style.display="none";
+        timer=setInterval(function(){
+            func_right();
+        },2000)
+    }
+
+function func_left(){
+    lis1Index--;
+    lis2Index--;
+    if(lis1Index<0){
+        lis1Index=lis1.length-1;
+        ul.style.transition="none";
+        ul.style.transform="translateX("+(-carousel_w*lis1Index)+"px)";
+        lis1Index--;
+        setTimeout(function(){
+            ul.style.transition="all 0.3s ease";
+            ul.style.transform="translateX("+(-carousel_w*lis1Index)+"px)";
+        },1)   
+    }else{
+        ul.style.transform="translateX("+(-carousel_w*lis1Index)+"px)";
+    }
+    if(lis2Index<0){
+        lis2Index=lis2.length-1;
+    }
+    for(var i=0;i<lis2.length;i++){
+        lis2[i].className="";    
+    }
+    lis2[lis2Index].className="active";   
+
+}
+
+function func_right(){
+    lis1Index++;
+    lis2Index++;
+    if(lis1Index>lis1.length-1){
+        lis1Index=0;
+        ul.style.transition="none";
+        ul.style.transform="translateX("+lis1Index+"px)";
+        lis1Index++;
+        setTimeout(function(){  
+            ul.style.transition="all 0.3s ease";
+            ul.style.transform="translateX("+(-carousel_w*lis1Index)+"px)";
+        },1)   
+    }else{
+        ul.style.transform="translateX("+(-carousel_w*lis1Index)+"px)";
+    } 
+    if(lis2Index>lis2.length-1){
+        lis2Index=0;
+    }
+    for(var i=0;i<lis2.length;i++){
+        lis2[i].className="";    
+    }
+    lis2[lis2Index].className="active";
+}  
+
+
+
+}
+</script>
+</body>
+</html>

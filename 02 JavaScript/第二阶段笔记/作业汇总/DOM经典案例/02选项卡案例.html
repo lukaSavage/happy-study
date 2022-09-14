@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>选项卡案例</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        #box{
+            width: 500px;
+            margin: 100px auto;
+        }
+        .top_box{
+            width: 100%;
+            height: 40px;
+            border-left: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+        }
+        .top_box>li{
+            width: 99px;
+            line-height: 39px;
+            float: left;
+            border-top: 1px solid #808080;
+            border-right: 1px solid #808080;
+            background-color: #ccc;
+            cursor: pointer;
+            user-select: none;
+
+        }
+        .top_box>li.active1{
+            background-color: cyan;
+            height: 40px;
+        }
+        .bottom_box{
+            width: 550px;
+            height: 300px;
+        }
+        .bottom_box li{
+            display: none;
+        }
+        .bottom_box li.active{
+            width: 100%;
+            height: 100%;
+            display: block;
+            background-color: cyan;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <ul class="top_box">
+            <li class="active1">第1个li</li>
+            <li>第2个li</li>
+            <li>第3个li</li>
+            <li>第4个li</li>
+            <li>第5个li</li>
+        </ul>
+        <ul class="bottom_box">
+            <li class="active">这是第1个li对应的盒子</li>
+            <li>这是第2个li对应的盒子</li>
+            <li>这是第3个li对应的盒子</li>
+            <li>这是第4个li对应的盒子</li>
+            <li>这是第5个li对应的盒子</li>
+        </ul>
+    </div>
+<script>
+    var lis1=document.querySelectorAll('.top_box li');
+    var lis2=document.querySelectorAll('.bottom_box li');
+    lis1.forEach(function(item,index){
+        item.onclick=function(){
+            lis1.forEach(function(value,index){
+                value.removeAttribute('class');
+                lis2[index].removeAttribute('class');
+            })
+            this.setAttribute("class","active1");
+            lis2[index].setAttribute("class","active");
+        }
+    })
+</script>
+</body>
+</html>

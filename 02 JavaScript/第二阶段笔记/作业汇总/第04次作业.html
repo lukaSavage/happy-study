@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/* 1. 封装函数， 接受一个参数； 输出*组成的等腰三角形，参数指定多少行 */
+function row(a){
+    for (var i = 0; i < a; i++) {
+        for (var j = 1; j < (a - i); j++) {
+            document.write("-");
+        }
+        for (var j = 0; j < 2 * i + 1; j++) {
+            document.write("*");
+        }
+        document.write("<br>");
+    }
+}
+    // 给函数row输入想要的参数来指定多少行
+    row(9);
+/* ----------------------------------------------------- */
+/* 2. 自己封装函数，实现数组的翻转；（不能用reverse） */
+var arr1 = [2, 34, 52, 24, 65];
+inversion(arr1);
+console.log(arr1);
+
+function inversion(b) {
+    // 控制对比次数
+    for (var i = 0; i < b.length / 2; i++) {
+        var temp = b[i];
+        b[i] = b[b.length - 1 - i];
+        b[b.length - 1 - i] = temp;
+    }
+}
+/* ----------------------------------------------------- */
+/* 3. 自己封装函数。实现数组排序（选做）；（纯数字排序） */
+var arr2 = [22,48,16,48,75,26,4];
+toBig(arr2);
+console.log(arr2);
+// // 遍历所有数组
+function toBig(arr){
+    for(var i=0;i<arr.length;i++){
+    // 算出每次要对比的次数
+        for(var j=0;j<arr.length-1-i;j++){
+            if(arr[j]>arr[j+1]){
+                var temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+        }
+    }
+}
+
+</script>
+</body>
+</html>

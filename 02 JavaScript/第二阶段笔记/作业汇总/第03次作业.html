@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> -->
+    <title>Document</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            margin-bottom: 50px;
+        }
+        td{
+            width: 100px;
+            height: 50px;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    
+<script>
+/* 1. 使用for和while循环分别输出1到50的偶数值，并计算所有的偶数和。 */
+    /* for循环方法 */
+    var sum1=0;
+    for(var i=0;i<=50;i+=2){
+        console.log(i);
+        sum1+=i;
+    }
+    console.log(sum1);
+    console.log("");
+
+/* -------------------------------------- */
+var i=0,sum2=0;
+while(i<=50){
+    sum2+=i;
+        console.log(i);
+        i+=2;
+    }
+    console.log(sum2);
+/* -------------------------------------- */
+/* 2. 使用for、while、do…while循环分别做出四种的九九乘法表格的输出。 */
+    /* for */
+        //第一种
+        // document.write("<table>");
+        // for(var i=1;i<=9;i++){
+        //     document.write("<tr>");
+        //     for(var j=1;j<=i;j++){
+        //         document.write("<td>"+j+"×"+i+"="+(i*j)+"</td>");
+        //     }
+        //     document.write("</tr>");
+        // }
+        // document.write("</table>");
+        //第二种
+        // document.write("<table>");
+        // for(var i=1;i<=9;i++){
+        //     document.write("<tr>");
+        //     for(var j=1;j<=(9-i);j++){
+        //         document.write("<td style='visibility: hidden;'></td>");
+        //     }
+        //     for(var j=1;j<=i;j++){
+        //         document.write("<td>"+j+"×"+i+"="+(i*j)+"</td>");
+        //     }
+        //     document.write("</tr>");
+        // }
+        // document.write("</table>");
+        // 第三种
+        // document.write("<table>");
+        // for(var i=9;i>=1;i--){
+        //     document.write("<tr>");
+        //     for(var j=1;j<=i;j++){
+        //         document.write("<td>"+j+"×"+i+"="+(i*j)+"</td>");
+        //     }
+        //     document.write("</tr>");
+        // }
+        // document.write("</table>");
+        // 第四种
+        // document.write("<table>");
+        // for(var i=9;i>=1;i--){
+        //     document.write("<tr>");
+        //     for(var j=1;j<=(9-i);j++){
+        //         document.write("<td style='visibility: hidden;'></td>");
+        //     }
+        //     for(var j=1;j<=i;j++){
+        //         document.write("<td>"+j+"×"+i+"="+(i*j)+"</td>");
+        //     }
+        //     document.write("</tr>");
+        // }
+        // document.write("</table>");
+        
+    /* while */
+        //第一种
+    /*         
+        var i=1;
+        document.write("<table>");
+        while(i<=9){
+            document.write("<tr>");
+            var j=1;
+            while(j<=i){
+                document.write("<td>"+j+"×"+i+"="+(i*j)+"</td>");
+                j++;
+            }
+            document.write("</tr>");
+            i++;
+        }
+        document.write("</table>");
+     */
+    /* do...while */
+    
+/* -------------------------------------- */
+/* 3. 使用for循环输出8行5列的一个表格，内容注意隔行颜色。 */
+    document.write("<table>");
+    for(var i=0;i<8;i++){
+        document.write("<tr>");
+        for(var j=0;j<5;j++){
+            if(i%2==1){
+                document.write("<td style='background-color: #ccc'>江南美景</td>");
+            }else{
+                document.write("<td>江南美景</td>")
+            }
+        }
+        document.write("</tr>");
+    }
+    document.write("</table>");
+/* -------------------------------------- */
+/* 4. 使用循环<h1>---<h6>输出标题 */
+    for(var i=1;i<=6;i++){
+        document.write("<h"+i+">才饮长沙水,又食武昌鱼</h"+i+">");
+    }
+/* -------------------------------------- */
+/* 5. 使用for、while、循环输出1到50的值，要求每次循环只能输出一个值，每输出10个换一行 */
+
+for(var i=1;i<=50;i++){
+    var tens=parseInt(i/10);
+    var units=i%10;
+    document.write(String(tens)+String(units)+"&nbsp;");
+    if(units==0){
+        document.write("<br>");
+    }
+}
+/* -------------------------------------- */
+/* 6. 用"*"打印一个等腰三角形 */ 
+for(var i=0;i<5;i++){
+    for(var j=1;j<(5-i);j++){
+        document.write("-");
+    }
+    for(var j=0;j<2*i+1;j++){
+        document.write("*");
+    }
+    document.write("<br>");
+}
+</script>  
+</body>
+</html>

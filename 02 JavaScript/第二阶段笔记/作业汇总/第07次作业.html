@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新年倒计时</title>
+    <style>
+        #box{
+            text-align: center;
+            margin: 100px auto;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+
+<script>
+    /* ① 倒计时， 距离春节还有 123天8小时23分钟15秒 */
+    var box=document.getElementById('box');   
+    var endDate=new Date('2021/1/1 00:00:00');
+    setInterval(function(){
+        
+        var currentDate=new Date();
+        var seconds=Math.floor((endDate.getTime()-currentDate.getTime())/1000);
+        console.log(seconds);
+        var day=Math.floor(seconds/(24*3600));
+        var h=Math.floor(seconds%(24*3600)/3600);
+        var m=Math.floor(seconds%(24*3600)%3600/60);
+        var s=Math.floor(seconds%(24*3600)%3600%60);
+        // h=h<10? '0'+h : h;
+        // m=m<10? '0'+m : m;
+        // s=s<10? '0'+s : s;
+        box.innerHTML="距离新年还有"+day+"天"+h.toString().padStart(2,0)+"小时"+m.toString().padStart(2,0)+"分钟"+s.toString().padStart(2,0)+"秒";
+    },1000);
+
+</script> 
+</body>
+</html>

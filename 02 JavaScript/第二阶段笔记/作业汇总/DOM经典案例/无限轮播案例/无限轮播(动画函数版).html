@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+		*{
+			padding: 0;
+			margin: 0;
+			list-style: none;
+			text-decoration: none;
+		}
+		img{
+			display: block;
+		}
+		#box{
+			width: 750px;
+			height: 320px;
+			padding: 10px;
+			border: 1px solid #000;
+			margin: 100px auto;
+			position: relative;
+		}
+		#box #container{
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+		#box #container #ul{
+			width: 600%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		#box #container #ul li{
+			width: 750px;
+			height: 320px;
+			float: left;
+			
+		}
+/*		第二部分样式*/
+		#box ol{
+			position: absolute;
+			right: 10px;
+			bottom: 10px;
+			margin-right: 10px;
+		}
+		#box ol li{
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: #ccc;
+			border-radius: 50%;
+		}
+		#box ol li.current{
+			background-color: #FFBE00;
+		}
+		#box #control .left{
+			width: 24px;
+			height: 36px;
+			position: absolute;
+			top: 50%;
+			margin-top: -18px;
+			background: url(images/left.png) no-repeat;
+		}
+		#box #control .right{
+			width: 24px;
+			height: 36px;
+			position: absolute;
+			top: 50%;
+			margin-top: -18px;
+			right: 10px;
+			background: url(images/right.png) no-repeat;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="box">
+		<div id="container">
+			<ul id="ul">
+				<li><img src="images/pic01.jpg" alt=""></li>
+				<li><img src="images/pic02.jpg" alt=""></li>
+				<li><img src="images/pic03.jpg" alt=""></li>
+				<li><img src="images/pic04.jpg" alt=""></li>
+				<li><img src="images/pic05.jpg" alt=""></li>
+			</ul>
+		</div>
+		<div id="control">
+		  <p><span class="left">&nbsp;</span></p>
+		  <p><span class="right">&nbsp;</span></p>
+		</div>
+		<ol id="ol">
+			<li class="current"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ol>
+	</div>
+	
+	
+	
+	
+	
+<script src="./myJs.js"></script>
+<script>
+window.onload = function(){
+	//1.获取需要操作的元素
+	var box =$("box");
+    var ul =$("ul");
+    var lis1 =ul.children;
+    var lis2 = $("ol").children;
+	var span_left= $("control").children[0];
+	var span_right= $("control").children[1];
+	var lis1index = 0; lis2index = 0; timer =null;
+	
+	//2.动态创建li
+	ul.appendChild(lis1[0].cloneNode(true));
+	
+	//3.左右按钮事件
+	span_left.onclick = function(){
+		lis1index--;
+		lis2index--;
+        if(lis1index<0){
+			
+			lis1index = 5;
+			ul.style.left = -750 * lis1index + "px";
+			ease(ul,-750*(--lis1index-1));
+		}else{
+			ease(ul,-750*lis1index);
+		};
+		if(lis2index<0){
+			lis2index = lis2.length-1;
+		}
+		for(var i=0;i<lis2.length;i++){
+			lis2[i].className = "";
+		}
+		 lis2[lis2index].className = "current";
+	
+	}
+	span_right.onclick = function(){
+		lis1index++;
+		lis2index++;
+        if(lis1index>lis1.length-1){
+			
+			lis1index = 0;
+			ul.style.left = -752 * lis1index + "px";
+			ease(ul,-750*(lis1index+1));
+			lis1index=1;
+		}else{
+			ease(ul,-750*lis1index);
+		};
+		if(lis2index>lis2.length-1){
+			lis2index = 0;
+		}
+		for(var i=0;i<lis2.length;i++){
+			lis2[i].className = "";
+		}
+	    lis2[lis2index].className = "current";
+	};
+	
+	//鼠标经过lis2事件
+	 for(var i=0;i<lis2.length;i++){
+		 (function(i){
+			 lis2[i].onmouseover = function(){
+				 for(var j=0;j<lis2.length;j++){
+					lis2[j].className = ""; 
+				 }
+				 lis2[i].className = "current";
+				 ease(ul,-750*(i));
+				 //同步lis1和lis2
+				 lis1index = i;
+				 lis2index = i;
+		 }
+		 })(i) 
+	 }
+	//自动轮播
+	timer = setInterval(function(){
+		lis1index++;
+		lis2index++;
+        if(lis1index>lis1.length-1){
+			
+			lis1index = 0;
+			ul.style.left = -752 * lis1index + "px";
+			ease(ul,-750*(lis1index+1));
+			lis1index=1;
+		}else{
+			ease(ul,-750*lis1index);
+		};
+		if(lis2index>lis2.length-1){
+			lis2index = 0;
+		}
+		for(var i=0;i<lis2.length;i++){
+			lis2[i].className = "";
+		}
+	    lis2[lis2index].className = "current";
+	},1000)
+	 //鼠标进入和移除box
+	box.onmouseover = function(){
+		clearInterval(timer);
+	};
+	box.onmouseout = function(){
+		timer = setInterval(function(){
+		lis1index++;
+		lis2index++;
+        if(lis1index>lis1.length-1){
+			
+			lis1index = 0;
+			ul.style.left = -752 * lis1index + "px";
+			ease(ul,-750*(lis1index+1));
+			lis1index=1;
+		}else{
+			ease(ul,-750*lis1index);
+		};
+		if(lis2index>lis2.length-1){
+			lis2index = 0;
+		}
+		for(var i=0;i<lis2.length;i++){
+			lis2[i].className = "";
+		}
+	    lis2[lis2index].className = "current";
+	},1000)
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+</script>
+</body>
+</html>

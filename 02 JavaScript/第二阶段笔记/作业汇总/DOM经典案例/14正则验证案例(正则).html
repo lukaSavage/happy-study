@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>正则案例</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        input{
+            width: 200px;
+            height: 40px;
+        }
+        #btn{
+            margin: 40px;
+            width: 200px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    验证的内容：<input type="text" id="text1" autocomplete="off"><br><br>
+    验证的正则：<input type="text" id="text2" autocomplete="off"><br><br>
+    <button id="btn">验 证</button>
+    <div id="div"></div>
+<script>
+    btn.onclick=function(){
+        if(RegExp(text2.value).test(text1.value)){
+            div.innerHTML='验证通过';
+        }else{
+            div.innerHTML='验证失败';
+        }
+        
+    }
+</script>
+</body>
+</html>

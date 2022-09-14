@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function* test() {
+            console.log('进来了');
+            const a = yield 1;
+            console.log('a',a);
+            const b = yield 2;
+            const c = yield 3;
+            const d = yield 4;
+        }
+        let p = test();
+        console.dir(p.next());
+        console.dir(p.next('想要值吗'));
+    </script>
+</body>
+
+</html>

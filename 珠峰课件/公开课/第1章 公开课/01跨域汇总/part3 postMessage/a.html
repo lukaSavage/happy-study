@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <iframe src="http://localhost:4000/b.html" id="frame" frameborder="0" onload="load()"></iframe>
+
+    <script>
+        /* 需求：a页面请求b页面拿去参数 */
+        function load() {
+            frame.contentWindow.postMessage('你好呀，postMessage', 'http://localhost:4000');
+
+            window.onmessage = function (e) {
+                console.log('我是a页面',e.data);
+            }
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #box{
+            position: relative;
+            margin: 100px;
+        }
+        .small{
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgb(255, 0, 0);
+            position: relative;
+        }
+        .small .mask{
+            position: absolute;
+            top: 0;
+            /* mask的宽度比例：x/500=350/800   ==> x = 218.75px */
+            width: 218px;
+            height: 218px;
+            background: rgba(204, 218, 15, 0.39); 
+            cursor: move; 
+            display: none;         
+        }
+        .small_hide{
+            width: 500px;
+            height: 500px;
+            position: absolute;
+            top: 0;
+            left: 351px;
+            border: 1px solid rgb(115, 255, 0);
+            overflow: hidden;
+            display: none;
+        }
+        .small_hide img{
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .tab{
+            width: 350px;
+            height: 50px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div class="small">
+            <img src="./images/pic001.jpg" alt="">
+            <span class="mask"></span>
+        </div>
+        <div class="small_hide">
+            <img src="./images/pic01.jpg" alt="">
+        </div>
+        <div class="tab">
+            <img src="./images/pic0001.jpg" alt="">
+            <img src="./images/pic0002.jpg" alt="">
+            <img src="./images/pic0003.jpg" alt="">
+        </div>
+    </div>
+<script>
+window.onload=function(){
+    var box=document.querySelector("#box");
+    var small=document.querySelector(".small");
+    var mask=small.children[1];
+    var small_hide=document.querySelector(".small_hide");
+    var img=small_hide.children[0];
+    var list_img=document.querySelector(".tab").children;
+    console.log(list_img);
+    
+    //鼠标进入small事件
+    small.onmouseenter=function(){
+        mask.style.display="block";
+        small_hide.style.display="block";
+        small.onmousemove=function(e){
+            var mask_X=e.clientX-box.offsetLeft-mask.offsetWidth/2;
+            var mask_Y=e.clientY-box.offsetTop-mask.offsetHeight/2;
+            if(mask_X<0){
+                mask_X=0;
+            }else if(mask_X>(small.offsetWidth-mask.offsetWidth)){
+                mask_X=small.offsetWidth-mask.offsetWidth;
+            }
+            if(mask_Y<0){
+                mask_Y=0;
+            }else if(mask_Y>(small.offsetHeight-mask.offsetHeight)){
+                mask_Y=small.offsetHeight-mask.offsetHeight;
+            }
+            mask.style.left=mask_X+"px";
+            mask.style.top=mask_Y+"px";
+            //比例：mask_X/x=small.offsetWidth/img.offsetWidth;
+            var x=mask_X*img.offsetWidth/small.offsetWidth;
+            var y=mask_Y*img.offsetHeight/small.offsetHeight;
+            img.style.left=-x+"px";
+            img.style.top=-y+"px";  
+        }
+    }
+
+    small.onmouseleave=function(){
+        mask.style.display="none";
+        small_hide.style.display="none";
+    }
+
+    for(var i=0;i<list_img.length;i++){
+        (function(i){
+            list_img[i].onmouseenter=function(){
+			    small.children[0].src="images/pic00"+(i+1)+".jpg";
+			    img.src="images/pic0"+(i+1)+".jpg";                
+            }
+        })(i)
+    }
+}
+</script>
+</body>
+</html>

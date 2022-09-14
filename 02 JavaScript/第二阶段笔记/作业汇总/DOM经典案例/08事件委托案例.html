@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件委托案例</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        ul{
+            width: 500px;
+            border: 1px solid #000;
+            padding: 20px;
+            margin: 100px auto;
+        }
+        li{
+            margin-bottom: 20px;
+            border: 1px solid #f90;
+        }
+        li.active{
+            background-color: cyan;
+        }
+    </style>
+</head>
+<body>
+    <button>添加</button>
+    <ul>
+        <li class='mark'>第1个li</li>
+        <li class='mark'>第2个li</li>
+        <li class='mark'>第3个li</li>
+        <li class='mark'>第4个li</li>
+        <li class='mark'>第5个li</li>
+    </ul>
+<script>
+    var btn=document.querySelector('button');
+    var ul=document.querySelector('ul');
+    var lis=ul.children;
+    console.log(lis);
+    ul.onclick=function(e){
+        if(e.target.className.indexOf('mark')!==-1){
+            e.target.classList.toggle('active');
+        }
+    }
+    btn.onclick=function(){
+        var newLi=document.createElement('li');
+        newLi.innerHTML='我是新增的li';
+        newLi.classList.add('mark');
+        ul.appendChild(newLi);       
+    }
+</script>
+</body>
+</html>

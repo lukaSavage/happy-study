@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单计算机</title>
+    <style>
+        fieldset{
+            /* width: 500px; */
+            text-align: center;
+            border: 1px solid rgb(8, 226, 62);
+            margin: 100px 300px;
+            position: relative;
+
+        }
+        input{
+            outline-color: red;
+            width: 150px;
+            height: 50px;
+            box-sizing: border-box;
+            padding: 5px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 30px;
+            margin-right: 50px;
+        }
+        input:last-of-type{
+            margin-left: 50px;
+        }
+        select{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+            outline-color: red;
+            font-size: 30px;
+        }
+        button{
+            width: 50px;
+            height: 50px;
+            background-color: red;
+        }
+        div.result{
+            position: absolute;
+            top: 150px;
+            left: 100px;
+            width: 700px;
+            height: 300px;
+            text-align: center;
+            line-height: 300px;
+            font-size: 100px;
+            border: 1px solid rgb(9, 172, 212);
+        }
+    </style>
+</head>
+<body>
+ <fieldset>
+     <legend>简单的计算器</legend>
+     <input type="text" id="num1">
+     <select name="count" id="count">
+         <option>+</option>
+         <option>-</option>
+         <option>×</option>
+         <option>÷</option>
+     </select>
+     <input type="text" id="num2">
+     <button>result</button>
+     <div class="result">结果是几呢？</div>
+ </fieldset> 
+<script>
+    var num1=document.querySelector("#num1");
+    var num2=document.querySelector("#num2");
+    var button=document.getElementsByTagName("button")[0];
+    var result=document.querySelector(".result");
+    button.onclick=function(){
+        // if(count=="+"){
+        //     result.innerText=parseFloat(num1.value)+parseFloat(num2.value);
+        // }
+        var count=document.querySelector("#count").value;
+        switch (count) {
+            case "+":
+                result.innerText=parseFloat(num1.value)+parseFloat(num2.value);
+                break;      
+            case "-":
+                result.innerText=parseFloat(num1.value)-parseFloat(num2.value);
+                break;      
+            case "×":
+                result.innerText=parseFloat(num1.value)*parseFloat(num2.value);
+                break;      
+            case "÷":
+                result.innerText=parseFloat(num1.value)/parseFloat(num2.value);
+                break;      
+            default:
+                result.innerText="程序有问题！";
+        }
+        if(result.innerText=="NaN"){
+            result.innerText="输入错误！";
+        }
+    }
+</script> 
+</body>
+</html>

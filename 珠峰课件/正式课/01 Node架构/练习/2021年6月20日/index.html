@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function Father(age) {
+        //     this.age = age;
+        // }
+        // function Son(name, age) {
+        //     this.name = name;
+        //     Father.call(this, age);
+        // }
+        // Son.prototype = Father.prototype;
+        // Son.prototype.constructor = Son;
+        // // Object.setPrototypeOf(Son, Father.prototype);
+
+        // const p = new Son('z', 18);
+        // console.dir(p.age);
+        var obj = { a: {} };
+        obj = obj.a;
+        obj.name = 'fox';
+
+        function text(obj) {
+            // var obj = { a: {} };
+            obj.a = {};
+            obj = obj.a;
+            obj.name = 'fox';
+            return obj;
+        }
+        console.log(text({}));
+    </script>
+</body>
+
+</html>

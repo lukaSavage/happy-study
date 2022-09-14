@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拖拽案例</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #box{
+            width: 200px;
+            height: 200px;
+            background-color: #f90;
+            position: fixed;
+            cursor: move;
+            user-select: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="box">坐标(0,0);</div> 
+<script>
+    var box=document.querySelector('#box');
+    box.onmousedown=function(e){
+        var x=e.offsetX;
+        var y=e.offsetY;
+        console.log('按下了');
+        document.onmousemove=function(e){
+            var box_X=e.clientX-x;
+            var box_Y=e.clientY-y;
+            if(box_X<0){
+                box_X=0;
+            }else if(box_X>document.documentElement.clientWidth-box.offsetWidth){
+                box_X=document.documentElement.clientWidth-box.offsetWidth;
+            }
+            if(box_Y<0){
+                box_Y=0;
+            }else if(box_Y>document.documentElement.clientHeight-box.offsetHeight){
+                box_Y=document.documentElement.clientHeight-box.offsetHeight;
+            }
+            box.style.left=box_X + 'px';
+            box.style.top=box_Y + 'px';
+            box.innerText='坐标('+box_X+','+box_Y+');';
+            // console.log(document.documentElement.clientX-box.offsetWidth);
+        }
+    }
+    document.onmouseup=function(){
+        this.onmousemove=null;
+    }
+</script>
+</body>
+</html>

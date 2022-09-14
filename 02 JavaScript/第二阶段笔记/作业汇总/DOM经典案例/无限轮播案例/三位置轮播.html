@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	*{
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		text-decoration: none;
+	}
+	img{
+		display: block;
+	}
+	#box{
+		width: 310px;
+		height: 260px;
+		padding: 10px;
+		border: 1px solid #000;
+		margin: 100px auto;
+		position: relative;
+		
+	}
+	#box #slider_scroll{
+    width: 310px;
+    height: 220px;
+    position: relative;
+	overflow: hidden;
+	}
+	#box #slider_scroll #banner{
+		width: 620px;
+		height: 220px;
+		background-color: #000DFF;
+		
+	}
+	#box #slider_scroll #banner .li{
+		width: 310px;
+		height: 220px;
+		position: absolute;
+	}
+	#box #control .left{
+			width: 24px;
+			height: 36px;
+			position: absolute;
+			top: 50%;
+			margin-top: -18px;
+			background: url(images/left.png) no-repeat;
+	}
+	#box #control .right{
+			width: 24px;
+			height: 36px;
+			position: absolute;
+			top: 50%;
+			margin-top: -18px;
+		    right: 10px;
+			background: url(images/right.png) no-repeat;
+	}
+	#box #ol{
+		position: absolute;
+		bottom: 20px;
+		left: 30px;
+		
+	}
+	#box #ol li{
+		width: 30px;
+		height: 15px;
+		background-color: #ccc;
+		float: left;
+		margin-left: 10px;
+		cursor: pointer;
+	}
+	#box #ol .current{
+		background-color: #FF9E00;
+	}
+</style>
+</head>
+
+<body>
+	<div id="box">
+		<div id="slider_scroll">
+		  <div id="banner">
+              <div class="li"><a href="#"><img src="images/1.jpeg" alt=""></a></div>
+              <div class="li"><a href="#"><img src="images/2.jpeg" alt=""></a></div>
+              <div class="li"><a href="#"><img src="images/3.jpeg" alt=""></a></div>
+              <div class="li"><a href="#"><img src="images/4.jpeg" alt=""></a></div>
+              <div class="li"><a href="#"><img src="images/5.jpeg" alt=""></a></div>
+              <div class="li"><a href="#"><img src="images/6.jpeg" alt=""></a></div>
+		   </div>
+		</div>
+		
+<!--下面是控制层-->
+		<div id="control">
+			<span class="left"></span>
+			<span class="right"></span>
+		</div>
+		<ol id="ol">
+			<li class="current"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ol>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<script src="../myJs.js"></script>
+<script>
+window.onload = function(){
+	//1.获取需要的标签
+	var box =$("box");
+	var scroll =$("slider_scroll");
+	var banner = $("banner");
+	var lis1 = banner.children;
+	var control = $("control");
+	var left =control.children[0];
+	var right = control.children[1];
+	var ol = $("ol");
+	var lis2 = ol.children;
+    let nowIndex = 0;
+	
+	//2.归为图片
+	
+	for(var i=1;i<lis1.length;i++){         //除了第一张让所有的元素移动到右边
+		lis1[i].style.left = scroll.offsetWidth + "px";
+	}
+	//3.控制左右两个按钮
+	/*    技巧如下
+     一.当前可视区域的图片快速右移;
+     二.上一张图片快速出现在可视区域的左边
+     三.让这张图片做动画进入
+    */
+	left.onclick = function(){
+		ease(lis1[nowIndex],scroll.offsetWidth);
+		nowIndex--;
+		if(nowIndex<0){
+			nowIndex = lis1.length-1;
+		}
+		lis1[nowIndex].style.left = -scroll.offsetWidth + "px";
+		ease(lis1[nowIndex],0);
+	}
+	right.onclick = function(){
+		ease(lis1[nowIndex],-scroll.offsetWidth);
+		nowIndex++;
+		if(nowIndex>=lis1.length){
+			nowIndex = 0;
+		}
+		console.log(nowIndex)
+		lis1[nowIndex].style.left = scroll.offsetWidth + "px";
+		ease(lis1[nowIndex],0);
+	}
+	
+	//4.监听鼠标进入ol
+	
+	for(var i=0;i<lis2.length;i++){
+		lis2[i].index = i;
+		lis2[i].onmouseover = function(){
+			//4.1让移动的样式出来
+			for(var j=0;j<lis2.length;j++){
+				lis2[j].className = "";
+			}
+			this.className="current";
+			
+			//4.2对比
+			/*判断移动后的与之前有样式的对比：
+			 一。如果移动后的>之前有样式的===》相当于向右移动
+			 二。如果移动后的<之前有样式的===》相当于向左移动
+			*/
+			if(this.index>nowIndex){
+				ease(lis1[nowIndex],-scroll.offsetWidth);
+		        lis1[this.index].style.left = scroll.offsetWidth + "px";
+				nowIndex =this.index;
+		        ease(lis1[nowIndex],0);
+			}
+			if(this.index<nowIndex){
+				ease(lis1[nowIndex],scroll.offsetWidth);
+		        lis1[this.index].style.left = -scroll.offsetWidth + "px";
+				nowIndex =this.index;
+		        ease(lis1[nowIndex],0);
+			}	
+		}
+	}
+	
+	
+	//5.自动轮播(相当于每隔一秒向右移动一次)     
+	 var timer =setInterval(function(){
+		 //5.1复制一份向右点击的代码
+		 ease(lis1[nowIndex],-scroll.offsetWidth);
+		nowIndex++;
+		if(nowIndex>=lis1.length){
+			nowIndex = 0;
+		}
+		console.log(nowIndex)
+		lis1[nowIndex].style.left = scroll.offsetWidth + "px";
+		ease(lis1[nowIndex],0);
+		 //5.2让ol也跟着走起来
+		 for(var i=0;i<lis2.length;i++){
+			 lis2[i].className = "";
+		 }
+		 lis2[nowIndex].className ="current";
+	 },1000)
+	 
+	 
+	 
+	 
+	//6.鼠标进入和移除box事件
+	 box.onmouseover = function(){
+		 clearInterval(timer);
+	 }
+	 box.onmouseout = function(){
+		 //复制上面自动轮播的代码
+		timer =setInterval(function(){
+		 ease(lis1[nowIndex],-scroll.offsetWidth);
+		nowIndex++;
+		if(nowIndex>=lis1.length){
+			nowIndex = 0;
+		}
+		console.log(nowIndex)
+		lis1[nowIndex].style.left = scroll.offsetWidth + "px";
+		ease(lis1[nowIndex],0);
+		 for(var i=0;i<lis2.length;i++){
+			 lis2[i].className = "";
+		 }
+		 lis2[nowIndex].className ="current";
+	 },1000) 
+	 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+</script>
+</body>
+</html>

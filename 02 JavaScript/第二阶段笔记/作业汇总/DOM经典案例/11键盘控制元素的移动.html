@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 50px;
+            height: 50px;
+            background-color: #f90;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+<script>
+    var box=document.querySelector('.box');
+    document.onkeydown=function(e){
+        console.log(e.keyCode);
+        switch(e.keyCode){
+            case 37:
+                box.style.left= -10+box.offsetLeft+'px';
+                break;
+            case 38:
+                box.style.top= -10+box.offsetTop+'px';
+                break;
+            case 39:
+                box.style.left= 10+box.offsetLeft+'px';
+                break;
+            case 40:
+                box.style.top= 10+box.offsetTop+'px';
+                break;
+            default:
+                console.log('输入不正确');
+        }
+    }
+</script>
+</body>
+</html>

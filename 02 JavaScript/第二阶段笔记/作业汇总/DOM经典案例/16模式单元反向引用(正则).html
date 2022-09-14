@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则</title>
+    <style>
+        #box {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            font-family: '宋体';
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        话说金莲陪着武松正在楼上说话未了，只见武大买了些肉菜果饼归家。放在厨
+        ，走上楼来，叫道："大嫂，你且下来则个。"那妇人应道："你看那不晓事的，
+        ！叔叔在此无人陪侍，却交我撇了下去。"武松道："嫂嫂请方便。"妇人道："
+        何不去间壁请王乾娘来安排？只是这般不见便。"武大便自去央了间壁王婆来。安
+        排端正，都拿上楼来，摆在桌子上，无非是些鱼肉果菜点心之类。随即烫酒上来。
+        武大叫妇人坐了主位，武松对席，武大打横。三人坐下，把酒来斟，武大筛酒在各
+        人面前。那妇人拿起酒来道："叔叔休怪，没甚管待，请杯儿水酒。"武松道："
+        感谢嫂嫂，休这般说。"
+    </div>
+    <br>
+    <br>
+    <button id="btn">替换</button>
+    <script>
+        var btn = document.querySelector('#btn');
+        btn.onclick = function(){
+            var box = document.querySelector('#box');
+            var content = box.innerHTML;
+            //替换字符串
+            box.innerHTML = content.replace(/"([^"]+?)"/g, '“$1”');
+        }
+    </script>
+</body>
+</html>
