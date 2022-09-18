@@ -38,7 +38,7 @@
 </head>
 
 <body>
-    <div class="a">
+    <div class="a" id="a">
         <ul>
             <li class="one">我是第1个li</li>
             <li>我是第2个li</li>
@@ -61,16 +61,18 @@
          */
         // { name: '张三', like: { eat: 'fruit', drink: 'water' } }
         // console.log('offsetRight:' + dd.offsetRight, 'offsetBottom' + dd.offsetBottom);
-        console.log(document.body.offsetHeight);
-        const offsetTop = dd.offsetTop;
-        const offsetLeft = dd.offsetLeft;
-        const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
-        const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
-        mask.style.height = document.body.offsetHeight + 'px';
-        mask.style.width = document.body.offsetWidth + 'px';
-        mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
-        console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
-
+        // console.log(document.body.offsetHeight);
+        // const offsetTop = dd.offsetTop;
+        // const offsetLeft = dd.offsetLeft;
+        // const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
+        // const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
+        // mask.style.height = document.body.offsetHeight + 'px';
+        // mask.style.width = document.body.offsetWidth + 'px';
+        // mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
+        // console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
+        a.onclick = function(e){
+            console.log(e.target);
+        }
         
     </script>
 </body>

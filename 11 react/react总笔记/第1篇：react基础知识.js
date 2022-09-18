@@ -376,33 +376,41 @@
                     son-----------------componentDidmount
                     father-----------------componentDidmount
                 2)组件更新阶段
-                    father-----------------shouldComponentUpdate
-                    father-----------------componentWillUpdate
-                    father-----------------render
-                    son-----------------componentWillReceiveProps
-                    son-----------------shouldComponentUpdate
-                    son-----------------componentWillUpdate
-                    son----------------render
-                    son-----------------componentDidUpdate
-                    father-----------------componentDidUpdate
+                    1）shouldComponentUpdate为true时↓
+                        father-----------------shouldComponentUpdate
+                        father-----------------componentWillUpdate
+                        father-----------------render
+                        son-----------------componentWillReceiveProps
+                        son-----------------shouldComponentUpdate
+                        son-----------------componentWillUpdate
+                        son----------------render
+                        son-----------------componentDidUpdate
+                        father-----------------componentDidUpdate
+                    2）shouldComponentUpdate为false时↓
+                        father-----------------shouldComponentUpdate
+                        father-----------------componentWillUpdate
+                        father-----------------render
+                        son-----------------componentWillReceiveProps
+                        son-----------------shouldComponentUpdate
+                        father-----------------componentDidUpdate
                 3)组件卸载阶段
                     father----------------componentWillUnmount
                     son-----------------componentWillUnmount
             ②、新版本
                 1)组件渲染阶段
                     father-------------------constructor
-                    father-------------------getDerviedStateFromProps
+                    father-------------------getDerivedStateFromProps
                     father-----------------render
                     son-------------------constructor
-                    son-------------------getDerviedStateFromProps
+                    son-------------------getDerivedStateFromProps
                     son----------------render
                     son-----------------componentDidmount
                     father-----------------componentDidmount
                 2)组件更新阶段
-                    father-------------------getDerviedStateFromProps
+                    father-------------------getDerivedStateFromProps
                     father-----------------shouldComponentUpdate
                     father-----------------render
-                    son-------------------getDerviedStateFromProps
+                    son-------------------getDerivedStateFromProps
                     son-----------------shouldComponentUpdate
                     son----------------render
                     son-----------------getSnapshotBeforeUpdate
