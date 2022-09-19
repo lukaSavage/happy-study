@@ -158,3 +158,95 @@ export let updateQueue = {
 ### 4.1 Element-Diff详细流程
 
 ![](imgs/03、element-diff原理.png)
+
+## 五、React生命周期
+
+>所谓生命周期，其原理就是在编译过程中在合适的地方判断并插入某些函数。
+
+### 5.1 旧版生命周期
+
+![](imgs/04、旧生命周期.png)
+
+### 5.2 新版生命周期
+
+![](imgs/05、新生命周期.png)
+
+## 六、context实现原理
+
+context的实现原理，简单的来说就是创建了一个全局变量，在最顶级父级将需要共享的变量传递，在后续的子组件中消费即可。
+
+```js
+
+function createContext() {
+	const context = { $$typeof: REACT_CONTEXT, _currentValue: undefined };
+	// 这里给context塞属性
+	context.Provider = {
+		$$typeof: REACT_PROVIDER,
+		_context: context,
+	};
+	context.Consumer = {
+		$$typeof: REACT_CONTEXT,
+		_context: context,
+	};
+
+	return context;
+}
+
+/*
+let context = {
+    $$typeof: Symbol(react.context),
+    Consumer: {$$typeof: Symbol(react.context), _context: context},    // ☆ 注意这里循环引用
+    Provider: {$$typeof: Symbol(react.provider), _context: context},
+    _currentValue: {xxx: xxx}
+}
+*/
+
+const react = {
+	createElement,
+	Component,
+	createRef,
+	forwardRef,
+    createContext
+};
+
+export default react;
+```
+
+具体实现步骤如下↓
+
+1. 首先createContext本省是一个函数，它返回一个变量作为全局变量，方便子组件读取属性
+2. 返回的context是一个循环引用变量，其中有两个特殊的组件，即<font color='#f00'>`Prrovider`</font>、<font color='#f00'>`Consumer`</font>。我们需要针对于这两个组件进行特殊处理
+3. 通过`<xxxContext.provide />`组件获取用户传递过来的value,赋值给`context._currentValue`
+4. 在渲染`<xxxContext.Customer>`组件时，<font color='#f00'>它会将你的children当做函数调用，并传递`context._currentValue`</font>值，所以这也是为什么需要写成一个函数的原因。
+
+```js
+function createDOM(vdom) {
+	const { type, props, ref } = vdom;
+	let dom; // 真实dom
+	if (type && type.$$typeof === REACT_PROVIDER) {
+		return mountProviderComponent(vdom);
+	} else if (type && type.$$typeof === REACT_CONTEXT) {
+		return mountContextComponent(vdom);
+	}
+    ...
+}
+    
+function mountProviderComponent(vdom) {
+	const { type, props } = vdom; // type = {$$typeof: Symbol(react.provider), _context: context}
+	const context = type._context; // { $$typeof: Symbol(react.context), _context: context }
+	context._currentValue = props.value; // 把用户传递过来的value值赋给context._currentValue
+	const renderVdom = props.children; // Provider而言他要渲染的其实是它的儿子
+	vdom.oldRenderVdom = renderVdom; // 这一步是为了后面更新用的
+	return createDOM(renderVdom);
+}
+ 
+/* 下面的函数主要是为了渲染<xxxContext.Customer /> */
+function mountContextComponent(vdom) {
+	const { type, props } = vdom;
+	const context = type._context;
+	const renderVdom = props.children(context._currentValue);
+	vdom.oldRenderVdom = renderVdom;
+	return createDOM(renderVdom);
+}
+```
+
