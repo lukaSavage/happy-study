@@ -689,8 +689,25 @@
             -------------总结↓-----------
             优缺点：
                 优点是：传参优雅，传递参数可以传递对象，并且刷新数据不会丢失数据
-                缺点是：hash模式没有这个功能 
-    9.实现HashRouter
+                缺点是：hash模式没有这个功能
+    9.路由hooks
+        1)、useHistory
+            可直接获取路由三大属性中的history对象
+        2)、useLocation
+            可直接获取路由三大属性中的location对象
+        3)、useRarams
+            可直接获取路由三大属性中的match.params对象
+        4)、useRouteMatch
+            改useRouteMatch钩子执行时，两种情况
+            ·不带参数，返回当前<Route />对象的match对象
+            ·接受一个参数时，该参数与matchPath的props参数相同。他可以是字符串的路径名，也可以是一个match对象如下，其最终返回值是一个布尔值
+                const match1 = useRouteMatch('/detail/:id')
+                const match2 = useRouteMatch({
+                    path: "/BLOG/:slug/",
+                    strict: true,
+                    sensitive: true
+                });
+    10.实现HashRouter
         ★★思路讲解：
             传递路线：<HashRouter /> (传递history) --> <Router> (Router内部会包一层RouterContext.Provider,用于给路由组件传递路由三大属性)
                 --> <Route /> (此时Route有对应的component，并将三大属性传递给component)
@@ -2681,55 +2698,55 @@
     
 二十八、React Hooks   
     ·useState
-    ·介绍
-        1)useState 就是一个 Hook
-        2)通过在函数组件里调用它来给组件添加一些内部 state,React 会在重复渲染时保留这个 state
-        3)useState 会返回一对值：当前状态和一个让你更新它的函数，你可以在事件处理函数中或其他一些地方调用这个函数。
-            它类似 class 组件的 this.setState，但是它不会把新的 state 和旧的 state 进行合并
-        4)useState 唯一的参数就是初始 state
-        5)返回一个 state，以及更新 state 的函数
-            在初始渲染期间，返回的状态 (state) 与传入的第一个参数 (initialState) 值相同
-            setState 函数用于更新 state。它接收一个新的 state 值并将组件的一次重新渲染加入队列
-    ·使用
-        import React from './react';
-        import ReactDOM from './react-dom';
+        ·介绍
+            1)useState 就是一个 Hook
+            2)通过在函数组件里调用它来给组件添加一些内部 state,React 会在重复渲染时保留这个 state
+            3)useState 会返回一对值：当前状态和一个让你更新它的函数，你可以在事件处理函数中或其他一些地方调用这个函数。
+                它类似 class 组件的 this.setState，但是它不会把新的 state 和旧的 state 进行合并
+            4)useState 唯一的参数就是初始 state
+            5)返回一个 state，以及更新 state 的函数
+                在初始渲染期间，返回的状态 (state) 与传入的第一个参数 (initialState) 值相同
+                setState 函数用于更新 state。它接收一个新的 state 值并将组件的一次重新渲染加入队列
+        ·使用
+            import React from './react';
+            import ReactDOM from './react-dom';
 
-        function App(){
-        const[number,setNumber]=React.useState(0);
-        let handleClick = ()=> setNumber(number+1)
-        return (
-            <div>
-            <p>{number}</p>
-            <button onClick={handleClick}>+</button>
-            </div>
-        )
-        }
+            function App(){
+            const[number,setNumber]=React.useState(0);
+            let handleClick = ()=> setNumber(number+1)
+            return (
+                <div>
+                <p>{number}</p>
+                <button onClick={handleClick}>+</button>
+                </div>
+            )
+            }
 
-        ReactDOM.render(
-        <App />,
-        document.getElementById('root')
-        );
-    ·原理
-        let hookStates = [];                     // 设定一个全局变量，用来记录hook的值
-        let hookIndex = 0;                       // 用来记录当前的hook的指针
-        let scheduleUpdate;
-        function render(vdom, container) {
-            mount(vdom,contain er);
-            scheduleUpdate = ()=>{
-            hookIndex = 0;
-            compareTwoVdom(container,vdom,vdom);
+            ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+            );
+        ·原理
+            let hookStates = [];                     // 设定一个全局变量，用来记录hook的值
+            let hookIndex = 0;                       // 用来记录当前的hook的指针
+            let scheduleUpdate;
+            function render(vdom, container) {
+                mount(vdom,contain er);
+                scheduleUpdate = ()=>{
+                hookIndex = 0;
+                compareTwoVdom(container,vdom,vdom);
+                }
             }
-        }
-        export function useState(initialState){
-            hookStates[hookIndex] = hookStates[hookIndex]||initialState;           // 第一次调用hookIndex为0，后面hookIndex的值依次累计
-            let currentIndex = hookIndex;                                          // 定义一个局部变量，防止hookIndex更改
-            function setState(newState){
-            if(typeof newState === 'function') newState=newState(hookStates[currentIndex]); 
-            hookStates[currentIndex]=newState;
-            scheduleUpdate();
+            export function useState(initialState){
+                hookStates[hookIndex] = hookStates[hookIndex]||initialState;           // 第一次调用hookIndex为0，后面hookIndex的值依次累计
+                let currentIndex = hookIndex;                                          // 定义一个局部变量，防止hookIndex更改
+                function setState(newState){
+                if(typeof newState === 'function') newState=newState(hookStates[currentIndex]); 
+                hookStates[currentIndex]=newState;
+                scheduleUpdate();
+                }
+                return [hookStates[hookIndex++],setState];
             }
-            return [hookStates[hookIndex++],setState];
-        }
     
     ·useMemo
         ·介绍
@@ -2908,7 +2925,7 @@
                 console.log(ct)
         ·原理
             function useContext(context){
-            return context._currentValue;
+                return context._currentValue;
             }
     ·useEffect
         ·介绍
@@ -2968,72 +2985,60 @@
                 }
             }
 
-    ·useRef
-        *作用是让工程函数组件也能够使用ref
-        *本质上，useRef 就像是可以在其 .current 属性中保存一个可变值的“盒子”。
-        function A() {
-            const el = useRef(null)
-            useEffect(()=>{ 
-                console.log(el);
-            },[])
-            return (
-                <div ref={el}>
-                    <input type="text"/>
-                    a...
-                </div>
-            )
-        }
-    ·useLayoutEffect
-    ·介绍
-        1)其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect
-        2)useEffect不会阻塞浏览器渲染，而 useLayoutEffect 会浏览器渲染
-        3)useEffect会在浏览器渲染结束后执行,useLayoutEffect 则是在 DOM 更新完成后,浏览器绘制之前执行
-    ·使用
-        import React from './react';
-        import ReactDOM from './react-dom';
 
-        const Animate = ()=>{
-            const ref = React.useRef();
-            React.useLayoutEffect(() => {
-            ref.current.style.transform = `translate(500px)`;//TODO
-            ref.current.style.transition = `all 500ms`;
-            });
-            let style = {
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            backgroundColor: 'red'
-            }
-            return (
-            <div style={style} ref={ref}></div>
-            )
-        }
-        ReactDOM.render(<Animate/>,document.getElementById('root'));
-    ·原理
-        export function useLayoutEffect(callback,dependencies){
-            let currentIndex = hookIndex;
-            if(hookStates[hookIndex]){
-                let [destroy,lastDeps] = hookStates[hookIndex];
-                let same = dependencies&&dependencies.every((item,index)=>item === lastDeps[index]);
-                if(same){
-                  hookIndex++;
-                }else{
-                  destroy&&destroy();
-                  queueMicrotask(()=>{
-                      hookStates[currentIndex]=[callback(),dependencies];
-                  });
-                  hookIndex++
+    ·useLayoutEffect
+        ·介绍
+            1)其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect
+            2)useEffect不会阻塞浏览器渲染，而 useLayoutEffect 会浏览器渲染
+            3)useEffect会在浏览器渲染结束后执行,useLayoutEffect 则是在 DOM 更新完成后,浏览器绘制之前执行
+            4)useEffect是异步的，而useLayoutEffect是同步的
+        ·使用
+            import React from './react';
+            import ReactDOM from './react-dom';
+
+            const Animate = ()=>{
+                const ref = React.useRef();
+                React.useLayoutEffect(() => {
+                ref.current.style.transform = `translate(500px)`;//TODO
+                ref.current.style.transition = `all 500ms`;
+                });
+                let style = {
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                backgroundColor: 'red'
                 }
-            }else{
-              queueMicrotask(()=>{
-                  hookStates[currentIndex]=[callback(),dependencies];
-              });
-               hookIndex++;
+                return (
+                <div style={style} ref={ref}></div>
+                )
             }
-        }
+            ReactDOM.render(<Animate/>,document.getElementById('root'));
+        ·原理
+            export function useLayoutEffect(callback,dependencies){
+                let currentIndex = hookIndex;
+                if(hookStates[hookIndex]){
+                    let [destroy,lastDeps] = hookStates[hookIndex];
+                    let same = dependencies&&dependencies.every((item,index)=>item === lastDeps[index]);
+                    if(same){
+                    hookIndex++;
+                    }else{
+                    destroy&&destroy();
+                    queueMicrotask(()=>{
+                        hookStates[currentIndex]=[callback(),dependencies];
+                    });
+                    hookIndex++
+                    }
+                }else{
+                queueMicrotask(()=>{
+                    hookStates[currentIndex]=[callback(),dependencies];
+                });
+                hookIndex++;
+                }
+            }
     ·useRef
         ·介绍
-            主要用于获取DOM
+            *作用是让工程函数组件也能够使用ref
+            *本质上，useRef 就像是可以在其 .current 属性中保存一个可变值的“盒子”。
         ·使用
             function A() {
                 const el = useRef(null)
