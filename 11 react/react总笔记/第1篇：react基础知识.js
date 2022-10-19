@@ -1504,45 +1504,90 @@
         3.redux三大原则
             1.单一数据源
                 整个应用的state都被存到一个状态树里，并且这个状态树，只存在唯一的store中
+                疑问：createStore方法使用后能否保证store是唯一的？
+                    redux不能保证用户创建一个或者多个store,这只能由用户自己去保证，使state便于追踪和修改 
             2.数据是只读的
                 state是只读的，唯一改变state的方法是触发action,action是一个用于描述已发生时间的普通对象
             3.数据改变只能通过纯函数来改变
                 相当于你要编写reducers
+            拓展：什么是纯函数？
+                确定的输入，一定会产生确定的输出
+                函数在执行过程中，不能产生副作用
+                ==如下案例↓
+                // sum 是一个纯函数；因为输入输出确定，并且返回的值一定是 num1 与 num2 这两个参数的和
+                function sum(num1, num2) {
+                    return num1 + num2;
+                }
+
+                // add 不是一个纯函数；因为输入相同，但是输出受到 flag 的影响，并不能保证确定输出
+                let flag = 10;
+                function add(num) {
+                    return num + flag;
+                }
+                // 将 add 改成纯函数：只需要将 let flag 改为 const flag，因为 const 决定了 flag 不可重新赋值，那么 flag 永远都是 10，那么输入输出可以确定
+
+                // changeInfo 不是一个纯函数；因为这个函数存在副作用
+                function changeInfo(info) {
+                    info.name = 'jack';
+                }
         3.redux的核心API
-            · store对象
+            ·createStore(reducer, preloadedState?, enhancer?)
                 1)作用: 
                     redux库最核心的管理对象
-                2)它内部维护着:
-                    state
-                    reducer
-                3)核心方法:
-                    getState()
-                    dispatch(action)
-                    subscribe(listener)
                 4)编码:
                     store.getState()
                     store.dispatch({type:'INCREMENT', number}) 
                     store.subscribe(render)
-            · applyMiddleware()
-                1)	作用:
-                    应用上基于redux的中间件(插件库)
-                2)	编码:
-                    import {createStore, applyMiddleware} from 'redux'
-                    import thunk from 'redux-thunk'  // redux异步中间件
-                    const store = createStore(
-                        counter,
-                        applyMiddleware(thunk) // 应用上异步中间件
-                    )
-            · combineReducers()
+            .bindActionCreators(actionCreators, dispatch)
+                1)作用：
+                    简化redux写法
+                2)编码：
+                    import store form '../store'
+
+                    const dispatch = store.dispatch;
+                    const actionCreators = {
+                        add() {
+                            return { type: ADD };
+                        }
+                        del() {
+                            return { type: DEL };
+                        }
+                    }
+                    const bindActions = bindActionCreators(actionCreators, dispatch)
+                    // bindActionCreators的返回值如下↓
+                    const bindActions = {
+                        add() {
+                            return dispatch(add());
+                        }
+                        del() {
+                            return dispatch(del());
+                        }
+                    }
+
+                    // 使用如下
+                    <button onClick={bindActions.add}></button>
+                    <button onClick={bindActions.del}></button>
+
+            ·combineReducers(reducers)
                 1)作用:
-                    合并多个reducer函数并统一暴露出去
+                    接受一个reducer聚合对象，返回一个聚合后的新的reducer
                 2)编码:
                     export default combineReducers({
                         user,
                         chatUser,
                         chat
                     })
-    ·源码解读
+            · applyMiddleware()
+                1)作用:
+                    应用上基于redux的中间件(插件库)
+                2)编码:
+                    import {createStore, applyMiddleware} from 'redux'
+                    import thunk from 'redux-thunk'  // redux异步中间件
+                    const store = createStore(
+                        counter,
+                        applyMiddleware(thunk) // 应用上异步中间件
+                    )
+    ·源码解读(详细请移步react-demo这个仓库：https://github.com/lukaSavage/react-demo)
         function createStore(reducer, preloadedState, enhancer) {
             let state = preloadedState,
                 listeners = [];
@@ -1960,32 +2005,57 @@
         2)、watcher saga     监听saga,监听被dispatch的actions,当接受到action或者知道其被触发时，调用worker执行任务
         3)、work saga        做左右的工作，如调用API，进行异步请求，获取异步封装结果
     ·redux中的几个关键字fork，call， put，takeEvery，takeLatest，all
-        1、fork(fn,m ...args)
-            创建一个新的进程或者线程，并发发送请求( fork 是无阻塞型调用)
-            fn: Function - 一个 Generator 函数，或返回 Promise 的普通函数
-            args: Array<any> - 传递给 fn 的参数数组。
-        2.call(fn, ...args)
-            发送api(call 是阻塞型调用。)，参数如下：
-            fn: Function - 一个 Generator 函数, 也可以是一个返回 Promise 或任意其它值的普通函数。
-            args: Array<any> - 传递给 fn 的参数数组。
+        1、take(action类型)
+            说明：
+                创建一个 Effect 描述信息，用来命令 middleware 在 Store 上等待指定的 action。
+                简单的来说，只要action type匹配到了，则会继续执行下一个yield，否则一直暂停在这里
+                在发起与 pattern 匹配的 action 之前，Generator 将暂停
+            使用：
+                function * watcherSaga() {
+                    yield take(types.ASYNC_ADD);
+
+                    // 这里如果仅仅用 yield workerSaga() 这样，后面的console并不会打印，所以我们需要使用fork这样的api才行
+                    yield fork(workerSaga)
+                    // yield workerSaga();
+                    console.log('我执行了~')
+                }
+            ★注意：take只会监听一次!!!如果监听到了，执行后续代码，以后再派发，就不会再响应了
+        2、fork(fn,m ...args)
+            说明：
+                创建一个新的进程或者线程，运行workerSaga
+                fork还可以并发发送请求( fork 是无阻塞型调用)，fork 类似于 call，可以用来调用普通函数和 Generator 函数。不过，fork 的调用是非阻塞的，
+                Generator 不会在等待 fn 返回结果的时候被 middleware 暂停；恰恰相反地，它在 fn 被调用时便会立即恢复执行。
+            参数说明：
+                fn: Function - 一个 Generator 函数，或返回 Promise 的普通函数
+                args: Array<any> - 传递给 fn 的参数数组。
+            使用：
+                function * watcherSaga() {
+                    yield fork(workerSaga)
+                    console.log('我执行了~')
+                }
+            ★注意：fork只会监听一次!!!如果监听到了，执行后续代码，以后再派发，就不会再相应了
         3.put(action)
             发送对应的 dispatch，触发对应的 action(非阻塞的)
-        4.take(action类型)
-            创建一个 Effect 描述信息，用来命令 middleware 在 Store 上等待指定的 action。 
-            简单的来说，只要action type匹配到了，则会继续执行下一个yield，否则一直暂停在这里
-            在发起与 pattern 匹配的 action 之前，Generator 将暂停
-            ★注意：take只会监听一次，如果监听到了，执行后续代码，以后再派发，就不会再相应了
-        5.takeEvery(action类型, 监听的generate)
-            ·监听对应的 action；
-            ·每一次 dispatch 都会触发；例如：点击一个新增的按钮，2s 后触发新增动作，在2s内不断点击按钮，这时候，每一次点击，都是有效的。
-        6.takeLatest((action类型, 监听的generate))
+        4.takeEvery(action动作传string, workerSaga)
+            说明：
+                循环rootSaga,使得可以监听多次take或者fork。
+            注意：
+                每一次 dispatch 都会触发；例如：点击一个新增的按钮，2s 后触发新增动作，在2s内不断点击按钮，这时候，每一次点击，都是有效的。
+        5.call(fn, ...args)
+            说明：
+                发送api(和fork用法大致相同，只是传参不同，并且fork是非阻塞的，而call 是阻塞型调用。)
+            参数说明：
+                fn: Function - 一个 Generator 函数, 也可以是一个返回 Promise 或任意其它值的普通函数。
+                args: Array<any> - 传递给 fn 的参数数组。
+        6.all([...watcherSaga])
+            说明：
+                类似于promise.all方法,提供多个saga,需要等这个saga全部完成才会向下执行当前的saga
+        7.takeLatest((action类型, 监听的generate))
             ·监听对应的 action；（和takeEvery相比，相当于做了一次防抖）
             ·只会触发最后一次 dispatch；例如：点击一个新增的按钮，2s 后触发新增动作，在2s内不断点击按钮，这时候，只有最后一次点击是有效的
-        7.throttle(time, action类型， 监听的generate)
+        8.throttle(time, action类型， 监听的generate)
             ·监听对应的 action；（和takeEvery相比，相当于做了一次节流）
             ·只会触发最后一次 dispatch；例如：点击一个新增的按钮，2s 后触发新增动作，在2s内不断点击按钮，这时候，只有最后一次点击是有效的
-        8.all
-            跟 fork 一样，同时并发多个 action，没有顺序。
         9.select(state=>state.xxx);
             用于获取combineReducers暴露出的redux状态管理对象(如果不传参数则获取整个管理对象，如果传了可以指定某个状态)
             例子：
@@ -1994,21 +2064,85 @@
                     console.log(obj)
                 }
     ·使用
-        1）在store文件目录下创建一个helloSaga.js文件
-            export function * helloSaga() {
-                console.log('Hello Sagas!');
+        1）在store文件目录下创建一个rootSaga.js文件
+            function * workerSaga() {
+                yield delay(1000);
+                // put方法会触发dispatch改变reducer中的数据
+                yield put({ type: types.ADD })
+            } 
+                
+            function * watcherSaga() {
+                // 如果没有监听到ASYNC_ADD这个动作，则watcherSaga会一直卡在这里，不会执行workerSaga
+                // 值得注意的是take只能监听一次，如果执行完整的watcherSaga后，ASYNC_ADD就不会触发了，需要使用takeEvery 这样的api才行
+                yield take(types.ASYNC_ADD);
+
+                // 这里如果仅仅用 yield workerSaga() 这样，后面的console并不会打印，所以我们需要使用fork这样的api才行
+                yield fork(workerSaga)
+                // yield workerSaga();
+                console.log('我执行了~')
+            }
+
+            function * rootSaga() {
+                yield watcherSaga()
             }
         2）在store文件夹下创建createStore对象
             import { createStore, applyMiddleware } from 'redux'
             import createSagaMiddleware from 'redux-saga'
-            import { helloSaga } from './sagas'
+            import { rootSaga } from './sagas'
 
-            const sagaMiddleware=createSagaMiddleware();
-            const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+            const sagaMiddleware = createSagaMiddleware();
+            const store = applyMiddleware(sagaMiddleware)(createStore)(reducer);
             // redux-saga需要run以下才能使用
-            sagaMiddleware.run(helloSaga);
+            sagaMiddleware.run(rootSaga);
             
             export default store;
+
+二十、dva
+    ·介绍
+        dva 首先是一个基于 redux 和 redux-saga 的数据流方案，然后为了简化开发体验，dva 还额外内置了 react-router 和 fetch，所以也可以理解为一个轻量级的应用框架。
+    ·特点
+        ·易学易用，仅有 6 个 api，对 redux 用户尤其友好，配合 umi 使用后更是降低为 0 API
+        ·elm 概念，通过 reducers, effects 和 subscriptions 组织 model
+        ·插件机制，比如 dva-loading 可以自动处理 loading 状态，不用一遍遍地写 showLoading 和 hideLoading
+        ·支持 HMR，基于 babel-plugin-dva-hmr 实现 components、routes 和 models 的 HMR
+    安装：
+        可以单独安装，
+            npm i dva
+        也可以通过安装脚手架进行下载
+            npm install dva-cli -g
+            dva new my-dva
+    使用：
+        -------- index.jsx-------
+        import React from 'react';
+        import dva, { connect } from 'dva';
+        
+        const app = dva();
+        // 通过app.model定义模型
+        app.model({
+            namespace: 'counter', // 因为一个dvaApp里面可以定义很多的模型
+            state: { number: 0 }, // 每个model里可以定义一个状态
+            reducers: {
+                add(state) {
+                    return { number: state.number + 1 };
+                }
+            }
+        })
+
+        const App = (props: any):ReactElement => {
+            return (
+                <>
+                    <div>{props.number}</div>
+                    <button onClick={() => props.dispatch({ type: 'counter/add' }) }>+</button>
+                </>
+            )
+        }
+
+        const ConnectApp = connect(state=>state.counter, null)(App);
+        // 指定要渲染的内容
+        app.router(() => <ConnectApp />);
+        // 开始渲染
+        app.start('#root');
+
 
 二十、redux Toolkit
     ·介绍
