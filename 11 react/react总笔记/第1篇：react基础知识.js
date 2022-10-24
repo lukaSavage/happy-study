@@ -1,4 +1,3 @@
-
 /* 
 ★★★★★★★★★★★★★★★ 1、react基本知识 ★★★★★★★★★★★★★★★★★★★★★★★★★
 一、React的基本介绍
@@ -1413,6 +1412,51 @@
     document.getElementById('root')
     );
     --------------------------------------------
+十三、react-router-config
+    就上面而言，所有的路由定义都是直接使用 Route 组件，并且添加属性来完成的；这样的方式会让路由变得非常混乱，
+    理想的状态是所有的路由配置放到一个地方进行集中管理，这个时候可以使用 react-router-config 来完成
+    安装：
+        yarn add react-router-config
+    使用：
+        // 在router配置中：
+        const routes = [
+            {
+                path: '/',
+                exact: true,
+                component: Index
+            },
+            {
+                path: '/about',
+                component: About,
+                routes: [
+                    {
+                        path: '/about/culture',
+                        exact: true,
+                        component: Culture
+                    }
+                ]
+            },
+            {
+                path: '/detail',
+                component: Detail
+            },
+        ]
+        export default routes
+
+        // 在具体页面中
+        export default function About(props) {
+            return (
+                <div>
+                <NavLink exact to="/about">理念</NavLink>
+                <NavLink exact to="/about/culture">文化</NavLink>
+
+                {renderRoutes(props.route.routes)}
+                </div>
+            )
+        }
+        但是需要注意的是，子路由，不是直接使用一整个路由表，而是当前路由配置下的 routes，可以通过 props.route.routes 获取
+        ☆ props.route：是只有使用了 react-router-config 这个库的 renderRoutes，才会添加这么一个属性 ☆
+
     
 十四、react-ui
     ·最受欢迎的UI组件库介绍
