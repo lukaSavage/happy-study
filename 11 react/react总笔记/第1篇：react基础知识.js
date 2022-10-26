@@ -2141,52 +2141,94 @@
             
             export default store;
 
-二十、dva
-    ·介绍
-        dva 首先是一个基于 redux 和 redux-saga 的数据流方案，然后为了简化开发体验，dva 还额外内置了 react-router 和 fetch，所以也可以理解为一个轻量级的应用框架。
-    ·特点
-        ·易学易用，仅有 6 个 api，对 redux 用户尤其友好，配合 umi 使用后更是降低为 0 API
-        ·elm 概念，通过 reducers, effects 和 subscriptions 组织 model
-        ·插件机制，比如 dva-loading 可以自动处理 loading 状态，不用一遍遍地写 showLoading 和 hideLoading
-        ·支持 HMR，基于 babel-plugin-dva-hmr 实现 components、routes 和 models 的 HMR
-    安装：
-        可以单独安装，
-            npm i dva
-        也可以通过安装脚手架进行下载
-            npm install dva-cli -g
-            dva new my-dva
-    使用：
-        -------- index.jsx-------
-        import React from 'react';
-        import dva, { connect } from 'dva';
-        
-        const app = dva();
-        // 通过app.model定义模型
-        app.model({
-            namespace: 'counter', // 因为一个dvaApp里面可以定义很多的模型
-            state: { number: 0 }, // 每个model里可以定义一个状态
-            reducers: {
-                add(state) {
-                    return { number: state.number + 1 };
+二十、dva 
+    1、基本使用
+        ·介绍
+            dva 首先是一个基于 redux 和 redux-saga 的数据流方案，然后为了简化开发体验，dva 还额外内置了 react-router 和 fetch，所以也可以理解为一个轻量级的应用框架。
+            官网地址：(https://dvajs.com/guide/concepts.html#subscription)
+        ·特点
+            ·易学易用，仅有 6 个 api，对 redux 用户尤其友好，配合 umi 使用后更是降低为 0 API
+            ·elm 概念，通过 reducers, effects 和 subscriptions 组织 model
+            ·插件机制，比如 dva-loading 可以自动处理 loading 状态，不用一遍遍地写 showLoading 和 hideLoading
+            ·支持 HMR，基于 babel-plugin-dva-hmr 实现 components、routes 和 models 的 HMR
+        安装：
+            可以单独安装，
+                npm i dva
+            也可以通过安装脚手架进行下载
+                npm install dva-cli -g
+                dva new my-dva
+        使用：
+            -------- index.jsx-------
+            import React from 'react';
+            import dva, { connect } from 'dva';
+            
+            const app = dva();
+            // 通过app.model定义模型
+            app.model({
+                namespace: 'counter', // 因为一个dvaApp里面可以定义很多的模型
+                state: { number: 0 }, // 每个model里可以定义一个状态
+                reducers: {
+                    add(state) {
+                        return { number: state.number + 1 };
+                    }
                 }
+            })
+
+            const App = (props: any):ReactElement => {
+                return (
+                    <>
+                        <div>{props.number}</div>
+                        <button onClick={() => props.dispatch({ type: 'counter/add' }) }>+</button>
+                    </>
+                )
             }
-        })
 
-        const App = (props: any):ReactElement => {
-            return (
-                <>
-                    <div>{props.number}</div>
-                    <button onClick={() => props.dispatch({ type: 'counter/add' }) }>+</button>
-                </>
-            )
-        }
+            const ConnectApp = connect(state=>state.counter, null)(App);
+            // 指定要渲染的内容
+            app.router(() => <ConnectApp />);
+            // 开始渲染
+            app.start('#root');
+    2、支持异步effect
+        介绍：
+            dva 为了控制副作用的操作，底层引入了redux-sagas做异步流程控制，由于采用了generator的相关概念，所以将异步转成同步写法，从而将effects转为纯函数。
+        使用：
+            app.model({
+                namespace: 'counter',
+                ...,
+                reducers: {
+                    asyncAdd(state) {
+                        console.log('这里也执行了~')
+                        return state;
+                    }
+                }
+                effects: {
+                    // 这里的effects就是redux-saga中的effects
+                    *asyncAdd(action, effects) {
+                        yield call(delay, 1000);
+                        // 向仓库派发动作{type: 'counter/add'},这里也可以不带前缀，如 yield put({type: 'add'})
+                        // 如果不写前缀，就指向自己命名空间下发送动作，等同于{type: 'counter/add'}
+                        yield put({type: 'counter/add'}) 
+                        
+                    }
+                }
+            })
 
-        const ConnectApp = connect(state=>state.counter, null)(App);
-        // 指定要渲染的内容
-        app.router(() => <ConnectApp />);
-        // 开始渲染
-        app.start('#root');
+            // 注意：如果reducers和effects里面有相同的异步函数，则两者都会执行(先reducer，后effects)。
 
+    3.支持路由
+        介绍：
+            这里的路由通常指的是前端路由，由于我们的应用现在通常是单页应用，所以需要前端代码来控制路由逻辑，通过浏览器提供的 History API 可以监听浏览器url的变化，从而控制路由相关操作。
+            （dva内部使用的是react-router）
+        使用：
+           import { Router, Route } from 'dva/router';
+            app.router(({history}) =>
+            <Router history={history}>
+                <Route path="/" component={HomePage} />
+            </Router>
+            ); 
+
+二十一、UmiJs
+    
 
 二十、redux Toolkit
     ·介绍
