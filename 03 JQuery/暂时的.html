@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* *{
+            padding: 0;
+            margin: 0;
+        } */
+        #box{
+            width: 200px;
+            height: 200px;
+            background-color: cyan;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <ul id="ul">
+        <li>第1个li</li>
+        <li>第2个li</li>
+        <li>第3个li</li>
+        <li>第4个li</li>
+        <li>
+            第5个li
+            <ol>
+                <li>1</li>
+                <li class="has">2</li>
+                <li></li>
+            </ol>
+        </li>
+    </ul>
+
+<!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script> -->
+<script src="./js/jquery-1.12.4.js"></script>
+<script>
+$(function(){
+    $('li:nth-child(3)').parentsUntil('ul').css('border','1px solid red');
+/* 
+css选择器有哪些
+基本选择器
+层级选择器
+过滤选择器
+内容选择器
+可见性选择器
+属性选择器
+子元素选择器
+表单选择器
+表单对象选择器
+ */
+
+})
+</script>
+</body>
+</html>

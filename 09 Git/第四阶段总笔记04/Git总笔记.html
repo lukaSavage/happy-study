@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>笔记</title>
+</head>
+<body>
+<script>
+/* 
+★★★★★★★★★★ 1.Git ★★★★★★★★★★★★★★★★
+一、git
+    1.什么是git？
+        Git是目前世界上最先进的分布式版本控制系统（没有之一）。开发者为 林纳斯·托瓦兹，开发时间为10天
+    2.安装
+        ①傻瓜式安装Git
+        ②安装完成后，还需要最后一步设置，在命令行输入： 
+            	git config --global user.name "Your Name" 
+            	git config --global user.email "email@example.com" 
+            	git config user.name 查看配置的姓名
+            	git config user.email 查看配置的邮箱
+            	因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址
+    3.Linux的命令(为git操作做铺垫)
+        1) mkdir xxx            在桌面新建一个xxx文件夹
+        2) vi x.txt             对x.txt进行CRUD操作(如果没有x.txt文件则进行创建)
+            ·输入 i 进入编辑模式
+            ·ESC + ：+ wq     保存并退出
+            ·ESC + : + q      不保存退出，会出现警告
+            ·ESC + ：+ q!     不保存强制退出
+        3) cd xxx                进入xxx目录
+        4) cd ..                 返回上一级目录
+        5) cat x.txt             查看x.txt文件的内容
+        6) clear                 清屏
+        7) ls                    列出当前文件夹中所有文件
+        8) pwd                   显示当前目录     
+    4.理解三个分区
+        ·工作区
+            简单的理解就是你通过git创建文件夹的第一层目录都是工作区
+        ·暂存区
+            Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，
+            还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
+        ·版本区
+            工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。
+    5.git版本库操作的一些命令
+        1)git init
+            初始化版本库(相当于创建了一个隐藏文件 .git ,这个文件夹是Git来跟踪管理版本库的，不要去修改这个文件里的内容)
+        2)git add x.txt
+          git add *   /   git add .   /git add -A     //这三个命令都是提交 所有 文件到暂存区 
+            将x.txt文件从工作区添加到暂存区   (可能会出现警告，由于linux和window的换行符不一致导致的。)
+        3)git commit -m "描述信息" 
+            将所有文件都提交到版本区(注意：必须先提交到暂存区，如果只输入git commit会出问题，ESC + ：+ wq 退出就好)
+        4)git status
+            查看是否添加成功（红色表示在工作区，绿色表示在暂存区）
+            什么情况下查看？
+                在不知道三个区的文件是否一致的情况下，可以通过git status查看状态
+    6.差异对比
+        1) git diff :              比较工作区与暂存区
+            如果是绿色，代表工作区有，暂存区没有的
+            如果是红色，代表暂存区有，工作区没有
+            如果是白色，都有
+        2) git diff --cached :     比较暂存区与版本区
+            颜色同上
+        3) git diff master :       比较工作区与版本区
+            颜色同上
+    7.查看日志和版本信息
+        1) git log (按q返回)
+            查看详细的日志信息
+        2) git reflog
+            查看简易的日志信息
+    8.版本回退
+        1)git reset --hard commit_id值  
+            三个区的文件回退到指定的版本
+        2)git reset --hard HEAD^     (HEAD^^指上上个版本, HEAD~100指前100个版本) 
+            三个区的文件回退到上一个版本
+        3)git reset --hard HEAD
+            三个区的文件回退到HEAD版本    (一般用于工作区和暂存区的内容没有commit的时候)
+        4)git reset HEAD
+            暂存区的文件回退到HEAD版本(此时文件区和版本区的文件不变)
+            适用范围：通常用此命令的时候，文件还没有上传到版本区，暂存区的内容和工作区的内容已经修改。
+        5)git reset HEAD^       
+            暂存区的内容回退到上个版本          
+        6)git checkout -- x.txt(危险)   或  git checkout x.txt
+            暂存区的文件回退到工作区中,此时工作区和暂存区都是这个文件
+        7)git checkout HEAD . / * / -A / 文件.txt (危险)
+            三个文件的内容回到HEAD版本 (和git reset --hard HEAD命令效果一样)
+        
+        
+    9.删除文件
+        ·git rm --cached x.txt       从暂存区删除此文件
+        ·git rm x.txt                删除文件(如果删除不了就用git rm -f x.txt)
+        ·git rm -r x.txt             删除文件夹
+        注意：需要将文件提交到版本区才能执行该操作
+    10.分支操作(重点！！！)
+        1)git checkout -b xxx 
+            创建dev分支，并切换到dev分支
+        2)git checkout master/xxx... 
+            切换分支
+        3)git branch 
+            查看当前分支
+        4)git merge xxx
+            合并指定dev分支到当前分支
+        5)git branch -d xxx 
+            删除指定分支
+        拓展：
+        6)git diff a b 
+            显示出两个分支之间所有有差异的文件的详细差异
+        7)git diff a b --stat 
+            显示出两个分支之间所有有差异的文件列表
+        8)git diff a b 文件名(带路径) 
+            显示指定文件的详细差异
+    11.忽略文件
+        .gitignore        git的忽略文件(在此文件中#代表注释的意思)
+            /文件夹名     忽略一个文件夹
+            ·文件名       忽略一个文件
+二、版本控制和系统控制的区别
+    版本控制系统分为两种：分别是↓
+        1.集中式版本控制系统
+            代表：
+                SVN、CVS
+            特点：
+                集中式版本控制系统，版本库是集中存放在中央服务器的，每个开发人员电脑里只有其中一个版本。
+        2.分布式版本控制系统
+            代表：
+                Git、BitKeeper
+            特点：
+                每个开发人员电脑里都有一个完整的版本库。同时，它也需要一台充当“中央服务器”的电脑，来方便“交换”大家的代码修改。
+    两者区别：
+        ①、集中式版本控制系统每个开发者只有应用代码库的一个版本。而分布式版本控制系统每个开发者都有整个代码库的所有版本。
+        ②、集中式版本控制系统在离线状态下开发者无法进行版本管理开发。而分布式版本控制系统在离线状态下开发者可以进行版本管理开发, 等到有网时再push到仓库中。
+三、GitHub介绍
+    1.什么是GitHub？
+        GitHub是一个Git项目托管网站，主要提供基于Git的版本托管服务。
+    2.GitHub能干嘛？
+        ·能够分享你的代码或者其他开发人员配合一起开发。
+        ·GitHub是一个基于Git的代码托管平台，Git并不像SVN那样有一个中心服务器。目前我们使用到的Git命令都是在本地执行，你就需要将数据放到一台其他开发人员能够连接的服务器上。
+    3.GitHub远程仓库的使用
+        ·本地仓库内容要推送到远程仓库
+            * git remote add origin https://github.com/lukaSavage/aaa.git 链接远程仓库
+            * (git remote remove origin  删除远程仓库链接的)
+            * (git remote get-url origin  查看当前链接)
+            * (git remote -     温馨提示操作)
+            * git push -u origin master  把本地仓库master主分支的数据直接推送到远程仓库的master主分支中  (-u只有第一次使用,后续提交可以不用)
+        ·第二次或再提交
+            在原来的基础上只需要输入git push origin master即可第二次提交
+        ·将本地新创建的dev分支发送到远程仓库中去
+            * git push origin dev
+
+        ·远程仓库有内容克隆到本地进行开发
+            * git clone https://github.com/xxx.git  (HTTPS)
+        ·获取并合并远程仓库更新后的内容
+            * git pull origin master 
+        ---------------------------------
+        ·克隆dev分支(将远程仓库的dev1分支克隆到本地的dev2分支来，如果没有dev2则自动创建)
+            * git fetch origin dev1:dev2         //dev1代表远程仓库dev1 ， dev2代表本地仓库dev2
+        
+        拓展：在git pull origin xxx后出现 please enter a commit ...的信息，如何解决？
+            ①、按键盘字母i进入insert模式
+            ②、修改最上面哪行黄色合并信息(可以不修改)
+            ③、按键盘左上角‘ESC’
+            ④、输入 :wq 按回车即可 
+
+    4.git SSH配置、秘钥创建(百度查)
+        SSH配置
+            1.输入命令：cd ~/.ssh 然后输入: $ ls 会看到以下内容：authorized_keys2 id_dsa known_hosts config id_dsa.pub
+
+            2.如果没有.ssh文件，这个时候你就要输入命令：$ ssh-keygen -t rsa -C "email@email.com" 来创建.ssh，
+
+            3.然后你就会看到：Creates a new ssh key using the provided email # Generating public/private rsa key pair.
+
+            Enter file in which to save the key (/home/you/.ssh/id_rsa):直接一路enter就可以
+
+            Enter same passphrase again: [Type passphrase again]会所提示你输入自己密码输不输都可以
+
+            4.完了之后会出现：Your public key has been saved in /home/you/.ssh/id_rsa.pub.
+
+            The key fingerprint is: # 01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db your_email@youremail.com这时候就完成了
+        添加公钥
+            1.查看你生成的公钥：$ cat ~/.ssh/id_rsa.pub
+
+            2.登陆你的github帐户。点击你的头像，然后 Settings -> 左栏点击 SSH and GPG keys -> 
+            点击 New SSH key新建公钥title可以随便输key就是你刚刚新建的公钥
+
+            3.可以测试下：ssh git@github.com如果输出Hi xxx! You've successfully authenticated, 
+            but GitHub does not # provide shell access. Connection to github.com closed.说明成功了
+四、在公司中具体如何使用git？
+    
+
+
+
+
+
+        
+
+
+
+ */
+</script>
+</body>
+</html>

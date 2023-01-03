@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>carousel</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        ul,ol,li{
+            list-style: none;
+        }
+        img{
+            width: 100%;
+            display: block;
+        }
+        #carousel{
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .ul{
+            width: 500%;
+            display: flex;
+            
+        }
+        .ul li{
+            width: 20%;
+        }
+        .ol{
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ol li{
+            float: left;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 2px;
+            background-color: #999;
+        }
+        .ol li.active{
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="carousel">
+        <ul class="ul">
+            <li><img src="./img/bilibili01.jpg" alt="图片"></li>
+            <li><img src="./img/bilibili02.jpg" alt="图片"></li>
+            <li><img src="./img/bilibili03.jpg" alt="图片"></li>
+            <li><img src="./img/bilibili04.jpg" alt="图片"></li>
+            <li><img src="./img/bilibili05.jpg" alt="图片"></li>
+        </ul>
+        <ol class="ol"></ol>
+    </div>
+
+
+
+
+<script src="./index.js"></script>   
+</body>
+</html>

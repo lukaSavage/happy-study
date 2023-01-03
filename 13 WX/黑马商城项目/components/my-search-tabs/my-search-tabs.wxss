@@ -1,0 +1,13 @@
+.search-tabs {
+  display: flex;
+}
+.search-tabs .tab-items {
+  padding: 15rpx 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-tabs .tab-items.active {
+  border-bottom: 6rpx solid var(--tc);
+}

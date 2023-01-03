@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+
+
+
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=600;
+    canvas.height=600;
+    var ctx=canvas.getContext('2d');
+
+    var Ox=300,Oy=300,r=100;
+    ctx.beginPath();
+    ctx.moveTo(300,200);
+    for(var i=0;i<5;i++){
+        var round =( 90 + 72 * i )/ 180 * Math.PI;
+        var x=Math.cos(round)*r;
+        var y=Math.sin(round)*r;
+        ctx.lineTo(Ox+x,Oy-y);
+    }  
+    ctx.closePath();
+    ctx.stroke();
+
+</script>
+</body>
+</html>

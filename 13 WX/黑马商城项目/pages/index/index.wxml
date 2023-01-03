@@ -1,0 +1,31 @@
+<view class="" hover-class="none" hover-stop-propagation="false">
+    <!-- 搜索组件 -->
+    <CommonSearch></CommonSearch>
+    <!-- 轮播图部分 -->
+    <swiper circular indicator-dots autoplay class="swiper-tab">
+        <swiper-item wx:for="{{swiperList}}" wx:key="goods_id">
+            <navigator url="{{item.navigator_url}}">
+                <image mode="widthFix" src="{{item.image_src}}"></image>
+            </navigator>
+        </swiper-item>
+    </swiper>
+    <!-- 导航部分 -->
+    <view class="nav">
+        <navigator open-type="navigate" wx:for="{{navList}}" wx:key="name">
+            <image mode="widthFix" src="{{item.image_src}}"></image>
+        </navigator>
+    </view>
+    <!-- 商品楼层 -->
+    <view class="group">
+        <view class="floor" wx:for="{{groupList}}" wx:key="index">
+            <view class="title">
+                <image mode="widthFix" src="{{item.floor_title.image_src}}"></image>
+            </view>
+            <view class="group-category">
+                <navigator open-type="navigate" url="{{itm.navigator_url}}" wx:for="{{item.product_list}}" wx:for-item="itm" wx:for-index="ids" wx:key="ids">
+                    <image mode="{{ids === 0? 'widthFix': 'scaleToFill'}}" src="{{itm.image_src}}"></image>
+                </navigator>
+            </view>
+        </view>
+    </view>
+</view>

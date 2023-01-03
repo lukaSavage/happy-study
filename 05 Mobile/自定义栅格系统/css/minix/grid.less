@@ -1,0 +1,24 @@
+
+.col-width(@class) {
+  .col(@index) when(@index > 0){
+    .col-@{class}-@{index} {
+      width: percentage(@index/12);
+    }
+    .col(@index - 1);
+  }
+  .col(12);
+}
+
+//创建每一列的样式
+.make-col(){
+  .col-width(xs);
+  @media(min-width:@media-sm) {
+    .col-width(sm);
+  }
+  @media(min-width:@media-md) {
+    .col-width(md);
+  }
+  @media(min-width:@media-lg) {
+    .col-width(lg);
+  }
+}

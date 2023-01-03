@@ -1,0 +1,74 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-19 19:46:42
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-21 19:34:35
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas{
+            display: block;
+            margin: 100px auto;
+            /* background-color: #ccc; */
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=600;
+    canvas.height=600;
+    var count=0;
+    var ctx=canvas.getContext('2d');
+
+    setInterval(function(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.save();
+            ctx.translate(canvas.width/2,canvas.height/2);
+            count++;
+            ctx.rotate(count/360*Math.PI);
+            ctx.save();
+                //绘制圆
+                ctx.beginPath();
+                ctx.arc(0,0,300,0,Math.PI*2);
+                ctx.strokeStyle='#000';
+                ctx.fillStyle="white";
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.arc(0,-150,150,-Math.PI/2,Math.PI/2);
+                ctx.arc(0,150,150,-Math.PI/2,Math.PI/2,true);
+                ctx.arc(0,0,300,Math.PI/2,Math.PI*3/2);
+                ctx.fillStyle='#000';
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(0,-150,50,-Math.PI/2,Math.PI*2);
+                ctx.fillStyle='white';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(0,150,50,-Math.PI/2,Math.PI*2);
+                ctx.fillStyle='#000';
+                ctx.fill();
+            ctx.restore();
+        ctx.restore();
+    },5)
+    
+    
+
+    
+
+
+</script>
+</body>
+</html>

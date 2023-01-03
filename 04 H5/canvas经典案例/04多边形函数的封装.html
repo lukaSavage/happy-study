@@ -1,0 +1,76 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-20 19:58:41
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-21 14:33:31
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多边形函数的封装</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<canvas></canvas>
+
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=600;
+    canvas.height=600;
+    var ctx=canvas.getContext('2d');
+
+    //调用函数
+    Polygon(ctx,300,300,100,{lineWidth:5,n:5});
+
+
+
+    /**
+     * @name: 封装多边形
+     * @param {ctx}  环境上下文名字 
+     * @param {Ox}   圆心x 
+     * @param {Oy}   圆心y 
+     * @param {r}    半径r 
+     * @param {r2}    内部半径r2 (可选)
+     * @param {n}     几边形 (可选)
+     * @param {fillStyle}    填充色 (可选)
+     * @param {lineWidth}    描边宽 (可选)
+     * @param {strokeStyle}    描边色 (可选)
+        
+     * @return: 
+     */
+    
+    function Polygon(ctx,Ox,Oy,r,{r2=(r*2/5),n=5,fillStyle='transparent',lineWidth=10,strokeStyle='#000'}={}){
+        ctx.beginPath();
+        var x=Ox+(Math.cos(Math.PI/2-Math.PI*2/n))*r;
+        var y=Oy-(Math.sin(Math.PI/2-Math.PI*2/n))*r;
+        ctx.moveTo(x,y);
+        for(var i=0;i<n;i++){
+            var round1=Math.PI/2 - Math.PI*2/n + Math.PI*2*i/n;
+            var x1=Ox+(Math.cos(round1))*r;
+            var y1=Oy-(Math.sin(round1))*r;           
+            ctx.lineTo(x1,y1);
+            var round2=Math.PI/2 - Math.PI/n + Math.PI*2*i/n;
+            var x2=Ox+(Math.cos(round2))*r2;
+            var y2=Oy-(Math.sin(round2))*r2; 
+            ctx.lineTo(x2,y2); 
+        }
+        ctx.closePath();
+        ctx.fillStyle=fillStyle;
+        ctx.lineWidth=lineWidth;
+        ctx.strokeStyle=strokeStyle;
+        ctx.fill();
+        
+        ctx.stroke();
+    }
+</script>
+</body>
+</html>

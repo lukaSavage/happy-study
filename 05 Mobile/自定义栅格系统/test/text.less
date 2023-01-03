@@ -1,0 +1,9 @@
+/* 测试写出12个.col-xs-n */
+.col(@index) when (@index <13){
+    .col-xs-@{index} {
+      width: percentage(@index/12);
+    }
+    .col(@index + 1);
+  }
+  .col(1);
+  

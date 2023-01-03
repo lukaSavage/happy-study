@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自动化构建工具</title>
+</head>
+<body>
+<script>
+/* 
+★★★★★★★★★★ 1.gulp的应用 ★★★★★★★★★★★★★★★★★★★★
+一、预备知识(了解)
+    1、什么是项目构建?
+        * 项目构建包括如下内容：
+        * 代码转换：将 TypeScript 编译成JavaScript、将 LESS 编译成 CSS等。
+        * 文件优化：压缩JavaScript、CSS、HTML 代码，压缩合并图片等。
+        * 代码分割：提取多个页面的公共代码，提取首屏不需要执行部分代码让其异步记在。
+        * 模块合并：在采用模块化的项目里会有很多个模块和文件，需要通过构建功能将模块分类合并成一个文件。
+        * 自动刷新：监听本地源代码变化，自动重新构建、刷新浏览器。
+        * 代码校验：在代码被提交到仓库前需要校验代码是否符合规范，以及单元测试是否通过。
+        * 自动发布：更新代码后，自动构建出线上发布代码并传输给发布系统。
+        * 构建工具就是做以上这些事，将源代码转换成可以执行的JavaScript、CSS、HTML 代码。
+        * 简单的来说：
+            构建工具在开发环境下，编译打包，自动化
+                    生产环境下，压缩代码
+
+    2、构建工具的认识
+        * 构建工具有很多，例如：
+        * fis3
+        * grunt
+        * gulp
+        * webpack
+        * parcel
+        * Rollup
+        * ...
+        * 但是市面上最火，功能最强大的无非就是webpack，而其次是gulp。
+        * 所以，我们主要就学习这两种构建工具
+
+    3、构建环境的认识
+        * 我们对平时开发的代码区分了两种环境：
+        * 开发环境 development
+            * 自动编译运行项目、检查语法错误、详细的错误提示等... （能帮助程序员更好的写代码, 在内存中编译运行，没有任何文件输出）
+        * 生产环境 production
+            * 压缩代码、兼容性处理等...（生成打包后的项目文件，提供项目上线使用）
+        * 而我们使用的库也分为两种依赖：    
+        * 开发依赖 devDependencies
+            * 项目构建打包需要的依赖
+        * 生产依赖 dependencies
+            * 项目上线运行时需要的依赖
+
+二、gulp的使用
+    中文主页: http://www.gulpjs.com.cn/
+    gulp是与grunt功能类似的**前端项目构建**工具, 也是基于Nodejs的自动**任务运行器**
+    能自动化地完成 javascript/coffee/sass/less/html/image/css 等文件的
+    合并、压缩、检查、监听文件变化、浏览器自动刷新、测试等任务
+    gulp更高效(异步多任务), 更易于使用, 插件高质量
+    使用步骤↓
+        1. 全局安装
+            npm i gulp-cli -g
+        2. 本地安装
+            npm init -y
+            npm i gulp -D
+        3. 初始化gulp配置文件：（文件名称固定） gulpfile.js (写在文件夹的里面)   
+            配置文件: 当你运行gulp指令时，读取gulpfile.js配置文件里面的配置，安装里面配置去运行
+        4. 定义配置
+            - 去插件网找插件  https://gulpjs.com/plugins/
+            gulp-xxx
+            - 下载插件 
+            npm i gulp-xxx -D
+            - 引入插件    
+            - 配置任务
+            gulp.task(任务名称, 任务要执行的回调函数)
+            - 执行任务
+            gulp 任务名称  
+        ★★★★★★★★★★★★★★★拓展(需要下载的包说明)★★★★★★★★★★★★★★★★★★★★★
+        ★1.识别ES6以上的语法并转换成commonjs模块化语法或ES5以下的语法
+        ★  npm i -D gulp-babel @babel/core @babel/preset-env 
+        ★2.让转换后的语法能够运行在浏览器端
+        ★  npm i -D gulp-browserify
+        ★
+        ★
+        ★
+        ★
+    配置统一任务方法：
+        ·series([])            同步顺序执行(同时只能干一件事)
+        ·parallel([])          异步并行执行（同时干多件事）
+        如下例子：
+            gulp.task('dev:js', gulp.series(['eslint', 'babel', 'browserify'])); // 同步顺序执行(同时只能干一件事)
+            gulp.task('dev:js', gulp.parallel(['eslint', 'babel', 'browserify'])); // 异步并行执行（同时干多件事）
+    
+    eslint模块(强制开发者需要遵循一些语法规范，如果不遵循，有三种选择)
+        0：默认，代表不处理，不使用规范
+        1：会警告
+        2：会报错
+        用之前需要eslintrc配置(定义的规范都网这个文件写)
+            .eslintrc 文件夹
+            
+    gulp监视
+        gulp.watch()    //但要手动刷新html页面
+
+★★★★★★★★★★ 2.webpack的应用 ★★★★★★★★★★★★★★★★★★★★
+一、webpack的基本使用
+    ·介绍
+        本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包工具。当 webpack 处理应用程序时，
+        它会在内部构建一个 依赖图(dependency graph)，此依赖图会映射项目所需的每个模块，并生成一个或多个 bundle
+    ·起步
+        1)全局安装webpack
+            npm i webpack webpack-cli -g
+        2)本地安装webpack
+            npm i webpack webpack-cli -D
+        
+        拓展：webpack打包命令↓↓↓
+            第一种、将src下的js文件解析打包到build目录中(一般正式开发中都会创建webpack.config文件，所以用不上)
+                * webpack ./src/js/index.js -o ./build/js/bulit.js --mode=development   //开发环境
+                * webpack ./src/js/index.js -o ./build/js/bulit.js --mode=production    //生产依赖
+                * 
+            第二种、直接通过命令打包
+                * 首先先在package.json中创建一个命令：
+                    "script": {
+                        "build": "webpack"
+                    }
+                * 直接运行 npm run build 即可打包
+                拓展：script命令是如何执行的？
+                    1.以webapck为例，当运行npm run build的时候，它会先执行shell脚本webpack
+                    2.紧接着它会去node_modules里面去找node_modules/.bin,并把bin目录下的命令添加到环境变量中。
+                    3.如果还找不到，将会找其他path路径下的命令
+                    一句话就是：找环境变量下的path路径下的集合
+
+    ·核心概念
+        *entry 入口
+            - 指示 webpack 以哪个文件为入口开始打包
+            - 入口起点(entry point)指示 webpack 应该使用哪个模块，来作为构建其内部 依赖图(dependency graph) 的开始。进入入口起点后，
+                webpack 会找出有哪些模块和库是入口起点（直接和间接）依赖的
+            - 默认值是 ./src/index.js，但你可以通过在 webpack configuration 中配置 entry 属性，来指定一个（或多个）不同的入口起点
+            主要写法：
+                entry: './src/js/index.js'
+            拓展：如果想要多入口打包，则可以这样写：
+                entry: {
+                    index: './public/assets/js/index',  //打包入口项
+                    list: './public/assets/js/list',
+                    search: './public/assets/js/search',
+                    detail: './public/assets/js/detail',
+                    jquery: './public/assets/vendors/jquery/jquery.min.js',
+                },
+        *output 输出
+            - 打包后 bundle 输出到哪里去
+            - 是一个对象,内有filename和path两个属性
+            - output 属性告诉 webpack 在哪里输出它所创建的 bundle，以及如何命名这些文件
+            - 主要输出文件的默认值是 ./dist/main.js，其他生成文件默认放置在 ./dist 文件夹中。
+                path:  path.resolve(__dirname,'dist'),                   // dist,为默认入口,所有文件打包生成的地方
+                filename: 'main.js'                                     // 要输入的文件入口为dist/main.js
+                    ★★★注意：path传的是绝对路径,即要配合核心模块path来搭配使用★★★
+        *loader 加载器
+            - webpack 只能识别 js、json、wasm或者txt 文件，其他文件会直接报错
+            - loader 能帮 webpack 加载它识别不了的模块
+            - 当要加载多个模块的时候，使用use:['xxx','xxx']
+            - 当要加载一个模块的时候，使用loader:'xxx'
+            - loader 让 webpack 能够去处理其他类型的文件，并将它们转换为有效模块，以供应用程序使用，以及被添加到依赖图中
+            主要写法：
+                module: {
+                    rules:[
+                        { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+                        //下载的loader配置
+                    ]
+                }
+            第二种写法：(当rules中的use只有一个加载插件时：)
+                module: {
+                    rules: [
+                        {
+                            test: /\.css$/,
+                            loader: 'style-loader'
+                        }
+                    ]
+                }
+        *plugins 插件
+            - 执行任务更加强大的工作（解决 loader 的痛点）
+            - 由于要放多个插件，所以用数组表示
+            - loader 用于转换某些类型的模块，而插件则可以用于执行范围更广的任务。包括：打包优化，资源管理，注入环境变量
+            主要写法：
+                plugins: [
+                    new HtmlWebpackPlugin({ template: './src/index.html' })   
+                ]
+        *mode 模式
+            日常的前端开发工作中，一般都会有两套构建环境
+            一套开发时使用，构建结果用于本地开发调试，不进行代码压缩，打印 debug 信息，包含 sourcemap 文件
+            一套构建后的结果是直接应用于线上的，即代码都是压缩后，运行时不打印 debug 信息，静态文件不包括 sourcemap
+            webpack 4.x 版本引入了 mode 的概念
+            当你指定使用 production mode 时，默认会启用各种性能优化的功能，包括构建结果优化以及 webpack 运行性能优化
+            而如果是 development mode 的话，则会开启 debug 工具，运行时打印详细的错误信息，以及更加快速的增量编译构建
+            - development 开发环境
+                - 会将 process.env.NODE_ENV 的值设为 development。启用 NamedChunksPlugin 和 NamedModulesPlugin
+                - 能将 ES6 模块化语法编译成浏览器能识别的模块化语法
+                
+            - production 生产环境(发生的默认)
+                - 会将 process.env.NODE_ENV 的值设为 production。启用 FlagDependencyUsagePlugin, FlagIncludedChunksPlugin, 
+                    ModuleConcatenationPlugin, NoEmitOnErrorsPlugin, OccurrenceOrderPlugin, SideEffectsFlagPlugin 和 
+                    UglifyJsPlugin
+                - 能将 ES6 模块化语法编译成浏览器能识别的模块化语法
+                - 压缩 js 代码
+            - none 不开启任何优化项设置
+            如何指定环境？
+                第一种写法：
+                    直接加个配置项：mode: 'development'
+                第二种写法：
+                    在package.json中的build命令添加字段：完整命令如下↓↓↓
+                    "build": "webpack --mode=production"      // 该命令的优先级比第一种高
+                第三种写法：(跨环境设置变量)
+                    npm i cross-env
+
+                    "build": "cross-env NODE_ENV=development webpack"
+                    -----------
+                    ★★★注意：mode只是在模块内可用，在node环境不可用
+                    拓展：如何设置环境变量？(详情请看node.js架构)
+                        ①、第一种。set key=value
+                        ②、第二种。
+                            const webpack = require('webpack')
+                            {
+                                plugins: [
+                                    new webpack.DefinePlugin({
+                                        'process.env.NODE_ENV': JSON.stirngify(process.env.NODE_ENV)
+                                    })
+                                ]
+                            }
+                第四种写法：(了解即可)
+                    一、在package.json中的build命令添加字段：完整命令如下↓↓↓
+                            "build": "webpack --env=development"
+                    二、修改webpack.config.json
+                        将module.exports = {...} 变成module.exports = (env)=>({...})的形式
+                        此时env就是package.json中的--env变量的值
+            在各个平台如何设置环境变量(拓展，了解即可)
+                ·在windows中，通过set xxx1=xxx2设置，取值则是echo %xxx1%
+                ·在mac、linux中，通过export xxx1=xxx3来设置
+        * devServer配置
+            devServer: {
+                port: 8080                                         // 配置http默认服务的端口号，如果不设置，默认为8080
+                open: true                                         // 自动打开浏览器
+                compress: true,                                   // 启动gzip压缩
+                contentBase: path.resolve(__dirname, 'public')   // static:额外的静态文件更目录，通常指没有被webpack加载打包的图片等资源(先找index.js有没有加载进来，如果没有则会找public文件，还找不到则报错)(现已废弃，请使用static代替)
+                static: path.resolve(__dirname, 'public')       //contentBase的替代方案
+            }
+        拓展：loader模块和plugins模块有什么区别？
+            1）从功能角度区分：
+                loader模块只专注于转化文件（transform）这一个领域，完成压缩，打包，语言翻译。仅仅是为了打包
+                plugins模块主要是为了帮助loader模块完成不了的任务，比如打包优化、资源管理、注入环境变量
+            2）从运行角度分析
+                1) loader运行在打包文件之前（loader为在模块加载时的预处理文件）
+                2) plugins在整个编译周期都起作用。
+二、配置文件config(loader、plugin模块配置详解)
+    *通常配置文件是一个js文件,使用的是common.js模块化的语法，主要通过mudule.exports={}来暴露文件
+    *执行顺序：从下往上，从右往左，从后往前 依次执行
+    ·开发环境下的webpack.dev.js
+        配置开发环境的webpack
+            需要下载的包：
+                npm i webpack-dev-server -D
+            配置webpack.config.js
+                module.exports = {
+                    devServer: {
+                        port: 8080                                         // 配置http默认服务的端口号，如果不设置，默认为8080
+                        open: true                                         // 自动打开浏览器
+                        compress: true,                                   // 启动gzip压缩
+                        contentBase: path.resolve(__dirname, 'static')   // static:额外的静态文件更目录，通常指没有被webpack加载打包的图片等资源(现已废弃，请使用static代替)
+                        static: path.resolve(__dirname, 'static')       //contentBase的替代方案
+                    }
+                }
+            配置package.json文件
+                "scripts": {
+                    "build": "cross-env NODE_ENV=production webpack",
+                    "start": "cross-env NODE_ENV=development webpack serve"
+                },
+
+
+            --------------------以下为npx的另一种玩法---------------------------
+            运行指令：
+                npx webpack-dev-server
+                // 指令：webpack 只能启动普通的配置。 要想启动devServer，要改指令：npx webpack-dev-server
+                // npx运行时会将当前目录node_modules/.bin临时添加为环境变量
+                // npx用来启动本地安装的包,相当于把webpack-dev-server临时添加为环境变量
+            提示：
+                * 也可以在package.json中的script属性修改以达到通过npm start来启动服务器
+                * "start": "npx webpack-dev-server  --config ./config/webpack.dev.js"
+                    默认情况配置文件和src同级，如果添加--config就会去指定目录寻找配置文件
+            ------------------------------------------------------------------------
+                
+        ①、CSS文件        
+            需要下载的包：
+                npm i style-loader -D          // 用于把css样式插入到html中，并最终转义成js脚本
+                npm i css-loader -D            // 用来翻译并处理css中的@import和url()
+            module配置：
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 'css-loader'],
+                },
+            拓展：
+                ①、如何处理css的兼容性？
+                    ·为了浏览器的兼容性，有时候我们必须加入-webkit,-ms,-o,-moz这些前缀
+                        Trident内核：主要代表为IE浏览器, 前缀为-ms
+                        Gecko内核：主要代表为Firefox, 前缀为-moz
+                        Presto内核：主要代表为Opera, 前缀为-o
+                        Webkit内核：产要代表为Chrome和Safari, 前缀为-webkit
+                    
+                    ---------------下面以伪元素为例-------------------
+                    ·（以伪元素为例：）伪元素::placeholder可以选择一个表单元素的占位文本，它允许开发者和设计师自定义占位文本的样式。
+                        ①、需要下载的包：  
+                            - npm i postcss-loader -D                  // 可以使用PostCSS处理CSS兼容，并给一些样式加兼容性的前缀
+                            - npm i postcss-preset-env -D              // 把现代的CSS转换成大多数浏览器能理解的 
+                        ②、新创建一个postcss.config.js的文件(不配置的话默认webkit)
+                            let postcssPresetEnv = require('postcss-preset-env');
+                            module.exports = {
+                                {
+                                    test: /\.css$/,
+                                    use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+                                },
+                                plugins:[postcssPresetEnv({
+                                    browsers: 'last 5 version'    // 根据兼容性加前缀
+                                })]
+                            }
+                            
+        ②、Less文件      
+            需要下载的包：
+                npm i less -D
+                npm i css-loader -D
+                npm i style-loader -D
+                npm i less-loader -D   // 将less转成css
+            module配置：
+                {
+                    test: /\.less$/,
+                    // use的value值得执行顺序是从右向左执行的
+                    use: ['style-loader', 'css-loader', less-loader],
+                },
+        ③、css的兼容性
+            复习：为了浏览器的兼容性，有时候我们必须加入-webkit,-ms,-o,-moz这些前缀
+                ·Trident内核：主要代表为IE浏览器, 前缀为-ms
+                ·Gecko内核：主要代表为Firefox, 前缀为-moz
+                ·Presto内核：主要代表为Opera, 前缀为-o
+                ·Webkit内核：产要代表为Chrome和Safari, 前缀为-webkit
+            需要下载的包：
+                npm i postcss-loader -D 给css添加兼容性前缀
+                npm i postcss-preset-env -D 一个插件，作用是帮助postcss找到package.json中的browserList里面的配置，通过配置加载指定的css兼容性样式
+            module配置：
+                {
+                    test: /\.less$/,
+                    // use的value值得执行顺序是从右向左执行的
+                    use: ['style-loader', 'css-loader', 'postcss-loader', less-loader],
+                },
+            同时在根目录文件下添加postcss.config.js文件
+                let postcssPresetEnv = require('postcss-preset-env');
+                module.exports={
+                    plugins:[postcssPresetEnv({
+                        browsers: 'last 5 version'
+                    })]
+                }
+            设置package.json文件
+                {
+                +  "browserslist": {
+                +    "development": [
+                +      "last 1 chrome version",
+                +      "last 1 firefox version",
+                +      "last 1 safari version"
+                +    ],
+                +    "production": [
+                +      ">0.2%"
+                +    ]
+                +  }
+                +}
+            
+        ③、image文件(样式中的图片)       
+            需要下载的包：
+                npm i file-loader -D      // 会将src目录下引用到的图片以hash值的方式拷贝到dist目录中
+                npm i url-loader -D       // 当图片小于limit的时候会把图片BASE64编码，大于limit参数的时候还是使用file-loader进行拷贝
+            module配置：
+                {
+                    test: /\.(png|jpg|gif|bmp|svg)$/i,
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,                     //小于8k 的图片，会转换成base64格式的图片
+                        name: '[hash:10].[ext]',         //[hash:10]取hash值前10位,[ext]后缀名。之前文件是什么后缀名，之后就是什么
+                        outputPath: 'imgs',              // 把图片放入到build/imgs文件夹下
+                    },
+                    esModule: false                      //关闭ES6模块化，使用commonjs，解决html img图片出现 [Object Module] 问题
+                }
+            ★★ 由于file-loader、url-loader、raw-loader已废弃，请使用asset module替代，写法如下↓↓↓
+                 module: {
+                    rules: [
+                        {
+                            test: /\.png$/i,
+                            use: 'asset/resource'
+                        },
+                        {
+                            test: /\.ico$/i,
+                            use: 'asset/inline'
+                        },
+                        {
+                            test: /\.text$/i,
+                            use: 'asset/source'
+                        },
+                    ],
+                },
+        ④、html文件(实现其他资源在html文件自动引入)
+            需要下载的包：
+                npm i html-webpack-plugin -D
+            先引入到webpack.dev.js中
+                const HtmlWebpackPlugin = require('html-webpack-plugin');
+            plugins配置
+                plugins:[
+                    new HtmlWebpackPlugin({
+                        // 以 ./src/index.html 为模板创建新的html文件
+                        // 新文件结构和源文件一样，会自动引入打包生成的资源（js）
+                        template: './src/index.html'
+                    })
+                ],
+        ⑤、html文件引入image(html文件引入图片)
+            需要下载的包：
+                npm i -D html-loader
+            module配置：
+                {
+                    test: /\.(html)$/,
+                    loader: 'html-loader',
+                }
+            ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+            ★ 注意：需要在 ③ 模块中额外添加esModule: false                                        ★
+            ★ 原因：关闭ES6模块化，使用commonjs，解决html img图片出现 [Object Module] 问题          ★
+            ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+        ⑥、字体图标
+            需要下载的包：(此处有两种选择，url-loader、file-loader,但用url-loader对压缩后的main.js比较大)
+                npm i file-loader -D
+            module配置：
+                {
+                    test: /\.(eto|svg|ttf|woff)$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: '[hash:10].[ext]',    //修改图片的名字，ext代表原来什么名字修改后依然一样
+                        outputPath: 'icon'          //把所有的字体图标放入到build/icon下
+                    }
+                }
+        ⑦、js兼容性处理(babel详解)
+            Babel其实是一个编译JavaScript的平台,可以把ES6/ES7,React的JSX转义为ES5   
+            需要下载的包：
+                cnpm i babel-loader @babel/core @babel/preset-env @babel/preset-react  -D
+                cnpm i @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties -D
+            各个包说明：
+                ·babel-loader                               使用Babel和webpack转译JavaScript文件
+                ·@babel/@babel/coreBabel                    编译的核心包
+                ·babel-preset-env                           包含了所有年度预设（ babel-preset-es2015、babel-preset-es2016、babel-preset-es2017），无需用户单独指定某个预设。
+                ·@babel/@babel/preset-react                 同上
+                ·@babel/plugin-proposal-decorators          把类和对象装饰器编译成ES5
+                ·@babel/plugin-proposal-class-properties    转换静态类属性以及使用属性初始值化语法声明的属性
+            在loader模块的写法：
+                +      {
+                +        test: /\.jsx?$/,
+                +        use: {
+                +          loader: 'babel-loader',
+                +          options: {
+                +            presets: [["@babel/preset-env",{
+                +              targets: "> 0.25%, not dead",
+                +            }], '@babel/preset-react'],
+                +            plugins: [
+                +              ['@babel/plugin-proposal-decorators', { legacy: true }],
+                +              ['@babel/plugin-proposal-class-properties', { loose: true }],
+                +            ],
+                +          },
+                +        },
+                +      },
+            拓展：babel各个包的转译过程↓↓↓
+                ①、首先，webpack是不认识es6、es7、jsx语法的，要将他们都转成es5，需要靠babel-loader
+                ②、babel-loader只是一个转换函数，并不能识别js的语法，也不知道如何转换，需要靠@babel/core
+                ③、@babel/core它是babel核心模块，它认识js代码(包括es6、jsx)，主要用途就是将js代码转换成ast语法树，并将其转换为代码字符串，同时此过程也可以创建source map。但不知道如何转换
+                ④、@babel里面有大量的插件，比如plugin-transform-arrow-functions，专门用于转es6箭头函数变成es5普通函数的
+                ⑤、但插件有几百个，我们此时需要打个包，此时需要用到的正是@babel/preset-env
+                总结：es6 通过babel-loader转成es5，此时webpack无法识别，需要将es5解析成ast语法树=>对于es6以上的语法需要@babel/preset-env来进行翻译
+
+        ⑧、esLint处理
+            需要下载的包：
+                npm install eslint-loader -D
+                npm install eslint -D
+                npm  install babel-eslint -D 
+            module配置：
+                {
+                  test: /\.jsx?$/,
+                  loader: 'eslint-loader',       // 
+                  enforce: 'pre',                // enforce有三种值，pre >normal(默认) > post , 优先级高的优先执行
+                  options: { fix: true },        //自动修复部分eslint报的错
+                  exclude: /node_modules/,       //这里是排除node_modules文件，不检查
+                },
+            配置.eslintrc.js文件：
+                module.exports = {
+                    // root: true,                    // 代表当前文件是根配置文件
+                    extends: 'airbnb'                 // 当然你可以不用root为true的配置，可以使用airbnb这个库配置好的拓展
+                    parser: 'babel-eslint',         // 通过babel-eslint转换成ast抽象语法树
+                    parserOptions: {
+                        sourceType: 'module',        // 源代码的类型
+                        ecmaVersion: 2015            // ecma版本号
+                    },
+                    env: {
+                        browser: true,    // 支持浏览器环境
+                        node: true        // 支持node环境
+                    },
+                    rules: {                        // 代码检查风格
+                        indent: 'off',              // 代码缩进(可选off或者error,如果是error，则不规范会报错)
+                        quotes: 'off',              // 引号类型
+                        'no-console': 'error'       // 禁止使用console
+                    }    
+                }
+         
+        ⑨、soucemap处理
+            sourcemap是为了解决开发代码与实际运行代码不一致时帮助我们debug到原始开发代码的技术。
+            配置：
+                module.exports = {
+                    devtool:'cheap-source-map',
+                }
+            附：配置项
+                配置项其实只是五个关键字eval、source-map、cheap、module和inline的组合
+                    source-map	产生.map文件
+                    eval	使用eval包裹模块代码
+                    cheap	不包含列信息（关于列信息的解释下面会有详细介绍)也不包含loader的sourcemap
+                    module	包含loader的sourcemap（比如jsx to js ，babel的sourcemap）,否则无法定义源文件
+                    inline	将.map作为DataURI嵌入，不单独生成.map文件
+                ---------------------以下是参考组合--------------------------------
+
+                source-map	                    原始代码 最好的sourcemap质量有完整的结果，但是会很慢
+                eval-source-map	                原始代码 同样道理，但是最高的质量和最低的性能
+                cheap-module-eval-source-map	原始代码（只有行内） 同样道理，但是更高的质量和更低的性能
+                cheap-eval-source-map	        转换代码（行内） 每个模块被eval执行，并且sourcemap作为eval的一个dataurl
+                eval	                        生成代码 每个模块都被eval执行，并且存在@sourceURL,带eval的构建模式能cache SourceMap
+                cheap-source-map	            转换代码（行内） 生成的sourcemap没有列映射，从loaders生成的sourcemap没有被使用
+                cheap-module-source-map	        原始代码（只有行内） 与上面一样除了每行特点的从loader中进行映射
+                hidden-source-map	            隐藏sourcemap
+                nosources-source-map	        控制台能正确提示报错的位置而不暴露源码
+                -------------------------------------------------------
+                配置推荐↓↓↓
+                    1.开发环境
+                        # 如果我们想要速度快，推荐cheap-eval-source-map
+                        # 如果我们想要调试更友好，推荐cheap-module-source-map
+                        # 折中的选择就是eval-source-map
+                    2.生产环境
+                        # 首先要排除内敛，因为一方面我们隐藏源代码，另一方面需要考虑减少文件体积
+                        # 想要速度快，优先选择cheap
+                        # 折中选择是 hidden-source-map
+        ⑩、第三方类库的处理
+            第三方类库的引入方式有两种：一种是直接引入、一种是插件引入
+            - 直接引入
+                import _ from 'lodash';
+                alert(_.join(['a','b','c'],'@'));
+            - 插件引入
+                webpack配置ProvidePlugin后，在使用时将不再需要import和require进行引入，直接使用即可
+                _ 函数会自动添加到当前模块的上下文，无需显示声明
+                    plugins: [
+                        ...,
+                        new webpack.ProvidePlugin({
+                            _:'lodash'
+                        })
+                    ]
+        11、提取css(MinCssExtractPlugin的应用)
+            MiniCssExtractPlugin插件将CSS提取到单独的文件中。它为每个包含CSS的JS文件创建一个CSS文件。
+            下载安装
+                cnpm install mini-css-extract-plugin -D
+        12、定义环境变量的插件
+            需要下载的包：
+                无
+            plugins配置：
+                const webpack = require('webpack');
+                
+                plugins: [
+                    new webpack.DefinePlugin({
+                        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+                    })
+                ]
+        13、webpack watch
+            当代码发生修改后可以自动重新编译    
+            module.exports = {
+                //默认false,也就是不开启
+                watch:true,
+                //只有开启监听模式时，watchOptions才有意义
+                watchOptions:{
+                    //默认为空，不监听的文件或者文件夹，支持正则匹配
+                    ignored:/node_modules/,
+                    //监听到变化发生后会等300ms再去执行，默认300ms
+                    aggregateTimeout:300,
+                    //判断文件是否发生变化是通过不停的询问文件系统指定议是有变化实现的，默认每秒问1000次
+                    poll:1000
+                }
+            }
+
+    ·生产环境下的webpack.dev.js
+        ①、css插件
+            因为css的下载和js可以并行，MiniCssExtractPlugin插件将CSS提取到单独的文件中。它为每个包含CSS的JS文件创建一个CSS文件。
+            需要下载的包：
+                npm install mini-css-extract-plugin -D
+            先引入到webpack.prod.js中
+                const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+            plugins配置：
+                new MiniCssExtractPlugin({
+                    //提取css文件为单独文件
+                    filename: "./css/[name].css",
+                    chunkFilename: "./css/[id].css"     //如果分割成两个文件，就会使用下面的命名
+                }),
+            最后在使用MiniCssExtractPlugin.loader取代style.loader
+            ---------------------------
+            拓展：让css压缩成一行
+                MiniCssExtractPlugin插件下的Minimizing For Production，专门将css压缩的更加彻底
+                具体使用步骤：
+                    ①、先下载
+                        npm i optimize-css-assets-webpack-plugin -D
+                    ②、再引入
+                        const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+                    ③、放入到plugins中
+                        plugins: [
+                            new OptimizeCSSAssetsPlugin({}),
+                        ]
+        ②、清除build再重新设置的插件
+            clean-webpack-plugin，一个webpack插件，可以打包前先清空输出目录
+            需要下载的包：
+                npm install -D clean-webpack-plugin
+            先引入到webpack.prod.js中：
+                const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+            plugins配置：
+                new CleanWebpackPlugin(), // 如下方式可以指定清除路径
+                new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: ['** / *']})
+        ③、CSS兼容自动处理
+            需要下载的包：
+                npm i postcss-loader -D
+                -----------(配置文件引入的3个包也需要下)
+                npm i postcss-import postcss-preset-env cssnano -D
+            在css-loader后面添加如下配置
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        ident: 'postcss',
+                        plugins: (loader) => [
+                        require('postcss-import')({ root: loader.resourcePath }),
+                        require('postcss-preset-env')(),
+                        require('cssnano')()
+                        ]
+                    }
+                }
+            在package.json中添加配置
+                "browserslist": [
+                    "> 0.5%",
+                    "not ie <= 8",
+                    "not dead"
+                ]
+        ④、统一配置css的url、link等资源的引入路径
+            1)先咋output模块下添加如下配置，为了解决url、link等资源的一致的引入路径
+                output:{
+                    publicPath: '/',
+                }
+            2)全局安装server,之后就可以用serve build命令运行了
+                npm i server -g
+            3)修改package.json配置(将命令整合在一起)
+                "build": "webpack --config ./config/webpack.prod.js && serve build"  
+        ⑤、js文件的兼容
+            需要下载的文件
+                npm install -D babel-loader @babel/core @babel/preset-env 
+                npm install --save @babel/polyfill  
+            再引入
+                import "@babel/polyfill";
+            按需加载
+                由于会将所有js兼容都加入，会造成体积会表达，为了解决该问题，还按需加载！(此时可以把引入去除)具体做法如下↓
+                步骤：
+                    1、下载core.js
+                        npm i core-js
+                    2.修改prod5、babel-loader
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                {
+                                    targets: {
+                                        edge: "17",
+                                        firefox: "60",
+                                        chrome: "67",
+                                        safari: "11.1",
+                                    },
+                                    useBuiltIns: "usage",
+                                    corejs: {
+                                        version: 3
+                                    }
+                                },
+                            ],
+                        ]
+        ⑥、html文件的压缩
+            做法：
+                在dev4里面添加一个minify属性即可，如下
+                    minify: {
+                        // 压缩html
+                        collapseWhitespace: true, // 移除空格
+                        removeComments: true, // 移除注释
+                        removeRedundantAttributes: true, // 当值匹配默认值时删除属性。
+                        removeScriptTypeAttributes: true, // type="text/javascript"从script标签中删除。
+                        removeStyleLinkTypeAttributes: true, // type="text/css"从style和link标签中删除。
+                        useShortDoctype: true // 使用HTML5 doctype
+                    }
+        ⑦、watch
+            当代码发生修改后可以自动重新编译
+            module.exports = {
+                //默认false,也就是不开启
+                watch:true,
+                //只有开启监听模式时，watchOptions才有意义
+                watchOptions:{
+                    //默认为空，不监听的文件或者文件夹，支持正则匹配
+                    ignored:/node_modules/,
+                    //监听到变化发生后会等300ms再去执行，默认300ms
+                    aggregateTimeout:300,
+                    //判断文件是否发生变化是通过不停的询问文件系统指定议是有变化实现的，默认每秒问1000次
+                    poll:1000
+                }
+            }
+        ⑧、服务器代理
+            如果你有单独的后端开发服务器 API，并且希望在同域名下发送 API 请求 ，那么代理某些 URL 会很有用。
+            devServer: {
+                proxy: {
+                    "/api": {
+                        target: 'http://localhost:3000',
+                        pathRewrite:{"^/api":""}        
+                    }            
+                }
+            }
+
+    
+            
+            
+
+            
+                
+三、优化处理
+    ①、oneof配置(rules的优化)
+        介绍：
+            查询rules当查到符合的立马跳出,加快打包速度
+        优点：
+            1.让打包速度更快
+            2.节约性能
+        用法：
+            在module模块的rules对象的外面添加  oneOf: [] 即可
+        注意：但如果碰到两个test值相同的情况，应该吧第二个从oneOf脱离，重新写入一个对象中
+    ②、babel-loader的优化(让第二次打包走缓存,速度更快些)
+        cacheDirectory：true, 默认值为 false。当有设置时，指定的目录将用来缓存 loader 的执行结果。
+    ③、tree shaking 
+        介绍：去除无用的js代码(满足添加自动触发)
+        满足条件：
+            1.必须使用ES6模块化
+            2.需要将webpack环境调成生产环境
+    ④、缓存问题
+    ⑤、code-splitting
+        介绍：
+            重复代码分离，即a文件和b文件有相同的代码，这些相同的代码用一个c文件分离出来，这样重复的代码可以走缓存
+        使用：
+            让entry模块由单入口变为多入口
+    ⑥、shamming(垫片)技术
+    ⑦、pwa(progressive web application，渐进式web应用程序)
+
+
+四、AST语法树
+    ·什么是AST语法树？
+        在计算机科学中，抽象语法树（Abstract Syntax Tree，AST），或简称语法树（Syntax tree），是源代码语法结构的一种抽象表示。
+        它以树状的形式表现编程语言的语法结构，树上的每个节点都表示源代码中的一种结构
+    ·抽象语法树用途
+        1) 代码语法的检查、代码风格的检查、代码的格式化、代码的高亮、代码错误提示、代码自动补全等等
+        2) 代码混淆压缩
+        3) 优化变更代码，改变代码结构使达到想要的结构
+    ·抽象语法树的定义
+        这些工具的原理都是通过JavaScript Parser把代码转化为一颗抽象语法树（AST），这颗树定义了代码的结构，通过操纵这颗树，我们可以精准的定位到声明语句、赋值语句、运算语句等等，实现对代码的分析、优化、变更等操作
+    ·JavaScript Parser
+        JavaScript Parser是把JavaScript源码转化为抽象语法树的解析器
+    ·常用的 JavaScript Parser
+        ①、esprima
+        ②、traceur
+        ③、acorn
+        ④、shift
+    ·babel的转移流程
+        Babel 能够转译 ECMAScript 2015+ 的代码，使它在旧的浏览器或者环境中也能够运行
+        工作过程分为三个部分
+            1）Parse(解析) 将源代码转换成抽象语法树，树上有很多的estree节点
+            2）Transform(转换) 对抽象语法树进行转换
+            3）Generate(代码生成) 将上一步经过转换过的抽象语法树生成新的代码
+五、面试题：
+    1）有哪些常见的Loader？
+        ①、css-loader style-loader less-loader
+            主要处理css编译的问题
+        ②、file-loader、url-loader、raw-loader(现已废弃，请使用asset module)
+            主要处理css引入图片以及字体图标的问题
+        ③、html-loader
+            主要处理html文件中引入图片的问题
+        ④、eslint-loader
+            配置eslint
+        ⑤、babel-loader
+            做兼容性处理
+        ⑥、source-map-loader
+            方便断点调试
+        ⑦、postcss-loader
+            css兼容性处理
+    2）有哪些常见的plugins
+        ①、htmlWebpackPlugins
+            实现html文件中自动将js文件引入
+        ②、MiniCssExtractPlugin
+            将css文件单独打包引入
+        ③、clean-webpack-plugin
+            清除build再重新打包
+    3）webpack优化有哪些？
+        ①、HMR热模块替换
+            模块热替换(hot module replacement 或 HMR)是 webpack 提供的最有用的功能之一。它允许在运行时更新所有类型的模块，而无需完全刷新。
+            也就是说当更改一个文件时，不用更新所有文件，只需修改被改的文件即可。
+            使用：(默认开启的是css的热模块替换，如果js也要开启,需要执行2)
+                1.在devServer里面添加 hot:true 
+                2.在app.js里面添加如下代码
+                    if (module.hot) {
+                        // 正常文件一旦变化，是要全部刷新
+                        // 监视 module1 文件的变化，就会触发后面的函数（其他模块不更新）
+                        module.hot.accept('./module1', () => {
+                        });
+
+                        module.hot.accept('./module2', () => {
+                        });
+
+                        module.hot.accept('./module3', () => {
+                        });
+                    }
+        ②、oneof技术，要处理的文件会智能匹配loader模块中需要的那个loader，找到即退出，而不是遍历整个loader
+        ③、babel-cache
+            由于babel-loader要花费的时间较长，所以需要缓存起来更好些(找到对应的loader->use->options->设置cacheDirectory:true)
+        ④、tree-shaking
+            去除无用的js代码(比如没有用到的变量，log等等)
+            注意：tree-shaking自动启用的前提：
+                1.必须使用ES6模块化
+                2.需要将webpack环境调整为生产环境
+        ⑤、code-spliting(代码分割技术)
+            1.通过多入口打包(在entry中配置多入口)
+            2.提取多入口的公共代码单独打包成一个文件，配置如下：  
+                optimization: {
+                    splitChunks: {
+                        chunks: all
+                    }
+                }
+        ⑥、shamming(垫片)技术
+            将主体公共资源变成全局资源，配置如下
+            plugins: [
+                new webpack.ProviderPlugin({
+                    $: 'jquery',
+                    vue: 'Vue'
+                })
+            ]
+        ★⑦、pwa (progressive web application，渐进式web应用程序)
+            能够在离线状态下运行的能力，配置如下：
+            npm i workbox-webpack-plugin -D
+            在plugins模块中配置：
+                new WorkboxPlugins.GenerateSW({
+                    clientsClaim: true,
+                    skipWaiting: true
+                })
+        ⑧、dll技术
+            将不会变的资源(如jquery、react等)单独打包
+        ⑨、thread-loader技术
+            主要针对于babel-loader开启多线程优化
+            npm i thread-loader -D
+        
+    4）webpack的构建流程是什么?从读取配置到输出文件这个过程尽量说全
+        1.初始化参数：从配置文件和 Shell 语句中读取与合并参数，得出最终的参数；
+        2.开始编译：用上一步得到的参数初始化 Compiler 对象，加载所有配置的插件，执行对象的 run 方法开始执行编译；
+        3.确定入口：根据配置中的 entry 找出所有的入口文件；
+        4.编译模块：从入口文件出发，调用所有配置的 Loader 对模块进行翻译，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理；
+        5.完成模块编译：在经过第4步使用 Loader 翻译完所有模块后，得到了每个模块被翻译后的最终内容以及它们之间的依赖关系；
+        6.输出资源：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的 Chunk，再把每个 Chunk 转换成一个单独的文件加入到输出列表，
+            这步是可以修改输出内容的最后机会；
+        7.输出完成：在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统。
+    5) webpack中es6是如何转换成commonjs的？
+        如果一个exports对象的__esModule=true说明它是从es module模块编译过来的，那么内部会通过Object.defineProperty配合Symbol.toStringTag用来转换
+        Symbol.toStringTag 是供 Object.prototype.toString 调用，这段代码作用是标识 exports 为模块，即 Object.prototype.toString.call(exports) === '[object Module]'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★ 3.vite的应用 ★★★★★★★★★★★★★★★★★★★★
+一、vite实战
+    ·介绍
+        Vite (法语意为 "快速的"，发音 /vit/) 是下一代前端开发与构建工具
+        💡 极速的服务启动 使用原生 ESM 文件，无需打包!
+        ⚡️ 轻量快速的热重载 无论应用程序大小如何，都始终极快的模块热重载（HMR）
+        🛠️ 丰富的功能 对 TypeScript、JSX、CSS 等支持开箱即用。
+        📦 优化的构建 可选 “多页应用” 或 “库” 模式的预配置 Rollup 构建
+        🔩 通用的插件 在开发和构建之间共享 Rollup-superset 插件接口。
+        🔑 完全类型化的API 灵活的 API 和完整 TypeS
+        拓展：vite在开发环境使用esbuild打包，在生产环境使用rollup打包(不用esbuild的原因是因为会有一些问题出现)
+    ·安装
+        npm install vue  --save
+        npm install  @vitejs/plugin-vue @vue/compiler-sfc vite --save-dev
+    ·配置vite.config.js
+        import { defineConfig } from 'vite'
+        import vue from '@vitejs/plugin-vue'
+        // https://vitejs.dev/config/
+        export default defineConfig({
+            plugins: [vue()]
+        })
+    ·设置package.json
+        {
+            "name": "vite2-prepare",
+            "version": "1.0.0",
+            "scripts": {
+                "dev": "vite",
+                "build": "vite build",
+                "serve": "vite preview"
+            },
+            "dependencies": {
+                "vue": "^3.0.5"
+            },
+            "devDependencies": {
+                "@vitejs/plugin-vue": "^1.2.4",
+                "@vue/compiler-sfc": "^3.0.5",
+                "vite": "^2.4.0"
+            }
+        }
+    ·静态文件处理public
+        如果有以下需求
+            #这些资源不会被源码引用（例如 robots.txt）
+            #这些资源必须保持原有文件名（没有经过 hash）
+        那么你可以将该资源放在指定的 public 目录中，它应位于你的项目根目录
+        该目录中的资源在开发时能直接通过 / 根路径访问到，并且打包时会被完整复制到目标目录的根目录下
+    ·配置路径别名(vite.config.js)
+        import { defineConfig } from 'vite'
+        import vue from '@vitejs/plugin-vue'
+        import {resolve} from 'path';
+
+        // https://vitejs.dev/config/
+        export default defineConfig({
+            resolve:{
+                alias:{
+                    '@':resolve('src')
+                }
+            },
+            plugins: [vue()]
+        })
+    ·配置兼容性前缀postcss
+        介绍：
+            如果项目包含有效的 PostCSS 配置 (任何受 postcss-load-config 支持的格式，例如 postcss.config.js)，它将会自动应用于所有已导入的 CSS
+        需要安装的包：
+            npm install autoprefixer --save
+        在根目录下创建 postcss.config.js：
+            module.exports = {
+                plugins: [
+                    require('autoprefixer')
+                ]
+            }
+        在根目录下创建 .browserslistrc 
+            >0.2%
+            not dead
+            not op_mini all
+二、样式处理
+    ·全局样式处理：
+        直接在main.js中引入即可
+        import { createApp } from 'vue'
+        import App from './App.vue'
+        + import './global.css'
+        createApp(App).mount('#app')
+    ·局部样式处理：
+        1).scoped
+            当 <style> 标签有 scoped 属性时，它的 CSS 只作用于当前组件中的元素
+            它使用了data-v-hash的方式来使css有了它对应模块的标识
+            使用：
+                <style scoped>
+        2).css module
+            第一种写法：
+                通过module作用的style都被保存到$style对象中
+                <template>
+                    <h1>{{ msg }}</h1>
+                    <a :class="$style.link">超链接</a>
+                </template>
+                <style module>
+                    .link {
+                        color: #42b983;
+                    }
+                </style>
+            第二种写法：
+                任何以 .module.css 为后缀名的 CSS 文件都被认为是一个 CSS modules 文件
+                导入这样的文件会返回一个相应的模块对象 src\components\HelloWorld.vue
+                <template>
+                <h1>{{ msg }}</h1>
+                    <a :class="style.link">超链接</a>
+                </template>
+                <script setup>
+                    import style from './HelloWorld.module.css';
+                < /script>
+三、Typescript的支持
+    ·需要安装的包
+        cnpm install typescript @babel/core @babel/preset-env  @babel/preset-typescript --save-dev
+    ·在根目录中创建 .babelrc
+        {
+            "presets": [
+                ["@babel/preset-env"],              // 将ES6编译成ES5
+                "@babel/preset-typescript"          // 将Typescirpt编译成ES5
+            ]
+        }
+    ·在根目录下创建tsconfig.json
+        {
+            "compilerOptions": {
+                "target": "esnext",
+                "module": "esnext",
+                "moduleResolution": "node",
+                "strict": true,
+                "jsx": "preserve",
+                "sourceMap": true,
+                "resolveJsonModule": true,
+                "esModuleInterop": true,
+                "lib": ["esnext", "dom"]
+            },
+            "include": ["src\**\*.ts", "src\**\*.d.ts", "src\**\*.tsx", "src\**\*.vue"]
+        }
+    ·在src目录下创建vite-env.d.ts
+        （让typescript识别支持.vue文件）
+        declare module '*.vue' {
+            import type { DefineComponent } from 'vue';
+            const component: DefineComponent<{}, {}, any>;
+            export default component;
+        }
+    ·在src目录下创建爱你vite-env.d.ts
+        如果你的库依赖于某个全局库，使用/// 指令
+        三斜线指令仅可放在包含它的文件的最顶端
+        三斜线引用告诉编译器在编译过程中要引入的额外的文件
+        /// <reference types="vite/client" />
+四、配置代理服务器
+    在vite.config.js中添加如下代码↓↓↓
+    defineConfig({
+        ...,
+        server: {
+          proxy: {
+            '/api': {
+              target: 'http://jsonplaceholder.typicode.com',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/api/, '')
+            }
+          }
+        },
+    })
+        
+六、Lerna
+    ·monoRepo和multiRepo的区别？
+        ·monoRepo是将所有的模块统一的放在一个主干分支之中管理 (即一个仓库里面放很多个包)
+        ·multiRepo 将项目分化成为多个模块，并针对每一个模块单独的开辟一个Repo来进行管理 (即每个仓库里面放一个包)
+    ·什么是Lerna?
+        Lerna是一个管理多个 npm 模块的工具,优化维护多包的工作流，解决多个包互相依赖，且发布需要手动维护多个包的问题。
+        (说白了就是一个工具,简化monoRepo操作的。)
+        
+    ·安装lern
+        npm i lerna -g
+        lerna init     // 初始化
+    ·文件分析
+        1）package.json文件分析
+            {
+                "name": "root",
+                "private": true,         // 代表不能发布到npm上
+                "devDependencies": {     // 开发依赖
+                    "lerna": "^4.0.0"
+                }
+            }
+        2）lerna.json
+            {
+                "packages": [          // 文件匹配模式，能匹配文件下的所有路径
+                    "packages/*"
+                ],
+                "version": "0.0.0"
+            }
+    ·常用命令
+        lerna bootstrap	 安装依赖
+        lerna clean	     删除各个包下的node_modules
+        lerna init	     创建新的lerna库
+        lerna list	     查看本地包列表
+        lerna changed	 显示自上次release tag以来有修改的包， 选项通 list
+        lerna diff	     显示自上次release tag以来有修改的包的差异， 执行 git diff
+        lerna exec	     在每个包目录下执行任意命令
+        lerna run	     执行每个包package.json中的脚本命令
+        lerna add	     添加一个包的版本为各个包的依赖
+        lerna import	 引入package
+        lerna link	     链接互相引用的库
+        lerna create	 新建package
+        lerna publish	 发布
+    ·yarn workspace
+        ·介绍
+            yarn workspace允许我们使用monorepo的形式来管理项目
+            在安装 node_modules 的时候它不会安装到每个子项目的 node_modules 里面，而是直接安装到根目录下面，这样每个子项目都可以读取到根目录的 node_modules
+            整个项目只有根目录下面会有一份 yarn.lock 文件。子项目也会被 link 到 node_modules 里面，这样就允许我们就可以直接用 import 导入对应的项目
+            yarn.lock文件是自动生成的,也完全Yarn来处理.yarn.lock锁定你安装的每个依赖项的版本，这可以确保你不会意外获得不良依赖
+        =====
+        ·启用yarn workspace
+            1) 配置lerna.json文件
+                {
+                    "packages": [           // 如果在package.json中配置了workspace，那么这里的packages内容将会被覆盖
+                        "packages/*"
+                    ],
+                    "version": "1.0.0",
+                +   "useWorkspaces": true,
+                +   "npmClient": "yarn"
+                }
+            2) 配置package.json文件
+                {
+                    "name": "root",
+                    "private": true,
+                +   "workspaces": [
+                +     "packages/*"
+                +   ],
+                    "devDependencies": {
+                        "lerna": "^4.0.0"
+                    }
+                }
+        ·一些常用命令
+            查看工作空间信息	 yarn workspaces info
+            给根空间添加依赖	 yarn add chalk cross-spawn fs-extra --ignore-workspace-root-check
+            给某个项目添加依赖	 yarn workspace create-react-app3 add commander
+            删除所有的          node_modules	lerna clean 等于 yarn workspaces run clean
+            安装和link	        yarn install 等于 lerna bootstrap --npm-client yarn --use-workspaces
+            重新获取所有的       node_modules	yarn install --force
+            查看缓存目录	     yarn cache dir
+            清除本地缓存	     yarn cache clean
+        
+        拓展：什么时候用lerna?什么时候用yarn workspace?
+            # 依赖管理、安装包和链接包用yarn wrokspace命令
+            # 初始化和发布包用lerna管理
+
+    ·实战
+        1、创建2个项目
+            # 使用lerna create vite-cli   // 我们用此项目来手写vite脚手架
+            # 使用lerna create vite-project // 我们用此项目来对我们手写的vite进行测试
+        2.修改package.json文件，添加如下代码
+            "bin": {
+                "vite-cli": "./bin/vite.js"   // 会全局注册一个命令：vite-cli , 并执行命令: ./bin/vite.js
+            }
+            // 以此我们可以通过全局命令 vite-cli xxx 执行脚本了。
+            
+            
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★ 4.rollup应用 ★★★★★★★★★★★★★★★★★★★★
+★★★★★★★★★★ 5.webpack原理篇 ★★★★★★★★★★★★★★★★★★★★
+一、代码分割和懒加载
+    ·异步加载的基本流程
+        1.点击按钮
+        2.加载包含额外代码块的模块定义的JS文件
+        3.js文件加载回来后js脚本会执行
+二、webpack编译流程
+    1)初始化参数：从配置文件和 Shell 语句中读取并合并参数,得出最终的配置对象
+    2)用上一步得到的参数初始化 Compiler 对象
+    3)加载所有配置的插件(plugin模块)
+    4)执行Compiler对象的 run 方法开始执行编译
+    5)根据配置中的entry找出入口文件
+    6)从入口文件出发,调用所有配置的Loader对模块进行编译
+    7)再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理
+    8)根据入口和模块之间的依赖关系，组装成一个个包含多个模块的 Chunk
+    9)再把每个 Chunk 转换成一个单独的文件加入到输出列表
+    10) 在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统
+
+
+
+
+
+
+
+
+
+    
+ */
+</script> 
+</body>
+</html>

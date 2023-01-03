@@ -1,0 +1,27 @@
+.first-tab .cate-item {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+.first-tab .cate-item .left-wrap {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.first-tab .cate-item .left-wrap image {
+  width: 70%;
+}
+.first-tab .cate-item .right-wrap {
+  flex: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+.first-tab .cate-item .right-wrap .goods-name {
+  width: 100%;
+}
+.first-tab .cate-item .right-wrap .goods-price {
+  color: var(--tc);
+  font-size: 30rpx;
+  margin: 0 0 10rpx 10rpx;
+}

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+      "CommonSearch": "../../components/common-search/common-search"
+  },
+  "navigationBarTitleText": "首页"
+}

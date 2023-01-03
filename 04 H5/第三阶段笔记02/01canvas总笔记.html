@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/* 
+★★★★★★★★★★★★★★ 1.Canvas基础  ★★★★★★★★★★★★★★★★★★★★★
+一、Canvas基础
+    1.什么是canvas？
+        canvas 就是HTML5新增的标签
+        用作画布，图像需要使用JavaScript调用canvasAPI（函数）来绘制
+    2.canvas应用
+        ·炫酷效果（特效）
+        ·图表（扇形图、直方图、折线图....）
+        ·canvas小游戏
+    3.canvas默认属性和方法
+        属性：
+            width     默认300
+            height    默认150
+            注意：不要在css中设置canvas的大小，可能会造成画布图像失真
+        方法：getContext();
+    4.canvas使用步骤
+        ① 获取canvas元素
+            var canvas=document.querySelector('canvas');
+        ② 设置画布的大小
+            canvas.width=600;
+            canvas.height=400;
+        ③ 获取绘图上下文
+            var ctx=canvas.getContext('2d');
+        ④ 绘制图像 
+            第一步：lineTo、moveTo、arc()...
+            第二步：lineStyle、moveStyle、lineWidth
+            第三步：fill()、stroke();
+二、路径操作
+    1.开启路径
+        ctx.beginPath();
+        作用： 结束前面的路径；填充描边的时候不影响的前面的 （必须）
+    2.闭合路径
+        ctx.closePath();
+        作用： 把路径的结束点和起始点连接，闭合路径
+    3.填充
+        ctx.fillStyle   设置填充的颜色
+        ctx.fill()      对路径进行填充
+    4.描边
+        ctx.strokeStyle    设置描边颜色
+        ctx.lineWidth      设置描边宽度，数字
+        ctx.stroke()       对路径描边，沿着路径两边秒
+    // 拓展：先填充后描边，描边会把填充的盖住，反之亦反
+    5.路径样式
+        1)设置线段两端的样式
+            ctx.lineCap='button'     
+                值有：
+                    butt		      方形(默认值)
+                    square		      平方形(比默认长一点)
+                    round		      圆形(比默认长一点)
+        2)设置路径连接处的样式
+            ctx.lineJoin='miter'   
+                值有：
+                    miter		      直角(默认值,斜接)
+                    bevel		      斜角(不常用)
+                    round             圆角
+    6.绘制线段
+        ctx.moveTo(x,y)   绘制起点
+        ctx.lineTo(x,y)   绘制连接点
+    7.绘制矩形路径
+        ·ctx.rect(x,y,w,h);
+            参数：
+                x,y: 是矩形左上角的位置坐标
+                w,h: 是矩形的宽和高
+            注意：
+                绘制完矩形路径后，可以使用 ctx.fill() 进行填充，也可以使用 ctx.stroke() 进行描边，或者即填充又描边
+        ·快速矩形工具
+            strokeRect(x,y,w,h)  快速描边矩形
+            fillRect(x,y,w,h)    快速填充矩形
+            clearRect(x,y,w,h)   快速清除矩形
+            注意：
+                1.快速矩形工具不是路径操作，无需开启路径。
+                2.不要和stroke()，fill()方法一起用，无效
+    8.绘制圆弧路径
+        ctx.arc(x,y,r,start,end)
+            参数：
+                x,y: 圆心坐标
+                r: 半径长度
+                start: 圆弧的起始弧度
+                end: 圆弧的结束弧度
+            弧度与角度：
+                π弧度 = 180角度               
+            start/end 位置：
+                三点钟方向的刻度就是 0弧度
+                六点钟方向的刻度就是 π/2弧度
+                九点钟反向的刻度就是 π弧度
+    9.切线圆弧 arcTo(了解)
+        ctx.arcTo(x1,y1,x2,y2,r);
+            参数：
+                x1,y1: 直角点的坐标
+                x2,y2: 其中一个直角边上的坐标
+                r : 半径  
+            注意：
+                *在执行arcTo方法之前，必须有其他的路径操作
+                *坐标点决定的是圆弧的方向，圆弧的大小由半径决定
+    10.设置虚线 setLineDash([5]);(了解)
+三、变换
+    1.基本方法
+        ctx.translate(x,y)   位移长度
+        ctx.scale(w,h)   缩放比例
+        ctx.rotate(弧度)  旋转
+        注意：
+            ① 所有的变换操作，是对坐标体系（绘图上下文）进行变换；变换之后，后面所有的图像都会受到影响
+            ② 各种变换顺序不同，产生的效果不同
+    2.绘图上下文的保存和恢复
+        ctx.save();   //保存当前的绘图上下文
+        ctx.restore();  //恢复上一次保存的绘图上下文
+四、文字
+    1.描边字和填充字
+        1.ctx.strokeText(text, x, y) 	描边字
+        2.ctx.fillText(text, x, y)    填充字 
+    2.文字样式
+        ctx.font  属性
+        说明：同css中font属性，可以设置是否加粗，是否斜体，字体大小，字体类型...
+    3.文字对齐方式
+        ctx.textAlign  水平对齐方式，值 start/end/center
+        ctx.textBaseline   垂直对齐方式 top / bottom / middle
+五、复杂样式 (了解！！)
+    1.渐变
+        ctx.createLinearCradient(x1,y1,x2,y2);  创建线性渐变
+        ctx.createRadialGradient(x1,y1,r1,x2,y2,r2) 创建径向渐变
+            渐变对象.addColorStop(位置, 颜色)
+    2.背景图
+        ctx.createPattern(imgNode, pattern) 返回pattern对象
+        需要把pattern对象作为一个颜色值来使用
+    3.阴影
+        ctx.shadowOffsetX
+        ctx.shadowOffsetY
+        ctx.shadowColor
+        ctx.shadowBlur
+    4.不透明度
+        ctx.globalAlpha
+六、图片操作
+    1.加载图片
+        ctx.drawImage(img, x, y, w, h)
+            img: 是图片元素
+            x,y : 是图片在画布上的位置
+            w,h : 图片在画布上的大小（可以省略，图片的实际大小）
+        注意：
+            等到图片加载完成再去绘制，onload事件
+    2.图像合成
+        ctx.globalCompositeOperation
+            定义：设置或返回如何将一个源（新的）图像绘制到目标（已有）的图像上
+            两个重要概念：
+                源图像 = 您打算放置到画布上的绘图
+                目标图像 = 您已经放置在画布上的绘图
+            用法：
+                ctx.fillRect(100,100,100,100)                     //源图像   
+                ctx.globalCompositeOperation = 'source-over'      //在中间设置
+                ctx.fillRect(150,100,100,100)                     //目标图像
+            值有：
+                1)source-over               默认。在目标图像上显示源图像。
+                2)source-atop               在目标图像顶部显示源图像。源图像位于目标图像之外的部分是不可见的。 //overflow:hidden
+                3)source-in                 在目标图像中显示源图像。只有目标图像之内的源图像部分会显示，目标图像是透明的
+                4)source-out                在目标图像之外显示源图像。只有目标图像之外的源图像部分会显示，目标图像是透明的。
+                5)destination-over          在源图像上显示目标图像。
+                6)destination-atop          在源图像顶部显示目标图像。目标图像位于源图像之外的部分是不可见的。
+                7)destination-in            在源图像中显示目标图像。只有源图像之内的目标图像部分会被显示，源图像是透明的。
+                8)destination-out           在源图像之外显示目标图像。只有源图像之外的目标图像部分会被显示，源图像是透明的。
+                9)lighter                   显示源图像 + 目标图像。
+                10)copy                      显示源图像。忽略目标图像。
+                11)xor                       使用异或操作对源图像与目标图像进行组合。
+    3.像素信息
+        1.ctx.getImageData(x,y,w,h)             读取，从画布中获取一块区域（矩形区域）的像素信息
+            ★该方法返回一个imageData对象,对象内有三个属性，如下
+                width:    该区域横向上像素点的个数
+                height:   该区域纵向上像素点的个数
+                data:     该区域所有像素点的 rgba 信息，data属性是个数组，数组每4个元素表示一个像素的颜色
+        2.ctx.putImageData(imageData, x,y)      写入，把像素信息写入到画布中，x、y为写入的坐标
+        3.ctx.createImageData(w, h)             创建，创建像素信息（imageData对象）
+            ★同getImageData一样，该方法也返回一个对象，有width、height、data三个属性
+七、画布操作(了解！)
+    1.画布裁剪
+        ctx.clip()
+            沿着路径裁剪
+            裁剪过后，只有裁剪的区域内才能显示绘图
+    2.画布编码
+        canvas.toDataURL()
+            把canvas画布转为 base64 编码
+    3.画布渲染画布
+        ctx.drawImage(imgNode/canvasNode, x, y, w, h)
+
+
+
+
+
+ */
+</script>
+</body>
+</html>

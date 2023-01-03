@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: #f7e45a;
+        }
+    </style>
+</head>
+<body>
+<scripT>
+/* 
+★★★★★★★★★★★★★★★★ 1.Node.js ★★★★★★★★★★★★★★★★★★★★★★
+一、Node.js基本概念
+    1.什么是Node.js？
+        node.js是一个基于v8引擎的JavaScript运行环境，简单的来说，就是一个使用v8引擎来写服务器的代码环境
+    2.Node.js有什么特点？
+        ①、优点
+            1)单线程
+            2)事件轮询机制
+            3)异步的非阻塞I/O  (input输入/outInput输出)
+            4)跨平台
+        ②、缺点
+            1)回调函数嵌套太多，太深(回调地狱)
+            2)单线程，处理不了cpu密集型任务
+            拓展：服务端任务分为两种：即cpu密集型任务和IO密集型任务。
+                cpu密集型任务需要调用cpu做大量的计算，如视屏音频的解码，加密等，IO密集型任务是对本地文件做大量的处理操作
+    3.应用场景
+        ·网站开发(如express)
+        ·即时聊天
+        ·api(移动端，pc，h5)
+        ·前端构建工具
+        ·跨品台打包工具
+        ·写操作系统(NodeOS)
+        ·命令行工具
+        ·做中间层BFF
+        ...
+    4.Node.js的组成
+        ·ECMAscript 基本语法
+        ·包含少量的BOM ，如console、setInterval、setTimeout、clearInterval
+二、全局对象global
+    1.属性描述：
+        Node.js没有window，但有一个全局对象global，内部属性如下：
+            ·clearImmediate:
+            ·clearInterval:
+            ·clearTimeout:
+            ·setImmediate:(立即执行的定时器，相当于setTimeOut的时间为0)
+            ·setInterval:
+            ·setTimeout:
+            ·queueMicrotask:微任务
+            ·console：
+            ·process.nextTick：立即执行函数(优先级最高，能在任意阶段优先执行)
+            ...
+    2.全局对象this指向
+        服务端全局变量默认是global,但是node执行的时候为了实现模块化，会在执行代码时在外面包裹一层函数，
+        函数执行的时候会通过call方法改变this指向，其指向空对象。
+    3.最外层函数剖析
+        node.js的global全局变量没有这两个方法，这两个方法其实都是最外成看不见的函数的两个属性，最外层看不见的函数包括5个形参。
+        该函数如下↓↓
+            function(exports, require, module, __filename, __dirname){
+            }
+            参数介绍：
+                exports,            用来暴露
+                require,            用来引用
+                module,             module.exports主要也是用来暴露
+                __filename,         当前模块的文件路径
+                __dirname           当前模块的文件夹路径
+                获取最外层函数的方法：
+                1) console.log(arguments.callee+'');
+                2) console.log(arguments.callee.toString());
+    4.process(global.process)中的属性
+        platform:         代表当前电脑是什么系统 ->win32 代表windows系统 darwin 代表mac系统
+        cwd:              （current working directory）代表当前工作的文件夹
+        env:               代表在执行命令的时候，可以去读取变量中的属性。同时我们也可以通过set来设置属性，例如：
+                            set NODE_ENV=development && node ./demo.js
+                            (上面命令行就代表设置NODE_ENV属性的值并执行demo.js文件)
+        argv:             代表执行命令时所带的参数,用法如下：
+                            console.log(process.argv);         ----> [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js' ]
+                            通过命令node ./demo.js xxx1 xxx2可以获取参数           ---> [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js', 'xxx1', 'xxx2' ] 
+                                     
+
+            
+三、模块化
+    1.模块化概念
+        模块化是指将一个大的功能拆分为一个一个小的模块，通过不同的模块组合来实现一个大功能；
+        模块是指一个js文件
+        node.js是使用CommonJs规范来实现模块化，前端使用的模块规范是AMD、CMD、ES6
+    2.CommonJs
+        *概念
+            CommonJs是一套JavaScript模块化规范，它包含：模块、二进制、buffer、字符集编码、I/O流、进程环境、文件系统、套文字、
+            单元测试、web服务器网关、接口、包管理等。
+            node借鉴CommonJs规范实现了一套模块系统，我们也叫作CommonJs模块化系统。
+
+            在 CommonJs 的模块化规范中，每一个文件就是一个模块，拥有自己独立的作用域、变量、以及方法等，
+            对其他的模块都不可见。CommonJS规范规定，每个模块内部，module 变量代表当前模块。这个变量是一个对象，
+            它的 exports 属性（module.exports）是对外的接口。加载某个模块，其实是加载该模块的 module.exports 属性。
+            require 方法用于加载模块。
+
+        *CommonJs模块化规范
+            1.引入（其他模块）
+                方法：require(模块路径)
+                模块路径的规则：
+                1. 文件后缀名可以省略不写： js、json
+                2. 自定义模块（自己写的模块）的模块路径必须以 ./ 或 ../ 开头，否则报错
+                    别人的模块（nodejs的核心模块）的模块路径直接写模块名称（不能加 ./ 或 ../）
+            2. 暴露（当前模块的内容）
+                exports 
+                    exports是module.exports的简写，相当于exports是一个变量接受了module.exports这个对象
+                    由于exprots是一个引用，所以exports只能 exports.xxx = xxx  不能直接赋值
+                module.exports
+                    module.exports.xxx = xxx
+                    module.exports = xxx
+                因为模块最终暴露的是 module.exports 指向的值
+                exports只是module.export的一个引用（简写）而已
+        *CommonJs在浏览器中运行
+            说明：
+                由于CommonJs不能再浏览器端执行，如果需要则可以安装Browserify
+            使用：
+                1.通过命令 npm i browserify -g 下载安装
+                2.执行命令
+                    ★说明：src文件下全是js模块内容，index.js相当于输出口,build文件夹是和src同级的文件，也就是说把index.js放入到build.js中★
+                    browserify src/index.js -o build/build.js
+                3.在index.html的body中引入
+                    <scripT src='./build/build.js'></scripT>            
+    3.ES6模块化
+        介绍：
+            在ES6中每一个模块就是一个独立的文件，并且是自动采用严格模式，所以在编写ES6模块的时候要严格遵守严格模式的一些限制。
+            在文件中定义的变量、函数、对象外部是无法读取的。ES6模块的语法主要由两个命令构成：export和import。
+            另外，ES6模块化路径规范和CommonJs路径规范保持一致，且ES6模块化不能在服务器和浏览器端直接运行。
+        使用：
+            ·暴露模块和对应的使用模块
+                1.默认暴露：
+                    //暴露
+                    export default {
+                        foo() {
+                            console.log('默认暴露方式')
+                        },
+                        bar() {
+                            console.log('默认暴露')
+                        }
+                    }                  
+                    默认暴露的方式只允许有一个: export default {}且在主模块引入时可以使用定义变量来接收的方式！
+
+                    // 引入模块
+                    import func from '.js/src/module1'
+                        //通过func.方法来使用
+                    func.foo()
+                    func.bar() 
+
+                2.分别暴露
+                    //暴露
+                    export const name = 'jack';
+                    export function bar() {
+                        console.log('bar() moudle1')
+                    }
+
+                    //引入
+                    向外暴露方式在主文件引入时必须使用对象的解构赋值引用（不能使用变量接收的方式来映入）
+                    import {name,bar} from '.js/src/module1.js'
+
+                3.统一暴露：
+                    function fun1() {
+                        console.log('fun1() module2')
+                    }
+
+                    function fun2() {
+                        console.log('fun2() module2')
+                    }
+                    // 暴露
+                    export {foo,bar}  
+
+                    //引入
+                    import {fun1,fun2} from './js/src/module2.js'
+            由于ES6模块化不能直接在node中运行，需要编译成es5之前的版本才可以运行，所以需要通过babel才能使用
+        ★babel的使用
+            介绍：
+                Babel 是一个JavaScript编译器，主要用于在旧的浏览器或环境中将 ECMAScript 2015+ 代码转换为向后兼容版本的 JavaScript 代码
+            使用：
+                1)初始化package.json
+                    npm init -y
+                2)下载安装
+                    npm i  @babel/core @babel/cli @babel/preset-env -D
+                    说明：
+                        @babel/core         核心包
+                        @babel/cli          脚本包
+                        @babel/preset-env   预设包
+                3)配置
+                    在根目录中创建一个.babelrc文件,注意,配置文件中不能写注释的,运行babel的时候执行对应的配置文件
+                    {
+                        "presets":[
+                            "@babel/preset-env"
+                        ]
+                    }
+                4)执行命令，进行编译操作(src 、build都是文件夹名字)
+                    npx babel src -d build
+        由此，ES6可以在服务端使用了，但想要在浏览器中使用，还需要借助browser才行(browser看上面)...
+    4.AMD模块化
+        介绍：
+            AMD 即Asynchronous Module Definition，中文名是异步模块定义的意思。它是一个在浏览器端模块化开发的规范
+            由于不是JavaScript原生支持，使用AMD规范进行页面开发需要用到对应的库函数，也就是大名鼎鼎RequireJS，实际上
+            AMD 是 RequireJS 在推广过程中对模块定义的规范化的产出
+        使用：
+            module1.js文件中
+            // 定义模块---当前模块是一个没有依赖其他模块的模块
+            define(function(){
+                function add (x,y){
+                    return x+y
+                }
+            // 向外暴露
+            return add
+            })
+
+            module2.js文件中
+                // 定义模块--当前模块依赖其他模块
+                define(['m1'],function(m1){
+                const result=m1(10,20)
+                // 暴露出去
+                return result
+            })
+
+            main.js文件中
+            配置
+            // 模块配置
+            require.config({
+            baseUrl: './src', // 基础路径
+            paths: {
+                'm1': 'module1', // 'm1' 这个模块的路径是 './module1'
+                'm2': 'module2'
+            }
+            });
+            // 主模块
+            require(['m2'], function (m2) {
+            console.log(m2)
+            });
+            index.html文件中
+            以上内容配置完毕后,去CDN去下载require文件,然后在index.html中进行script的配置
+            <script src="./src/require.min.js" data-main="./src/main.js">
+    5.CMD模块化
+        介绍
+            CMD 即Common Module Definition通用模块定义，CMD规范是国内发展出来的，就像AMD有个requireJS，CMD有个浏览器的实现SeaJS，
+            SeaJS要解决的问题和requireJS一样，只不过在模块定义方式和模块加载（可以说运行、解析）时机上有所不同 语法
+        使用：
+            module1.js文件中
+                define(function (require, exports, module) {
+                function add (x, y) {
+                    return x + y
+                }
+                // 暴露出去
+                module.exports = add
+                })
+
+            module2.js文件中
+                define(function (require, exports, module) {
+                // 引入
+                const add = require('./module1')
+                // 暴露出去
+                module.exports = add(10, 50)
+                })
+
+            main.js文件中
+                define(function (require, exports, module) {
+                    const result = require('./module2')
+                    console.log(result)
+                })
+                index.html文件中
+                <scripT src="./src/sea.js"></scripT>
+                <scripT type="text/javascript">
+                    seajs.use('./src/main.js')
+                </scripT>
+    ★四个模块化的区别★
+        * 模块化的方式:
+            * 1.CommonJS模块化
+            * 2.ES6模块化
+            * 3.AMD
+            * 4.CMD
+            * 
+            * CommonJS是属于同步加载,AMD是属于异步加载
+            * CommonJS可以直接在服-在浏览器端执行,如果想要在浏览器端执行,需要使用Browserify就可以了
+            * AMD和CMD是为了直接在浏览器中执行而诞生的,
+            * ES6模块化不能直接在服务器端执行,也不能直接在浏览器端执行,需要使用Babel进行编译,之后才可以在服务器端执行,通过Browserify可以在浏览器端执行
+            * AMD可以直接在浏览器端中执行,但是需要配合require.js文件
+            * CMD可以直接在浏览器端中执行,但是需要配合sea.js文件
+            * AMD推崇依赖前置，CMD推崇就近依赖
+        面试题：
+            commonjs模块与ES6模块的区别？
+                1.commonjs输出的，是一个值的拷贝，而es6输出的是值的引用
+                2.commonjs是运行时加载，es6是编译时输出接口
+
+
+四、包和包管理器
+    1.package包和package.json
+        Node.js的包基本遵循commonjs的规范，包将一组相关的模块组合在一起，形成一组完整的工具，主要文件就是package.json
+        package.json是一个包描述文件，用于表达非代码相关的信息，它是一个json格式的文件
+        包描述文件通常包含name、version、dependencies(生产依赖)、devDependencies(开发依赖)、scripts(包的命令)...详细信息如下↓↓↓
+            1. name  包名（将来下载包输入的名称）  
+                包名要求不能有中文、大写。（只能小写英文、数字、下划线）
+                包名不能与现有包名重复（不能叫jquery、react、vue）
+            2. version 版本号
+            3. description 一个描述，方便别人了解你的模块作用，搜索的时候也有用。
+            4. main main属性指定了程序的主入口文件。意思是，如果你的模块被命名为foo，用户安装了这个模块并通过require("foo")来使用这个模块，
+                    那么require返回的内容就是main属性指定的文件中 module.exports指向的对象。它应该指向模块根目录下的一个文件。对大对数模块而言，
+                    这个属性更多的是让模块有一个主入口文件，然而很多模块并不写这个属性。
+            3. scripts 运行项目的指令
+            4. dependencies 生产依赖
+                jquery: 1.12.0              代表 版本必须是 1.12.0
+                jquery: ^1.12.0             代表 版本必须是 1.12.x
+                jquery: ~1.12.0             代表 版本必须是 1.x.x
+            5. devDependencies 开发依赖
+                devDependencies只会在开发环境下使用，生产环境不会被打入包内；而dependencies不仅在开发环境中要使用，生产环境也需要使用到
+    2.npm包管理器
+        全称：node package manager, Node的包管理器 
+        *下载安装包(相关指令)   
+            1)添加到生产依赖         
+                如：npm install/i jquery@1.12.24  (使用@可以下载指定版本包，下面的install都可以简写为i）
+                ·npm i xxx                     下载最新版本的包
+                ·npm i xxx -S/--save
+            2)添加到开发依赖
+                ·npm i xx x -D/--save-dev
+            3)全局安装
+                ·npm i xxx -g                   默认路径 C:\Users\LuKaSavage\AppData\Roaming\npm    作用:为了作为指令使用
+            4)下载当前目录package.json中所有依赖包
+                ·npm i 
+            5)删除包
+                ·npm remove/r xxx
+            6)创建package.json
+                ·npm init                       自定义
+                ·npm init -y                    创建全选默认值的package.json (路径不能有中文)
+        *下载完后npm会做的事情
+            - 创建node_modules，将下载的包放进去
+            - 将下载的包添加当前目录的package.json中依赖中
+            - 创建package-lock.json，是一个下载缓存文件，能让第二次下载更快，同时防止下载的版本不变
+    3.yarn包管理器
+        yarn的出现解决了npm下载速度慢的问题
+        *yarn安装指令
+            ·npm i yarn -g
+        *下载安装包
+            1)yarn add jquery@1.12.24              下载并添加到生产依赖
+            2)yarn add xxx --dev                   下载并添加到开发依赖
+            3)yarn global add xxx                  全局安装(yarn全局安装是使用不了的，需要手动配置环境变量)
+            4)yarn                                 下载当前目录package.json中所有依赖包
+        *删除安装包
+            5)yarn remove xxx 
+    4.淘宝镜像cnpm(了解)
+        *安装命令
+            npm config set registry https://registry.npm.taobao.org
+        *验证命令
+            npm config get registry
+            如果返回https://registry.npm.taobao.org，说明镜像配置成功
+        *使用cnpm
+            如：cnpm install jquery@1.12.24
+
+    
+六、核心模块
+    1.path
+        作用：用来获取文件的路径的
+        方法：
+            ·path.join('a','b','c')           获取根元素的相对路径
+                如 const load=path.join('a','./b','../c','demo.js');
+            ·path.resolve('a','b','c')         获取元素的绝对路径(推荐)
+             如：path.resolve(__dirname,'a','./b','../c','demo.js');            
+    2.buffer(不需要引入，是全局对象global上的属性)
+        作用：Buffer是一个和数组类似的对象，不同是Buffer是专门用来保存二进制数据的。
+        属性：length
+        方法：
+            ·Buffer.alloc(size)          创建一个指定大小的缓冲数据,该数据是清空后干净的数据，size代表字节
+            ·Buffer.allocUnsafe(size);   创建一个指定大小的缓冲数据,该数据是没有清空缓存(内存里的)的数据(如果数据需要被覆盖，用此方法性能更好)
+            ·Buffer.from(str);           将一个字符串转换为buffer
+            ·buf.toString();             将一个buffer数据重新转换成字符串   //一般一个汉字占3个字节
+            ·buf.fill(0);                将BuffocUnsafe的数据都初始化
+    3.fs
+        作用：对文件进行读写操作
+        ·同步写入文件
+            1)打开文件
+                fs.openSync(path, [flags, mode])
+                参数详情：
+                    *path                        文件路径(必填)
+                    *flags                       可选，对文件进行操作（读/写）
+                        可选值：默认值: 'r'
+                        'w'                      写入
+                        'r'                      读取
+                        'a'                      追加
+                    *mode                        可选，设置文件的权限（只读/可读可写..）
+                        可选值：默认值: 0o666,一般我们不传
+                        0o111                    文件可执行
+                        0o222                    文件可写入
+                        0o444                    文件可读取
+                        0o666                    文件可读、可写
+                返回值：const fd = fs.openSync('a.txt','w');
+                    返回值fd是一个文件描述符，为数字3，代表打开的文件
+            2)写入内容
+                fs.writeSync(fd, string, position, encoding)
+                参数详情：
+                    *fd                          文件描述符
+                    *string                      要写入的字符串内容
+                    *position                    可选，从文件的那个位置开始写入  默认值：0 ，一般我们不传
+                    *encoding                    可选，写入文件内容的编码方式   默认值：utf-8 ，一般我们不传
+                返回值： const writeLength = fs.writeSync(fd,'打开的文件');
+                    返回值writeLength是一个数字，代表写入内容的字节长度
+            3)关闭文件(注意：一定要关闭文件，不然会造成内存泄漏)
+                fs.closeSync(fd)
+        ·异步写入文件
+            1)打开文件
+                fs.open(path[, flags, [mode, (err,fd)=>{}]]);
+                参数详情：
+                    path:         同上
+                    falgs：       同上
+                    mode:         同上
+                    callback: 回调函数，异步方法通过回调函数返回文件的描述符（fd），同步方法通过返回值返回
+                        error: 如果打开文件失败了，就会是错误内容。 如果打开文件成功了，就是null
+                        fd:    文件描述符
+                    注意：nodejs有错误优先机制: 要求开发者先处理异步代码的错误。在做其他事
+            2)写入内容
+                fs.write(fd, string[, position[, encoding], callback])
+                参数详情：
+                    fd：         同上
+                    string:      同上
+                    position:    同上
+                    encoding     同上
+                    callback
+                        error:  一般我们只关心第一个参数
+            3)关闭文件
+                fs.close(fd, (err)=>{})  
+                    fd:         同上
+                    err：       同上  
+        *async的简单介绍↓↓↓  (便于解决异步promise的可读性差的问题)         
+            generator回顾：
+                generator:
+                    function*(){
+                        yield xxx;
+                    }
+            而async函数是generator的语法糖,和后者相比：
+                用async取代*
+                用await取代yield
+            注意：
+                ①、await只有遇到promise对象(pending状态)才会停止
+                ②、当promise对象变成成功状态时，继续往下执行
+                ③、当promise对象变成失败状态时，会报错
+                ④、async函数的返回值是一个初始化状态的promise对象
+                    注意：async返回的对象如果有catch方法，就不会报错，而是触发catch方法，没有就会报错
+                如下案例：
+                    async function fn(){
+                        console.log(1111);
+                        await console.log(222);
+                        console.log(33333);
+                        await new Promise((resolve, reject)=>{
+                            setTimeout(()=>{
+                                console.log(44444)
+                                reject('hehe')
+                            },1000)
+                            return 111;
+                        })
+                        // 如果上一个await不是promise，则默认继续执行下面的代码
+                        // 如果上一个await是promise
+                            ·pengding状态，停留在哪个await上
+                            ·成功状态：继续执行下面的代码
+                            ·失败状态：下面的代码不执行
+                        
+                        await console.log(555555); 
+                    }
+                    const promise = fn()
+                        promise.then(res=>{
+                            // ------- ⑤、res 的值看fn函数的返回值------------
+                            console.log(res)
+                        }).catch(err=>{
+                            // ------- ⑥、err 的值看调用reject时传递的参数-------------
+                            console.log(err)
+                        })
+        ·简单写入文件
+            适用范围：一般写入小的文件，因为会占用双倍的内存
+            方法：
+                同步方法：fs.writeFileSync(path,string[,options]);
+                    参数说明：
+                        path:            文件的路径
+                        string:          要写入的东西
+                        options:         可选，需要一个对象作为参数，默认值：{encoding:"utf8",flag:"w",mode:0666}
+                异步方法：fs.writeFile(path,string[,options],callback);
+                    参数说明：
+                        path:            文件的路径
+                        string:          要写入的东西
+                        options:         可选，需要一个对象作为参数，默认值：{encoding:"utf8",flag:"w",mode:0666}
+                        callback：       回调函数，我们只考虑err
+                            err：        写入错误是触发
+            具体做法：
+
+                -------------- 详见《核心模块练习:06简单写入文件》 ----------------
+
+        ·流式写入文件
+            适用范围：将文件一点一点的写入，即使占用双倍内存也没有多大影响，一般用于写入大的文件
+            方法：fs.createWriteStream(path);              
+            具体做法：
+                1.创建一个可写流
+                    var ws = fs.createWriteStream(path);
+                2.监听流的状态
+                    ws.once("open",function(){});
+                    ws.once("close",function(){});
+                3.向流中写入内容
+                    ws.write(...);
+                    ws.write(...);
+                    ws.write(...);
+                4.关闭流
+                    // ws.close();    同步关闭方法，可能还没写入完就关闭，不好
+                    ws.end();         // 异步关闭方法，推荐
+
+                -------------- 详见《核心模块练习:07流式写入文件》 ----------------
+        ·简单读取文件
+            适用范围：小文件的读取
+            方法：
+                同步读取：fs.readFileSync(path[, options]);
+                异步读取：fs.readFile(path[, options], callback);
+                参数说明：
+                    path                  读取文件的路径
+                    options               配置对象
+                    encoding              指定打开文件的编码，默认是null
+                    flag                  文件的操作类型，默认是 r
+                    callback              回调函数，通过回调函数返回读取到的数据
+                        err               错误对象
+                        data              返回的数据（Buffer）
+
+            具体做法：
+                fs.readFile('a.txt', (err, data) => {
+                    if (!err) {
+                        console.log(data.toString());
+                    } else {
+                        console.log(err);
+                    }
+                })
+
+                -------------- 详见《核心模块练习:08简单读取文件》 ----------------
+        ·流式读取文件
+            适用范围：适合大文件，每次读取64kb
+            方法：const rs = fs.createReadStream(absPath);
+            参数说明：
+                absPath：绝对路径
+            具体做法：
+                方法1：监听可读流rs.on('data',(data)=>{});
+                方法2：rs.pipe(ws);
+                -------------- 详见《核心模块练习:09流式读取文件》 ----------------
+    4.http
+        ·http服务端
+            方法：
+                http.createServer()
+                -------------- 详见《核心模块练习:10http客户端》 ----------------
+                
+        ·http客户端
+            方法：
+                http.request()
+            -------------- 详见《核心模块练习:11http服务端》 ----------------
+二、数据库MySQL
+    ·数据库的分类
+        1.关系型数据库(RFBS)
+            代表有：MySQL、Oracle、DB2、SQL Server...
+            特点：关系紧密，都是表
+        2.非关系型数据库(NoSQL)
+            代表有：MongoDB、Redis...
+            特点：关系不紧密，有文档，有键值对
+    ·数据库的结构
+        在传统数据库中，数据的组织结构分别数据库、数据表、数据行、字段4大部分组成
+    ·安装
+        略~
+    ·创建表时的勾选项说明
+        1.PK(primary key 主键)
+            当某项属性勾选了该功能时，该属性会作为与其他对象区别的凭证。例如我们的学号
+            每个人在本校都是唯一的，但姓名是可能相同的。所以学号就具有主键功能
+        2.NN(not null 非空)
+            当某项属性勾选了该功能时，该属性的数据是不能为空的；这是项十分实用的功能，
+            在大多数数据填写框中数据都是不能为空的如注册时的密码框，查询信息的编号框等。
+        3.UQ(unique 唯一索引)
+            当某项属性勾选了该功能时，该属性的数据不会出现相同的情况。
+            如我们的身份证号码。
+        4.B(binary 二进制数据)
+            当某项属性勾选了该功能时，该属性的数据会以二进制数据类型呈现。
+        5.UN(unsigned 无符号 )
+            当某项属性勾选了该功能时，该属性的数据前是无正负号的。
+        6.ZF(zero fill 补0)
+            当某项属性勾选了该功能时，该属性的数据前会按你的设置补0。
+        7.AI(auto increment 自增)
+        8.G (generated column 生成列)
+    ·创建表时DataType数据类型说明
+        1.int 整数
+        2.varchar(len)字符串
+        3.tinyint(1) 布尔值
+        4.timestamp  时间戳
+    ·MySQL的一些常用指令
+        ·说明类
+            ①、--                           注释内容(注意中间有个空格) 
+            ①、show databases;              展示所有的数据库
+            ②、use xxx(数据库名)             切换到/使用xxx数据库
+        ·CRUD操作
+            -- C(create 增)
+                -- list代表表名 关键字需要加``,键名key不需要加，值加引号
+                ③、insert into list(name,`password`) values ('赵柳','222');
+
+            -- R(read 查)
+                ④、select * from list;
+                -- 查找表中所有数据
+                ⑤、select `name`,`password` from list;
+                -- 查找指定列的数据
+                ⑥、select * from list where idlist=3;
+                -- 查找具体数据
+                ⑦、select * from list order by idlist desc;
+                -- 倒序查询(加个order by xxx desc)
+                ⑧、select * from list limit 2 offset 2;
+                -- 分页查询(limit:每页的数量;  offset: 把前2条数据给过滤掉)
+            -- U(update 改)
+                -- 改动之前需要使用 use xxx 命令切换到指定数据库再进行update操作
+                ⑨、update list set `password`='123ischanged' where name='沛华';
+                -- 更新多个值时
+                ⑩、update list set password='23243', status=1 where name='沛华';
+            -- D(delete 删)     //数据可贵，一般不用
+                ⑪、delete from list where idlist=1;
+        ·SQL的where子句
+            1.语法
+                where 子句用于限定选择的标准。在select、update、delete语句中，皆可使用where子句来限定选择的标准。如下示例↓↓↓
+                1）查询语句中的where条件
+                    select 列名称 from 表名称 where 列 运算符 值
+                2) 更新语句中的where条件
+                    update 表名称 set 列=新值 where 列 运算符 值
+                3) 删除语句中的where条件
+                    delete from 表名称 where 列 运算符 值
+            2.where可使用的运算符
+                # =   等于
+                # <>  不等于
+                # >   大于
+                # >=  大于等于
+                # BETWEEN 在某个范围内
+                # LIKE  搜索某种模式
+                注意：在某版本的SQL中，操作符<>可以写成!=
+                1）查询status为 1 的所有用户
+                    select * from user where status=1
+                2) 查询id大于2的所有用户
+                    select * from user where id>2
+                3) 查询username不等于admin的所有用户
+                    select * from user where username<>'admin'
+        ·SQL的and和or运算符
+            1.语法
+                and 表示必须同时满足多个条件，相当于js中的 && 运算符
+                or 表示只要满足任意一条即可，相当于js中的 || 运算符
+                示例如下↓↓↓
+                select * from user where status=0 and id < 3
+        ·SQL的order by子句
+            1.语法
+                order by 语句用于根据指定的列队结果集进行排序。
+                order by 语句默认按照升序对记录进行排序(即默认使用asc关键字排序)。
+                如果您希望按照降序对记录进行排序，可以使用desc关键字。
+                示例如下↓↓↓
+                select * from user order by status;
+                select * from user order by status asc;  -- 和上面语句完全一样，都是升序
+                select * from user order by status desc; -- 表示降序
+            2.多重排序
+                如果您希望先按照status字段进行降序排序，再按照username的字母进行升序排序，示例如下↓↓↓
+                select * from user order by status desc, username asc;
+        ·SQL的count函数
+            1.语法
+                count(*)函数用于返回查询结果的总数据条数，语法格式如下↓↓↓
+                select count(*) from user where status=0;
+        ·SQL的as子句
+            1.语法
+                如果希望给查询出来的列名称设置别名，可以使用as关键字，示例如下↓↓↓
+                select count(*) as total from users where status=0;
+        连表查询操作(inner join xxx on 条件)
+            select * from articles inner join list on (list.id= articles.userid) where title='111';
+    
+
+三、MySQL数据库在node.js中的使用(通过node.js操作MySQL数据库)
+    ·mysql2的初步使用
+        *通过npm i mysql2 下载库
+        1)引入 
+            const mysql = require('mysql2'); 
+        2)创建连接(连接本地的mysql数据库),并返回一个connection对象
+            ★注意：user和password必须要写，不然会报错★ 
+            const connection = mysql.createConnection({    
+                host: 'localhost',        //域名
+                port: 3306,             //mysql的默认端口号
+                database: 'test',        //数据库名称
+                user: 'root',
+                password: 'root'      
+            })
+        3)对数据库进行操作
+            ①、简单的查询，示例如下↓↓↓
+                connection.query(
+                    `select * from list`,   
+                    //err node.js的错误优先机,result代表查询结果，fileds是一个数据，包含了每一列的数据，一般不用
+                    function(err,result,fileds){
+                        if(!err) console.log(result);
+                        if(result.affectedRows === 1) { console.log('插入数据成功'); }
+                        else console.log(err);
+                    }
+                )
+                拓展： affectedRows字段专门用来判断是否插入成功的。
+            ②、插入数据↓↓↓
+                // 1.要插入到的user表中的数据对象
+                const user = { username: '张三', password: '234' }
+                // 2.带执行的SQL语句，其中英文的 ? 表示占位符
+                const sqlStr = 'insert into user (useranme, password) values (?, ?)'
+                // 3.使用数组的形式，依次为 ？ 占位符指定具体的值
+                db.query(sqlStr, [user.username, user.password], (err, result) => {
+                    if (err) return console.log(err.message);
+                    if(result.affectedRows === 1) { console.log('插入数据成功') }
+                })
+
+                拓展：插入数据时，如果数据对象的每个属性和数据表的字段一一对应，则可以通过如下方式快速插入数据
+                const sqlStr = 'insert into user set ?'
+            ③、更新数据↓↓↓
+                // 1.要更新的数据对象
+                const user = { id: 7, username: '张三', password: '234' }
+                // 2.带执行的SQL语句，其中英文的 ? 表示占位符
+                const sqlStr = 'update user set username=?, password=? where id=?'
+                // 3.调用db.query()执行 SQL 语句的同时，使用数组一次为占位符指定具体的值
+                db.query(sqlStr, [user.username, user.password, user.id], (err, result) => {
+                    if (err) return console.log(err.message);
+                    if(result.affectedRows === 1) { console.log('插入数据成功') }
+                })
+
+                拓展：同样在更新数据时，如果数据对象的每个属性和数据表的字段一一对应，则可以通过如下方式快速更新数据
+                const sqlStr = 'update user set ? where id=?'
+                db.query(sqlStr, [user, user.id], (err, result)=>{ ... })
+            ④、删除数据↓↓↓
+                // 1.要执行的SQL语句
+                const sqlStr = 'delete from user where id=?'
+                // 2.调用db.query()执行sql语句的同时，为占位符指定具体的值
+                // 注意：如果SQL语句中有多个占位符，则必须使用数组为每个占位符指定具体的值；如果SQL语句中只有一个占位符，则可以省略数组
+                db.query(sqlStr, 7, (err, res) => {
+                    if (err) return console.log(err.message);
+                    if(result.affectedRows === 1) { console.log('删除数据成功') }
+                })
+
+        4)断开数据库连接(或者ctrl+c手动断开)
+            connection.end();
+    ·sequlize的使用
+        介绍：由于mysql2在操作方面有些不便，为了更好的操作数据库，我们这里引入sequlize来操作,从此不需要写sql语句了
+        *通过npm i sequlize 下载库
+        1)引入
+            const Sequelize = require('sequelize');
+        2)创建sequelize实例对象，连接数据库，传四个参数，数据库名，用户名，密码以及一个对象
+            ★Sequelize不能创建数据库，所以我们需要在图形化界面(workbentch)创建数据库★
+            const sequelize = new Sequelize('test','root','root',{
+                host: 'localhost',    //主机名,另外端口号3306可以默认不写
+                dialect: 'mysql'      //要连接的数据库
+            })
+            // 参数说明：
+                第一个参数：代表数据库的名字
+                第二个参数：代表用户名
+                第三个参数：代表密码
+                第四个参数：代表配置项(通常只需要设置host和dialect即可，端口号不需要配置)
+        3)测试sequlize连接是否成功
+            (async () => {
+                try {
+                    await sequelize.authenticate();
+                    console.log('连接成功');
+                } catch (error) {
+                    console.error('Unable to connect to the database:', error);
+                }
+            })();
+            
+        3)通过实例对象的define方法创建表
+            // article是自定义表的名字，最终创建的表是 复数形式，sequelize会默认给表添加 createdAt(创建的时间) updatedAt(更新的时间)
+            const Article = sequelize.define('article', {
+                // 表中列数据
+                title: {
+                    type: Sequelize.STRING, // 类型是字符串
+                    allowNull: false, // 非空
+                },
+                content: {
+                    type: Sequelize.STRING, // 类型是字符串
+                    allowNull: false, // 非空
+                },
+                userId: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false, // 非空
+                    unique: true
+                }
+            });
+            // 创建表后必须同步数据库
+            // force: true：如果数据库存在Article表，会强制删除，在创建
+            Article.sync({force: true}).then(() => {
+                console.log('创建成功');
+            }).catch(err => {
+                console.error('创建失败:', err);
+            });
+        4)对表进行增删改查操作
+            ★增
+                (async () => {
+                    const res = await Article.create({
+                        title: '4444',
+                        content: '新创建的title,这是第4个',
+                        userId: 3
+                    })
+                    console.log(res.dataValues);
+                })()
+            ----------------------------
+            ★查
+                ·findAll 查询所有数据    
+                ·findOne 查询一条数据
+                (async () => {
+                    const res = await Article.findAll({
+                        // 条件查询
+                        where: {
+                            xxx: xxx
+                        },
+                        // 排序('DESC'代表倒序)
+                        order: [
+                            ['id', 'DESC']
+                        ],
+                        // 限制查找的数量
+                        limit: 2,
+                        // 从第几条开始查找
+                        offset: 2,
+                        // 只查找指定列的数据
+                        attributes: [
+                        'title', 'content'
+                        ],
+                        // 将其他表给关联起来一起查询
+                        // (可以有两种写法：一种是string[]类型，一种是object[]类型)
+                        ①、当写成string[]类型时：代表查询关联表的所有字段
+                        // include: [User],
+                        ②、当写成object[]类型时：代表巡查关联表的部分字段
+                        // include: [{
+                            model: User,   // 代表要查找的表
+                            attributes: ['userId']   // 代表只查userId
+                        }]
+                    })
+                    console.log(res);
+                })()
+            ----------------------------------
+            ★改
+                // 修改数据(第1个参数传递要修改的值,第二个参数代表要修改哪一个（查询条件）)
+                (async () => {
+                    const res = await Article.update({
+                        title: '4444',
+                    }, {
+                        where: {
+                            title: '标题111'
+                        }
+                    })
+                    console.log(res.dataValues);
+                })()
+            ----------------------------------
+            ★删
+               (async () => {
+                    const res = await Article.destroy({
+                        title: '4444',
+                    }
+                    console.log(res.dataValues);
+                })() 
+
+            
+    ·sequelize联表查询
+        介绍：即通过一个条件查询多张表
+            ·在mysql中进行联表查询
+                ①、选择对应的表右键打开alter，点击foreign-keys
+                ②、设置foreign key name,名字随便取。
+                ③、设置Reference Table，选择相应的表的名称
+                ④、设置表a和表b哪个数据要关联起来
+                sql相关语句：
+                    ·查询所有数据
+                        查询表a中name为张三的表，并且查询b中相同id的数据
+                        select * from a inner join b on(a.id = b.id)  where name='张三';
+                    ·查询部分数据
+                        select a.name, a.age, b.like from a inner join b on(a.id = b.id)  where name='张三';
+            ·使用sequelize进行联表查询
+                基本用法：
+                    // a --->b,c,d,  代表一对多的关系，a可以关联多张表
+                    // 下面代表a属于b表
+                    a.belongsTo(b, {
+                        // 设置外键 a.userId   关联b.id
+                        foreignKey: 'userId'
+                    })
+                    b.hasOne(a, {
+                        foreignKey: 'userId'
+                    })
+    ·sequelize连接池
+        介绍：当我们需要使用数据库时，我们需要创建连接数据库，用完后需要销毁，为了实现复用性，我们可以使用sequelize连接池来解决这个问题
+        使用：
+            // 一般线上环境使用
+            const sequelize = new Sequelize('test','root','root',{
+                host: 'localhost',    //主机名,另外端口号3306可以默认不写
+                dialect: 'mysql',      //要连接的数据库
+                ...,
+                pool: { // 创建连接池
+                    max: 5, // 最大5个连接
+                    min: 0, // 最小
+                    acquire: 30000, // 如果报错超过30s，就会重新连接
+                    idle: 10000 // 如果10s连接没有使用，就会自动断开连接
+                }
+            })
+            
+四、HTTP协议
+    概念：HTTP协议也叫超文本传输协议，是一种基于TCP/IP的应用层通信协议，这个协议详细规定了浏览器和万维网服务之间互相通信的规则。
+    ·报文
+        概念：报文分为请求报文和响应报文两部分组成，其中每个部分都是由4个小部分组成，即：报文首行、报文头部、空行、报文主体。
+        1.请求报文：(如下请求报文)
+        -------------------------------------------------------------------------------
+            GET http://localhost:3000/ HTTP/1.1
+            Host: localhost:3000
+            Connection: keep-alive
+            Upgrade-Insecure-Requests: 1
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+            Sec-Fetch-User: ?1
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,_/_;q=0.8,application/signed-exchange;v=b3
+            Sec-Fetch-Site: none
+            Sec-Fetch-Mode: navigate
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: zh-CN,zh;q=0.9
+            Cookie: weibo.sid=x90B5ZEA0757pugF0fPVL2bYEbkZrslS; weibo.sid.sig=umGVwHzgpSeaamtCEHJPBfvhs2o
+        -------------------------------------------------------------------------------
+            ·报文首行：
+                如：GET http://localhost:3000/ HTTP/1.1
+                    GET：请求方式/类型 GET(查)/POST(增)/PUT(改)/DELETE(删)/OPTIONS
+                        - 哪些请求属于 GET 请求：
+                            1. 浏览器输入地址发送请求 
+                            2. html 所有标签都是 GET 请求 
+                            3. form 表单可以发送 GET/POST 请求
+                            4. 除了 form 表单/ajax 以外，其他请求默认都是 GET 请求
+                    http://localhost:3000/ : 代表请求地址
+                    HTTP/1.1:       代表协议名/版本号
+            ·报文头部：
+                Host: localhost:3000
+                服务器主机名端口号
+                Connection: keep-alive
+                保持长（持续）连接
+                Upgrade-Insecure-Requests: 1
+                允许使用 https 协议
+
+                User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+                用户代理：浏览器内核信息
+
+                Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,_/_;q=0.8,application/signed-exchange;v=b3
+                浏览器能够接受的文件（数据）类型
+                    text/html html 文件类型
+                    application/javascript js 文件类型
+                    text/css 样式文件类型
+                    image/webp image/png image/jpg ... 图片文件类型
+                    application/json json 数据类型
+                    application/x-www-form-urlencoded 采用 form 表单传输数据的类型
+                    application/xml;q=0.9 代表前面这个类型优先级=0.9
+
+                Accept-Encoding: gzip, deflate, br
+                浏览器接受的文件压缩格式
+                Accept-Language: zh-CN,zh;q=0.9
+                浏览器接受的语言
+                Cookie: weibo.sid=x90B5ZEA0757pugF0fPVL2bYEbkZrslS; weibo.sid.sig=umGVwHzgpSeaamtCEHJPBfvhs2o
+                会话控制的方案
+
+                Sec-Fetch-User: ?1
+                Sec-Fetch-Site: none
+                Sec-Fetch-Mode: navigate
+            ·空行：
+                报文头部和报文主体的空白行
+            ·报文主体：
+                post请求参数
+            拓展：
+                一、GET请求和POST请求有什么区别？
+                    1. 请求参数位置不一样
+                        GET请求请求参数（查询字符串参数）位于 请求首行（地址栏可见）
+                        POST请求请求参数(请求体参数)位于 请求主体(地址栏不可见)
+                    2. 安全性不一样
+                        GET请求较低(参数地址栏可见)
+                        POST请求相对较高(参数地址栏不可见)
+                    3. GET请求默认被浏览器缓存起来(第二次会走缓存)
+                        POST请求默认不被缓存
+                            --> 将来通过ajax演示
+                    4. 请求参数的长度不一样（过去有，现代浏览器没有这个区别）
+                        GET请求请求参数位于请求首行，而浏览器对地址栏输入地址长度是有限制的，长度有限
+                        POST请求参数位于请求体。理论上长度无限
+                        结论：
+                        如果要传输敏感数据（如：用户名/密码、用户信息..），一般使用POST
+                        如果传输不是敏感数据，就用GET  
+                二、Content-type有哪些类型？
+                    ·text/html
+                    ·text/css
+                    ·applicaiton/javascript;
+                    ·application/json;
+                    ·application/x-www-form-urlencoded;
+                    ·image/x-icon;
+        2.响应报文  (响应报文如下)
+        -------------------------------------------------------------------------------
+            HTTP/1.1 200 OK
+            Content-Type: text/plain;charset=utf-8
+            Date: Mon, 16 Dec 2019 02:29:29 GMT
+            Connection: keep-alive
+            Content-Length: 30
+
+            http 服务器返回了响应~~
+        -------------------------------------------------------------------------------
+            ·报文首行
+                HTTP/1.1 200 OK
+                    协议名/版本号 响应状态码
+                    常见的状态码：
+                        1xx 代表请求还需要进一步处理（请求处理中..）
+                            101 websocket协议（跟服务器协商，第一次走http，后续要切换协议）
+                        2xx 代表请求成功（响应成功） 200
+                            200 请求ok
+                            204 请求成功，但是无响应内容
+                            206 部分请求，分段请求，主要是用作多线程下载视频的状态码
+                        3xx 代表请求重定向（请求资源我这里没有，去其他服务器找）
+                            301 请求重定向，永久重定向（即当你访问一个网址时候，它会永久跳转到其他网址）
+                            302 请求重定向，临时重定向（即当你中间层使用nginx的时候，它有可能暂时跳转到其他服务器）
+                            304 请求重定向到缓存中(即协商缓存,也就是说get请求会被浏览器缓存下来，当再次访问仍然走服务器，服务器告诉客户端走缓存)
+                        4xx 代表客户端错误
+                            401 没有权限访问该资源
+                            403 禁止访问
+                            404 资源找不到
+                            405 服务器可能当前只支持get/post请求，但当前访问了一个put请求，服务器就会响应找不到方法
+                        5xx 代表服务端错误
+                            500 服务器解析出错，无法完成响应
+                            502 服务器收到的内容是无效的
+                            503 负载均衡挂了，无法对用户的请求做处理
+            ·报文头部
+                Content-Type: text/plain;charset=utf-8
+                    内容类型：（浏览器接收到，就会对应解析）
+                Date: Mon, 16 Dec 2019 02:29:29 GMT
+                    响应时间
+                Connection: keep-alive
+                Content-Length: 30
+                    报文体长度（字节）
+            ·空行
+                报文头部和报文主体的空白行
+            ·报文主体
+                http服务器返回了响应~~
+                服务器响应的数据
+    
+五、Express介绍(node.js中的三大框架之一，express、koa、egg)
+    介绍：
+        Express 是一个基于 Node.js 平台的极简、灵活的 web 应用开发框架，它提供一系列强大的特性，帮助你快速创建各种 Web 和移动设备应用。
+        简单来说Express就是运行在node中的用来搭建服务器的模块。
+    对比：
+        Express和Koa对比：
+            - express处理请求全部采用回调的方式，koa则是采用promise + async + await
+            - express内部采用的是ES5语法，koa则是采用es6来编写
+            - express比koa功能多，多了一些内置中间件
+    基本用法：
+        ①、引入express：                   const express=require('express');
+        ②、创建应用对象：                   var app = express();
+        ③、配置静态资源:                    app.use(express.static('public'));    （public是一个文件夹，里面放了css、js等文件, ）
+        ④、开启服务器，监听3000端口          app.listen(3000);
+        注意点：
+            express.static: 
+                # express在指定的静态目录中查找文件，并对外提供资源的访问路径。因此，存放静态文件的目录名不会出现在url中。如果需要提供访问路径，可参考如下方式↓↓↓
+                    app.use('/public', express.static('public'));
+                # 如果要托管多个资源目录，请多次调用express.static()函数
+                例如：app.use(express.static('public1'))
+                     app.use(express.static('public2'))
+                    同时寻找文件时，也会按从上到下的顺序查找，找到了直接返回。找不到才会去下一个
+    ·路由Router
+        ·介绍
+            定义：路由是由一个 URI、HTTP 请求（GET、POST等）和若干个句柄组成的。
+            我们可以将路由定义为三个部分：
+            第一部分：HTTP请求的方法（get、post、put、delete或options）
+                *一对一
+                    '/' 根路径 --> http://localhost:3000/
+                    '/css/index.css' --> http://localhost:3000/css/index.css
+                *一对多
+                    '/xxx/:id' --> http://localhost:3000/post/123456  http://localhost:3000/post/abcd ...
+            第二部分：URI路径
+                
+            第三部分: 回调函数(句柄函数，钩子函数)用来处理请求，返回响应
+                接收两个参数：
+                ·request：(请求对象，客户端给服务器)
+                    request的一些常用方法：
+                        1) req.headers     获取请求头信息(请求报文头部) 
+                        2) req.url         获取出主机名和端口号的路径部分
+                        3) req.params      获取地址栏(报文首行)的params(:id的值)参数  (返回的是一个对象{id:xxx},如果没有:id,则返回一个空对象，有多个id，则返回最后一个)
+                        4) req.query       获取GET请求的查询字符串参数(返回的是一个对象,即地址栏?后面的字符串,如果没有，则返回一个空对象)
+                        5) req.body        获取POST请求的请求体的参数（默认情况下，express框架不解析请求体数据，所以获取结果为undefined,如果需要获取数据，则需要添加内置中间件：app.use(express.urlencoede({extended:true}))                    
+                ·response：(响应对象，服务器给客户端) 
+                    response的一些常用方法：(返回响应只能生效一个，多个报错，set除外)
+                        1) res.set()       设置响应头
+                        2) res.end()       快速返回响应(通常返回不做处理的数据，如数字，英文字符串等)
+                        3) res.send()      根据响应的内容，自动设置响应头Content-type字段，相当于set()和end()方法的结合(适用于返回需要处理的数据，如中文字符串)
+                        4) res.json()      将响应的内容转换成json数据返回
+                        5) res.sendFile()  返回文件，客户端会打开显示,里面传的是一个绝对路径
+                        6) res.download()  返回文件，客户端会自动下载成文件，同样传绝对路径
+                        7) res.redirect()  请求重定向到新的网址
+        ·路由模块化
+            为了方便对路由进行模块化的管理，Express不建议将路由直接挂载到app上，而是推荐将路由抽离为单独的模块。步骤如下↓↓↓
+                ①、创建路由模块对应的.js文件
+                ②、调用express.Router()函数创建路由对象
+                ③、向路由对象上挂载具体的路由
+                ④、使用module.exports向外共享路由对象
+                ⑤、使用app.use()函数注册路由模块
+                具体代码实现：
+                    // ----- /router/user.js文件夹 ---------
+
+                    const express = require('express');
+                    const userRouter = express.Router();
+                    userRouter.get('/a', (req, res) => {
+                        res.send('请求了a接口')
+                    });
+                    userRouter.post('/b', (req, res) => {
+                        res.send('请求了b接口')
+                    });
+                    // 注意这里是直接把userRouter实例返回，而不是一个对象
+                    module.exports = userRouter
+
+                    // ---- index.js文件夹 --------
+                    const userRouter = require('./router/user')
+                    app.use(userRouter)
+            给路由模块添加前缀
+                app.use('/xxx', userRouter)
+    ·中间件Middleware
+        1.介绍
+            中间件（Middleware） 特指业务流程的中间处理环节。本质上是一个函数，它可以访问请求对象（request）, 响应对象（response）, 
+            和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。
+            使用：通过app.use((req,res,next)=>{})使用；
+            参数说明：
+                ·request 和Route的req一模一样。 请求对象
+                ·response 和Route的res一模一样。 响应对象
+                ·next 一个函数，是实现多个中间件连续调用的关键，它表示把流转关系转角给下一个中间件或者路由。
+                注意：中间件默认能接受处理所有请求,一次请求默认只能触发一个中间件函数 
+                    如果要触发多个中间件，请使用next();
+            中间件的作用：
+                多个中间件之间，共享同一份req和res.基于这样的特性，我们可以在上游的中间件中，统一为req或res对象添加自定义的属性或方法。供下游的中间件或路由进行使用。
+                可以理解成是一个复用逻辑代码的功效
+        2.全局中间件
+            客户端发球的任何请求，到达服务器之后，都会触发的中间件，叫做全局生效的中间件。
+            示例：
+                app.use((req,res, next)=>{
+                    ...
+                    next()
+                })
+                // 下面放路由中间件
+                此时第一个app.use即为全局中间件
+        3.局部中间件
+            不使用app.use()定义的中间件，叫做局部中间件。
+            示例：
+                app.get('/user',(req, res, next)=>{
+                    console.log('这是局部中间件，只会在当前路由生效！！！')
+                    // 该局部中间件生效之后，会继续执行第三个参数回调
+                }, (req, res)=>{
+                    res.send('mounted')
+                })
+            定义多个局部中间件↓↓↓
+                app.get('/user', mw1, mw2, (req, res)=>{res.send('mounted1')})
+                app.get('/user', [mw1, mw2], (req, res)=>{res.send('mounted2')})
+                
+                以上两种方式是等效的
+        4.中间件的分类
+            1) 应用级中间件
+                通过app.use()、app.get()或app.post()等绑定到app实例上的中间件，都叫做应用级别的中间件。
+                即自己开发的中间件。
+            2) 路由级别中间件
+                绑定到express.Router()实例上的中间件，叫做路由级别的中间件。它的用法和应用级别中间件没有任何区别。只不过，应用级别中间件
+                是绑定到app实例上，路由级别中间件是绑定到router实例上，代码示例如下：
+                示例：
+                const app = express()
+                const userRouter = app.Router()
+
+                // 路由级中间件↓
+                userRouter.get('/a',(req, res)=>{
+                    res.send('aaaaaaaa')                    
+                })
+
+                // 应用级中间件
+                app.get('/b', (req, res)=>{res.send('bbbbb')})
+            3) 错误级中间件
+                专门用来捕获整个项目中发生的异常错误，从而防止项目异常崩溃的问题。 
+                错误级别中间件必须要有4个参数：形参顺序从前到后，分别是(err, req, res ,next)
+                ★★ 注意 ★★★★★★★★★★★★★★★★★
+                ★ 错误中间件必须注册在所有路由之后！！！   ★
+                ★★★★★★★★★★★★★★★★★★★★★★
+                
+                app.get('/',(req, res)=>{
+                    throw new Error('服务器发生错误') // 抛出一个自定义错误
+                })
+
+                app.use((err, req, res, next) => {
+                    console.log('发生了错误' + err.message)  // 在服务器打印错误消息
+                    res.send('Error' + err.message)         // 向客户端相应错误相关的内容
+                })
+
+            4) 内置中间件：express框架内置的中间件。
+                ·express.urlencoded() 解析POST请求体数据(解析application/x-wwww-form-urlencoded，通常和req.body连用，有兼容性，仅在4.16.0+ 版本生效)
+                    用法：app.use(express.urlencoded({extended:true}));
+                    
+                    拓展：express.urlencoded({extended:true})和express.urlencoded({extended:false})有什么区别？
+                        # 模块的区别
+                            如果设置为false，那么对URL-encoded的数据的解析采用querystring库；
+                            如果设置为true，那么采用qs库，允许将富对象和数组编码为url编码格式，允许使用url编码的json体验。
+                        # 返回的对象格式的区别
+                            当extended为false的时候，键值对中的值就为'String'或'Array'形式，如下
+                                {
+                                    move[id]: '4234234',
+                                    move[name]: 'RE0·从零开始的异世界生活'
+                                }
+                            当extended为true的时候，则可为任何数据类型。
+                                {
+                                    move: {
+                                        id: '4234234',
+                                        name: 'RE0·从零开始的异世界生活'
+                                    }
+                                }
+                ·express.static() 向外暴露服务器的静态资源
+                    用法：app.use(express.static('xxx'));    // xxx代表文件夹名称
+                ·express.json()  解析POST请求体数据(解析application/json,有兼容性，仅在4.16.0+ 版本生效)
+                    用法：app.use(express.json());    
+
+            5) 第三方中间件：社区开发者开发的中间件
+                ①、body-parser(了解，已被express内置中间件代替)
+                    在express@4.16.0版本之前，我们经常使用body-parser来解析请求体数据。
+                    使用步骤↓↓心爱
+                        1）运行 npm install body-parser 安装中间件
+                        2）使用require导入中间件
+                            const parser = require('body-parser')
+                        3）调用app.use()注册并使用中间件
+                            app.use(parser.urlencoded({extended: false}))
+                    拓展：Express内置的express.rulencoded中间件，就是基于body-parser这个第三方中间件进一步封装出来的
+                ②、cookie-parser
+                    略...
+        5.自定义中间件
+            实现一个类似于express.urlencoded这样的中间件，来解析POST提交到服务器的表单数据。
+            实现步骤：
+                ①、定义中间件
+                    app.use((req, res, next)=>{
+                        // your logic...
+                    })
+                ②、监听req的data事件
+                    在中间件中，需要监听req对象的data事件，来获取客户端发送到服务器的数据。
+                    如果数据量比较大，无法一次性发送完毕，则客户端会把数据切割后，分批发送到服务器。所以data事件可能会触发多次，每次触发data事件时，获取
+                    到数据只是完整数据的一部分，需要手动对接收到的数据进行拼接。
+                ③、监听req的end事件
+                    当请求提数据接受完毕之后，会自动触发req的end事件
+                    因此，我们可以在req的end事件中，拿到并处理完整的请求体数据。
+                ④、使用querystring模块解析请求体数据
+                    node.js内置了一个querystring模块，专门用来处理查询字符串。通过这个模块提供的parse()函数，可以轻松吧查询字符串，解析成对象的格式。
+                ⑤、将解析出来的数据对象挂载为req.body
+                    上游的中间件和下游的中间件之间共享同一份req和res。因此我们可以将解析出来的树，挂载为req的自定义属性，命名为req.body.供下游使用。
+            代码如下
+                // 4.导入querystring的node.js内置模块
+                const qs = require(querystring);
+
+                app.use((req, res, next)=>{
+                    // 1.定义变量，用来存储客户端发送过来的请求体数据
+                    let str = ''
+                    // 2.监听req对象的data事件
+                    req.on('data', chunk => {
+                        // 拼接请求体数据，隐式转换为字符串
+                        str += chunk
+                    })
+                    // 3.监听req对象额end事件
+                    req.on('end', () => {
+                        // 在str中存放的是完整的请求体数据
+                        console.log(str) // 通常数据格式为 a=1&b=233这种
+                        // 调用qs.parse()方法，吧查询字符串解析为对象
+                        const body = qs.parse(str)
+                        // 挂载
+                        req.body = body
+                        next()
+                    })
+                })
+        6.接口跨域解决方案(由于jsonp只支持get请求，我们这里只考虑cors)
+            cors是express的第三方中间件。使用步骤如下↓↓↓
+            ①、安装中间件 npm i cors
+            ②、导入中间件 const cors = require('cors')
+            ③、在路由之前调用app.use(cors())
+                
+            
+
+            
+    拓展：服务器执行顺序
+        1.首先，服务器启动时，会用数组收集所有的路由和中间件  [route, middleware...]
+        2.当有请求访问服务器时，服务器就会遍历数组来处理请求、返回响应
+            先取出第一个
+                如果是路由, 看请求方式和请求路径是否完全匹配，如果匹配上就执行回调函数，请求就到此终止（后面的就不执行了），如果有一个不匹配，就看下一个函数
+                如果是中间件，就立即执行中间件回调函数，如果内部调用了next方法，就执行下一个，如果没有，请求到此终止（后面的就不执行了）
+            如果都没有匹配上呢？ 返回 404   Cannot GET /aaa
+六、MD5加密
+    介绍：一种消息载要加密算法
+    特点：不可逆的方式加密(理论上通过密文没办法破解明文)
+          同样的明文加密后输出同样的密文
+    安装：npm i md5
+    使用：md5(password);   //将明文括起来
+七、Cookie
+    ·什么是Cookie？
+        cookie本质是一个存储在浏览器的文本，随着http请求自动传递给服务器。它由一个名称、一个值和其他几个用于控制cookie有效期、
+        安全性、使用范围的可选属性组成。不同域名下的cookie各自独立，每当客户端发起请求时，会自动吧当前域名下所有未过期的cookie一同
+        发送给服务器。
+        也可以说cookie是一个头（请求头/响应头）：
+            服务器以响应头的形式将Cookie发送给浏览器
+            浏览器收到以后会自动将Cookie保存
+            浏览器再次访问服务器时，会以请求头的形式将Cookie发回
+            服务器就可以通过检查浏览器发回的Cookie来识别出不同的浏览器
+    ·Cookie的优缺点？
+        优点(作用)：
+            *解决会话控制（http协议无状态问题） 
+            *存储少量的数据
+        缺点：
+            *存储容量小。   一般数量不超过50个，单个大小不超过4kb。
+            *安全性较低。   因为数据是直接存储在客户端
+            *传输流量大。   cookie每次发送请求都会全部携带上
+    ·Cookie的使用？
+        客户端
+            document.cookie （基本不用）
+        服务端
+            1.设置
+                用法：res.cookie(key, value, options);
+                *设置过期时间和只能在服务端获取：
+                    res.cookie(key,value,{
+                        maxAge:1000*3600*24*7,        //设置一个星期的时间(单位：毫秒)
+                        httpOnly:true                 //只能在服务端获取，客户端无法获取
+                    }); 
+            2.修改
+                /Cookie一旦发送给浏览器，就不能再修改了
+                //但是我们可以使用同名的cookie来替换已有cookie
+                res.cookie("username","zhubajie");
+
+            2.获取
+                req.cookies           //默认undefined，需要通过中间件解析
+                cookie-parser的使用
+                    通过npm i cookie-parser来下载第三方中间件用来解析cookie数据
+                        ①、const cookieParser=require('cookie-parser')
+                        ②、app.use(cookieParser());
+                
+            3.删除
+                res.clearCookie(key)
+八、Session
+    1.什么是session？
+        Session 是一个对象，存储特定用户会话所需的属性及配置信息。
+    2.session工作原理
+        ①、客户端登录：提交账号和密码
+        ②、服务器验证账号和密码，通过后，将用户的信息存储在服务器的内存中，同时生成对应的cookie字符串给客户端
+        ③、客户端再次发起请求时，通过请求头自动把当前域名下所有可用的cookie发送给服务器。
+        ④、服务器根据请求头中携带的cookie，从内存中查找对应的用户信息，认证成功后，服务器针对当前用户生成特定的
+           响应内容给浏览器。
+    3. session的使用
+        问题：由于session是临时存储，如果服务器重启就会清空
+        解决：需要持续化存储，存在redis数据库当中
+        具体步骤：
+            npm i redis connect-redis express-session
+
+            // 1.导入session 中间件
+            const session = require('express-session')
+            // 2.配置session 中间件
+            app.use(session({
+                secret: 'keyboard cat',       // secret 属性的值可以为任意字符串
+                resave: false,                // 固定写法
+                saveUninitialized: true,      // 固定写法
+            }))
+            // 当express-session 中间件配置成功后，可以通过req.session来访问和使用session对象，从而存储用户的关键信息
+            app.post('/api/login', (req, res)=> {
+                // 判断用户提交的登录信息是否正确
+                if(req.body.username !== 'admin' || req.body.password !== '000000') {
+                    return res.send({ status: 1, msg: '登录失败' })
+                }
+
+                req.session.user = req.body // 将用户的信息，存储到session中
+                req.session.isLogin = true  // 将用户的登录状态存储到session中
+                res.send({ status: 0, msg: '登录成功' })
+
+            })
+        清空session
+            调用req.session.destroy()函数，即可清空服务器保存的session信息。示例如下↓↓↓
+            // 退出登录的接口
+            app.post('/api/logout', (erq, res) => {
+                // 清空当前客户端对应的 session 信息
+                req.session.destroy()
+                res.send({
+                    status: 0,
+                    msg: '退出登录成功'
+                })
+            })
+            
+            ★★注意：destroy函数不会清空所有session 
+
+    拓展： cookie和session的区别？
+        1)cookie数据存放在客户的浏览器上，session数据放在服务器上。
+        2)cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗
+            考虑到安全应当使用session。
+        3)session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能
+            考虑到减轻服务器性能方面，应当使用COOKIE。
+        4)单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。
+        5)所以个人建议：
+            将登陆信息等重要信息存放为SESSION
+            其他信息如果需要保留，可以放在COOKIE中
+九、JSON Web Token
+    1.什么是json web token?
+        JSON Web Token 是一个开放标准协议，它定义了一种紧凑和自包含的方式，它用于各方之间作为JSON对象安全地传输信息。
+        是目前最流行的跨域认证解决方案。
+    2.jwt的工作原理
+        ①、客户端登录：提交账号和密码
+        ②、服务器验证账号和密码，通过后，将用户的信息对象，经过加密后生成token字符串发送给客户端
+        ③、前端将token存储到localstorage或者sessionStorage中，当客户端再次发起请求时，通过请求头的authorization字段，将token发送给服务器。
+        ④、服务器把token字符串还原成用户的信息对象，认证成功之后，服务器针对当前用户生成特定的响应内容返回给浏览器。
+    3.jwt的组成部分
+        jwt通常由三部分组成，分别是Header(头部)、Payload(有效荷载)、Signature(签名)。
+        三者之间使用英文的'.'分隔，格式如下：
+            Header.Payload.Signature
+        三个部分各自代表的含义
+            ·Payload: 代表真正的用户信息，他是用户信息经过加密后生成的字符串。
+            ·Header和Signature是安全性相关的部分，只是为了保证Token的安全性。
+
+    3.jwt的使用？
+        客户端收到服务器返回的JWT之后，通常会将它存储在localStorage或sessionStorage中。
+        此后，客户端每次与服务器通信，都要带上这个JWT的字符串，从而进行身份认证。推荐做法是把JWT放在HTTP请求头的Authorization字段中，格式如下：
+            Authorization: Bearer <token>
+    4.在express中使用JWT
+        1.安装
+            npm i jsonwebtoken express-jwt
+            ·jsonwebtoken: 用于生成jwt字符串
+            ·express-jwt: 用于将jwt字符串解析还原成json对象
+        2.具体步骤↓↓↓
+            // 1.导入用于生成JWT字符串的包
+            const jwt = require('jsonwebtoken');
+            // 2.导入用于将客户端发送过来的jwt字符串，解析还原成json对象的包
+            const expressJWT = require('express-jwt');
+            // 3.定义secret秘钥
+            const secretKey = 'lukasavage No1 @_@'
+            /*
+              为了保证JWT字符串的安全性，防止JWT字符串在网络传输中被别人破解，我们需要专门定义一个用于加密和解密的secret密钥：
+                ①、当生辰jwt字符串的时候，需要使用secret密钥对用户的信息进行加密，最终得到加密好的jwt字符串
+                ②、当把jwt字符串解析还原成json对象的时候，需要使用secret密钥进行解密
+            /
+            // 5.将jwt字符串还原为json对象
+            // expressJWT({ secret: secretKey }) 就是用来解析Token的中间件
+            // .unless({ path: [/^\api\//] }) 用来指定哪些接口不需要访问权限
+            // ★注意：只要配置了express-jwt这个中间件，就可以把解析出来的用户信息，挂载到req.user属性上★
+            app.use(expressJWT({ secret: sectretKey }).unless({ path: [/^\api\//] }))
+            // 4.生成jwt字符串
+            app.post('/api/login', (req, res) => {
+                // ... 省略登录失败的代码
+                // 用户登录成功后，生成jwt字符串，通过token属性响应给客户端
+                /*
+                    字段说明：
+                        参数1: 用户的信息对象
+                        参数2: 加密的密钥
+                        参数3: 配置对象，可以配置当前的token的有效期
+                        expiresIn代表token过期时间
+                /
+                
+                const userinfo = req.body
+                res.send({
+                    status: 200,
+                    message: '登录成功！',
+                    token: jwt.sign({ username: userinfo.username }, secretKey, { expiresIn: '30s' })
+                })
+            })
+
+            // 7.使用错误处理中间件捕获解析JWT失败后产生的错误
+            当使用express-jwt解析token字符串时，如果客户端发送过来的token字符串过期或者不合法，会产生一个解析失败的错误，影响项目的正常运行。
+            我们可以通过express的错误中间件，捕获这个错误并进行相关的处理，
+            app.use((err, req, res, next) => {
+                // token 解析失败导致的错误
+                if(err.name === 'UnauthorizedError') {
+                    return res.send({ status: 401, message: '无效的token' })
+                }
+                // 其他原因导致的错误
+                res.send({ status: 500, message: '未知错误' })
+            })
+
+    拓展：JWT和Session的差别？
+        相同点：它们都是存储用户信息
+        不同点：
+            ①、Session是在服务器端的，而JWT是在客户端的。
+            ②、Session方式存储用户信息的最大问题在于要占用大量服务器内存，增加服务器的开销。
+                而JWT方式将用户状态分散到了客户端中，可以明显减轻服务端的内存压力。
+            ③、Session的状态是存储在服务器端，客户端只有session id；而Token的状态是存储在客户端。
+        推荐方案：
+            ①、服务端渲染、不存在跨域问题推荐使用Session认证机制
+            ②、前后端分离、需要跨域请求后端接口推荐使用jwt认证机制
+十、websocket的介绍
+    1.为什么要使用websocket？
+        http通信只能由客户端发起，http协议做不到服务器主动向客户端推送消息
+    2.主要特点？
+        ·服务器可以主动向客户端发送消息
+        ·客户端也可以主动向服务器发送消息
+    3.其他特点？
+        ·建立在TCP协议之上，服务端的实现比较容易
+        ·与http协议有良好的兼容性
+        ·数据格式比较轻量，性能开销小，通信高效
+        ·可以发送文本，也可以发送二进制数据
+        ·没有同源限制，客户端可以与任意服务器通信。(可以跨域)
+        ·协议标识符为ws(加密为wss)
+            如http协议是 http://localhost:3000
+            websocket是 ws://localhost:3000
+    3.websocket的使用？
+        **本文讲的是soctet.io这个库的使用(原生的话对兼容性不好，也有其他的库，目前这个库最好用)**
+        1.服务端API
+            1)引入http协议，用来创建服务器
+                const http = require('http');
+            2)引入socketIo
+                const socketIo = require('socket.io');
+
+            3)创建server
+                const server = http.createServer();
+            4)创建web socket服务  
+                const io = socketIo(server);     //io代表 web socket 服务端
+
+            5)websocket服务端绑定connection事件，当客户端连接上服务端就会触发事件(后面的回调函数)，
+                此时，在事件回调函数中就能知道哪个客户端连接过服务端
+                io.on('connection', client => {
+                    // 一旦客户端绑定 xxx 事件，服务端就会触发下面的事件,并且接收到客户端发来的信息data
+                    client.on('server_receive_client_msg', data => {
+                        console.log('服务器接受到了消息', data);
+                        // 服务端再将消息转发给所有客户端
+                        // io.emit('client_receive_server_msg', data );
+                        // 或者将消息转发给除自己以外的所有客户端
+                        client.broadcast.emit('client_receive_server_msg', data );
+                            // 注意:原则上ws会把消息发送给所有连接的客户端，如果添加了broadcast，那么客户端的发起者A不会接受到自己发的消息
+                    });
+                });
+            5)监听端口号
+            server.listen(3000);
+        2.客户端API
+            先引入socket.io
+                <script src='socket.io.js'><./script>
+            1)连接websocket服务端
+                const client=io('ws://localhost:3000');
+            2)接收服务端的消息
+                client.on('client_receive_server_msg',function(data){
+                    console.log('服务端发送的消息',data)
+                })
+            3)向服务端发送消息
+                client.emit('server_receive_client_msg','xxxxxxxxx');
+十一、koa的基本介绍
+    ·入门
+        1.介绍
+            Koa 是一个新的 web 框架（基于http模块），由 Express 幕后的原班人马打造， 致力于成为 web 应用和 API 开发领域中的一个更小、
+            更富有表现力、更健壮的基石。 通过利用 async 函数，Koa 帮你丢弃回调函数，并有力地增强错误处理。 Koa 并没有捆绑
+            任何中间件， 而是提供了一套优雅的方法，帮助您快速而愉快地编写服务端应用程序。
+            拓展：为什么出现koa？
+                    原因在于createServer((req,res)=>{})中的req、res非常弱！
+        2.特点
+            ·用ctx来替代req和res(即增强req、res)
+            ·没有路由，只有中间件(需要借助插件koa-route来完成)    
+        3.使用
+            *通过npm i koa 下载koa
+            1)引入koa
+                const Koa = require('koa');
+            2)创建app引用对象
+                const app=new koa();
+            3)使用
+                app.use((ctx,next)=>{
+                    console.log(ctx.req.query);                   // 原生的
+                    console.log(ctx.request.req.query);           // 原生的，koa自己封装的request上是有req属性的
+                    -----------------
+                    console.log(ctx.request.query);               // koa封装的
+                    console.log(ctx.query);                       // koa封装的
+                    ctx.body='服务器返回的响应'
+                })
+                // 针对于错误做监听
+                app.on('error', function(err)=>{
+                    console.log('夭寿啊------', err)
+                })
+
+        4.由于koa没有路由，因此需要额外下载koa-route库来实现
+        *通过npm i koa-route 下载koa-route
+        1)引入koa
+            const _ = require('koa-route');
+        2)使用
+            app.use(_.get('/route',(ctx,next)=>{
+                ctx.body='服务器返回的响应';
+            }))
+    ·ctx上的常见属性
+        ①、原生的(只要ctx出现req、res字段，那么就是原生的)
+            ctx.req               
+            ctx.req.query
+            ctx.request.req.query
+            ctx.req.path
+            ctx.request.path
+            ctx.req.url
+            ctx.request.url
+            ctx.res      
+            ...         
+        ②、koa自己封装的(字段没有req、res都是koa自己封装的)
+            ctx.request.url
+            ctx.method
+            ctx.request.parse
+            ctx.request.query
+            ctx.response
+            ...
+十二、webstorage技术
+    1.什么是webstorage技术？
+        webstorage是一个本地离线存储方案，分为两种，一种是localStorage永久存储，另一种是Sessionstorage(临时(会话)存储)
+    2.用法？
+        ①、设置/存储
+            xxxStorage.setItem(key,value);
+        ②、读取
+            xxxStorage.getItem(key,value);
+        ③、删除
+            xxxStorage.removeItem(key,value);    //删除一个
+            xxxStorage.clear();                  //删除所有
+    3.特点？
+        存储数据大概3~5MB，如果需要存储大量数据，需要借助第三方库localforage.js来讲数据存储在indexDB里面
+        其库的用法和localstorage类似如下：
+        1.引入localforage.js(通过npm可以下载到)
+            <scrip src='localforage.js'> </scrip>
+        2.如果传函数，则当做普通的回调函数处理，如果不传函数，返回的是一个promise对象
+            (async ()=>{
+                await localforage.setItem('usename','peihua');
+            })();
+    拓展：
+        面试题：localstorage、cookie、sessionStorage三者的区别？
+            共同点：都是保存在浏览器端、且同源的 
+            区别： 
+            1、cookie数据始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递，
+                而sessionStorage和localStorage不会自动把数据发送给服务器，仅在本地保存。cookie数据还有路径（path）的概念，
+                可以限制cookie只属于某个路径下 
+            2、存储大小限制也不同，cookie数据不能超过4K，同时因为每次http请求都会携带cookie、所以cookie只适合保存很小的数据，
+                如会话标识。sessionStorage和localStorage虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大 
+            3、数据有效期不同，sessionStorage：仅在当前浏览器窗口关闭之前有效；localStorage：始终有效，窗口或浏览器关闭也
+                一直保存，因此用作持久数据；cookie：只在设置的cookie过期时间之前有效，即使窗口关闭或浏览器关闭。cookie如果没有设置
+                时间，则在浏览器窗口关闭即销毁。 
+            4、作用域不同，sessionStorage不在不同的浏览器窗口中共享，即使是同一个页面；localstorage在所有同源窗口中都是共享的；
+                cookie也是在所有同源窗口中都是共享的 
+            5、web Storage支持事件通知机制，可以将数据更新的通知发送给监听者 
+            6、web Storage的api接口使用更方便
+十三、HTTP相关知识大集合
+     ·tcp的五层协议
+        ·应用层
+        ·传输层
+        ·数据链路层
+        ·网络层
+        ·物理层
+十四、经典面试题汇总
+    浏览器渲染页面的过程？
+        1.遇到html标记，调用html解析器生成DOM树。
+        2.遇到style、link标签，调用css解析器生成CSSOM树。
+        3.遇到script标记，调用JavaScript解析器，绑定事件、修改DOM树、CSSOM树等
+        4.将DOM树和CSSOM合成渲染树。
+        5.将节点绘制到屏幕上。
+    url输入到页面显示全过程?
+        简答概括就是：
+            1、输入网址
+            2、DNS解析
+            3、建立tcp连接
+            4、客户端发送HTPP请求
+            5、服务器处理请求　
+            6、服务器响应请求
+            7、浏览器展示HTML
+            8、浏览器发送请求获取其他在HTML中的资源。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★★ 2.redis ★★★★★★★★★★★★★★★
+一、Redis介绍
+    ·什么是redis？
+        Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。
+    ·优势
+        # 性能极高 – Redis能读的速度是110000次/s,写的速度是81000次/s 。
+        # 丰富的数据类型 – Redis支持二进制的字符串、列表、哈希值、集合和有序集合等数据类型操作。
+        # 原子性 – Redis的所有操作都是原子性的，意思就是要么成功执行要么失败完全不执行
+        # 单个操作是原子性的。多个操作也支持事务，即原子性，通过MULTI和EXEC指令包起来。
+        # 丰富的特性 – Redis还支持 发布/订阅, 通知, key 过期等等特性。
+    拓展：
+        1) 关系型数据库和非关系型数据库的区别？
+            MongoDB和Redis都是NoSQL数据库，采用结构型数据存储，而MySQL、oracle等则属于传统的关系型数据库。
+            ①、关系型数据库
+                优点：以完善的关系代数理论为基础,有严格的标准,支持事务ACID四性,借助索引机制可以实现高效的查询。
+                缺点：可扩展性差，无法较好地支持海量数据存储，数据模型过于死板，事务机制影响了系统的整体性能，全文搜索功能较弱。
+
+            ②、NoSQL数据库
+                优点：数据之间无关系，易扩展。有非常高的读写性能，支持大量数据，性能高。有灵活的数据模型，无须事先为要存储的数据建立字段，随时可以存储自定义的数据格式。
+                缺点：复杂查询性能不高,一般都不能实现事务的强一致性。
+        2) MongoDB和Redis有什么区别？
+            ·内存管理
+                Redis 数据全部存在内存，定期写入磁盘，当内存不够时，可以选择指定的 LRU 算法删除数据。
+                MongoDB 数据会优先存于内存，当内存不够时，只将热点数据放入内存，其他数据存在磁盘。
+            ·数据结构
+                Redis 支持的数据结构丰富，包括hash、set、list等。
+                MongoDB 数据结构比较单一，但是支持丰富的数据表达，索引，最类似关系型数据库，支持的查询语言非常丰富。
+            ·数据量和性能
+                当物理内存够用的时候，性能，redis>mongodb>mysql
+                数据量，mysql>mongodb>redis
+                注意mongodb可以存储文件，适合存放大量的小文件，内置了GirdFS 的分布式文件系统。
+            ·可靠性
+                mongodb从1.8版本后，采用binlog方式（MySQL同样采用该方式）支持持久化，增加可靠性；
+                Redis依赖快照进行持久化；AOF增强可靠性；增强可靠性的同时，影响访问性能。
+                可靠性上MongoDB优于Redis。
+            
+二、配置
+    ·安装
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★★ 3.mongoDB ★★★★★★★★★★★★★★★
+一、MongoDB介绍
+    ·什么是MongoDB?
+        MongoDB是一个基于分布式文件存储的开源数据库系统,由C++编写，它将数据存储为一个文档，
+        数据结构由键值(key=>value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
+    ·适用场景
+        1）处理大量低价值的数据而且对处理性能有很高的要求
+        2）可以用mongoDB来实 现数据的缓存（缓存层）
+        3）MongoDB搭建集群环境，实现存储数据横向扩展
+    ·安装
+        MongoDB官方网址：https://www.mongodb.com/   （resources --> server --> installation --> install MongoDB Community Edition）
+        注意：mongoDB的默认端口：27017
+二、Mongo可视化工具
+    ·Robo 3T
+    ·Navicat（不推荐，收费）
+三、MongoDB存储数据的组成
+    ·数据库    MongoDB的单个实例可以容纳多个独立的数据库，比如一个学生管理系统就可以对应一个数据库实例
+    ·集合      数据库是由集合组成的，一个集合用来标识一个实体，，如学生集合
+    ·文档      集合是由文档组成的，一个文档表示一条记录，比如一位同学张三就是一个文档
+    以下时MongoDb和mysql的组成区别↓↓↓
+        Mongodb                                    mysql
+        ---------------------------------------------------
+        文档(document,单个文档最大16M)               记录(row)
+        存储的数据格式为BSON(二进制的json格式，类型比json多一些)
+        -------------------------------------------------------
+        集合(collection)                            表(table)
+        --------------------------------------------------------
+        数据库(32位系统上，一个个数据库的文件          数据库(database)
+        不能超过2G)
+四、使用mongoDB + robo 3T
+    ·使用数据库
+        1)打开cmd，直接通过 mongo 命令启动
+        2)常用命令
+            ·use xxx                   切换数据库(xxx代表数据库名称，如果此数据库不存在也可以切换过来，但不能立刻创建数据库)
+            ·show dbs                  查看所有数据库
+            ·db                        查看当前数据库
+            ·db.xxx.insert({name: '张三', age: 18})     插入数据(注意这个xxx代表着哪个集合)
+            ·db.xxx.find()             查询当前集合所有的数据,也可以查询单条数据，
+                                        如db.xxx.find({age: 18},{_id: 0}),会得到age为18的文档
+                                        如果第二个参数的_id的值为0，会查找完之后剔除_id属性，如果_id是一个非0数字，则代表只查age为18的_id值
+            ·db.dropDatabase()         删除数据库
+            ·db.createCollection(collection_Name)  创建一个空集合
+            ·db.collection_Name.insert(document)   collection_Name集合的名称、document要插入的文档
+    ·帮助文档
+        ·db.help()                 数据库中的方法
+        ·db.collections.help()     找到集合中的方法
+    ·插入
+        ·db.xxx.insert(document)    像某个集合插入文档
+        ·db.xxx.save(document)      如果不指定 _id 字段 save() 方法类似于 insert() 方法。如果指定 _id 字段，则会更新该 _id 的数据。
+        注意：
+            当插入一条新文档的时候mongodb会自动为此文档生成一个_id属性,_id一定是唯一的，
+            用来唯一标识一个文档 _id也可以直接指定，但如果数据库中此集合下已经有此_id的话插入会失败
+    ·删除
+        基本语法：
+            ·db.deleteOne({name: '张三'})    删除一条
+            ·db.collection.remove(
+                <query>,
+                {
+                    justOne: <boolean>
+                }
+            )
+        参数
+            query :（可选）删除的文档的条件。
+            justOne : （可选）如果设为 true 或 1，则只删除匹配到的多个文档中的第一个
+
+    ·更新
+        基本语法：
+            ·db.xxx.updateMany(...) 指定所有
+            ·db.xxx.update(   // 指定单条
+                <query>,
+                <updateObj>,
+                {
+                    upsert: <boolean>,
+                    multi: <boolean>
+                }
+            )
+        参数：
+            query      查询条件,指定要更新符合哪些条件的文档
+            update     更新后的对象或指定一些更新的操作符
+            $set       直接指定更新后的值，例如：db.xxx.update({name: '张三'}, {$set: {uuu: 233}})
+            $inc在原基础上累加
+            upsert 可选，这个参数的意思是，如果不存在符合条件的记录时是否插入updateObj. 默认是false,不插入。
+            multi 可选，mongodb 默认只更新找到的第一条记录，如果这个参数为true,就更新所有符合条件的记录。
+    ·查询
+        ·基本查询
+            ·db.xxx.find({},{age:1})   只返回age列
+            ·db.xxx.findOne()   只返回显示age列
+            ·db.student.find({age:{$in:[30,100]}},{name:1,age:1});    $in: 查询字段在某个范围内
+            ·$nin  查询字段在某个范围内
+            ·$not  对特定条件取反
+            ·db.stu.find({},{friends:{$slice:[0,3]}});  "friends" : [ "A", "B", "C" ] 对数组查询
+            ·db.xxx.find({'a.b.c': 233})    查询嵌套的对象数据
+        ·条件查询操作符
+            ·db.collectoin_name.find({<key>:<value>,<key>:<value>})   等于
+            ·db.collectoin_name.find({<key>:{$gt:<value>}})      $gt: 大于
+            ·$gte    大于等于
+            ·$lt     小于
+            ·$lte    小于等于
+            注意：以上操作符可以同时使用，例如：db.students.find({age: {$gte: 30, $lte: 50}})
+            ·db.students.find().count()   查询总条数
+            ·db.collection.find({key:/value/})  正则查询
+        ·与和或查询操作符
+            ·db.collection_name.find({key1:value1, key2:value2})    通过第二个参数进行精准查询
+            ·db.collection_name.find({                              查询的条件满足其中一条就可以得到
+                $or: [{key1: value1}, {key2:value2}]
+            })
+        ·分页查询
+            ·db.collectoin_name.find().limit(3)       查询前3条数据
+            ·db.students.find().skip(3)               查询3条以后的数据
+            ·db.collectoin_name.find().skip(skipNum).limit(limitNum)   同样可以组合使用
+            ·db.collectoin_name.find().sort({<key>:1})       1:代表升序排序
+            ·db.collectoin_name.find().sort({<key>:-1})      -1:代表降序排序
+
+
+
+    拓展：
+        在cmd上也可以通过for循环批量插入，如下cms命令↓↓↓
+        for(let i = 0; i < 10; i++) {
+        ···  db.students.insert({name: "lukasavage"+ i, age: 18 + i})
+        ··· }
+五、在node中使用mongoose
+    ·官方网址：https://mongoosejs.com/docs/guide.html
+    ·具体使用：
+        (mongoose要求按照规则来存储数据，核心目的就是为了让非关系型数据库更像关系型数据库)
+        1.创建连接
+            const mongoose = require('mongoose');
+
+            mongoose.connect('mongodb://127.0.0.1:27017/school', function (err) {
+                if (!err) {
+                    console.log('连接数据库成功');
+                }
+            });
+        2.创建Schema，后续用来创建模型 (类似于vue中的props一样，像属性校验)
+            const UserSchema = mongoose.Schema({
+                username: {
+                    type: String,
+                    lowercase: true, // 大写转小写
+                    trim: true,
+                    require: true
+                },
+                password: {
+                    type: String
+                },
+                age: {
+                    type: Number,
+                    default: 0,
+                    min: 0,
+                    max: 120
+                },
+                gender: {
+                    type: Number,
+                    enum: [0,1],
+                    validate() {}  // 自己校验，返回true就是校验成功
+                }
+            })
+        3.创建模型
+            const userModel = mongoose.model('User', UserSchema /*, 'users' *(/); // 自动会被命名为转小写加s
+        4.插入数据后并断开连接
+            let arr = [];
+            for (let i = 0; i < 10; i++) {
+                arr.push({
+                    username: `张三${i}`,
+                    password: '123',
+                    gender: '1',
+                    age: 18,
+                    t: 'xxxx',
+                });
+            }
+
+            (async () => {
+                const user = await userModel.create(arr);
+                console.log(user);
+                // mongoose.disconnect(); // 操作数据后断开连接
+            })();
+        
+            // 如此一来，我们通过mongoose创建数据就完成了~
+
+        // ----------------------------------分割线-----------------------------
+        5.查询数据
+            ·findById
+                # 查询一条数据 
+                (async () => {
+                    const user = await userModel.findById(arr);
+                    console.log(user);
+                    // 会得到一个对象
+                })();
+            ·find
+                # 可查询多条符合条件的数据，返回一个数组
+            ·limit、skip、sort()
+                
+        
+
+        
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★★ 4.原生ajax ★★★★★★★★★★★★★★★
+一、AJAX的介绍
+    1.什么是ajax？
+        AJAX 全称为Asynchronous Javascript And XML，就是异步的 JS 和 XML。
+        通过AJAX可以在浏览器中向服务器发送异步请求。
+        AJAX 不是新的编程语言，而是一种使用现有标准的新方法
+    2.ajax原理？
+        Ajax的工作原理相当于在用户和服务器之间加了一个中间层(Ajax引擎)，使用户操作与服务器响应异步化。
+    3.优缺点？
+        优点
+            1)	可以无需刷新页面而与服务器端进行通信。
+            2)	允许你根据用户事件来更新部分页面内容。
+        缺点：
+            1)	没有浏览历史，不能回退
+            2)	存在跨域问题
+            3)	SEO不友好
+二、使用
+    1.核心对象
+        XMLHttpRequest，AJAX的所有操作都是通过该对象进行的
+    2.使用步骤
+        1)创建XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+        2)设置请求信息
+            xhr.open(method, url);
+                //get请求可以省略，post请求不发数据也可以省略
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        3)发送请求
+            xhr.send(body)  //get请求不传body参数，只有post请求使用
+        4)接收响应
+            //xhr.responseXML     接收xml格式的响应数据
+            //xhr.responseText    接收文本格式的响应数据
+
+            xhr.onreadystatechange = function (){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    var text = xhr.responseText;
+                    console.log(text);
+                }
+            }
+    3.ajax请求状态(面试题)
+        readyState值代表请求的不同的阶段(5个阶段)
+            0：请求初始化阶段，xhr刚刚创建
+            1：send方法还没调用（还没有发送请求），还可以设置请求信息
+            2：send方法已经调用了（已经发送请求），并接受到了部分响应（响应首行 --> 响应状态码 和响应头 --> 其他信息）
+            3：接受到了部分响应体数据（如果响应体较小，就全部接受完毕）
+            4：全部接受完毕响应体数据
+三、解决IE浏览器缓存问题
+    问题：在一些浏览器中(IE),由于缓存机制的存在，ajax只会发送的第一次请求，剩余多次请求不会在发送给浏览器而是直接加载缓存中的数据。
+        由于GET请求默认会被浏览器缓存，
+        chrome/firefox  走协商缓存,也就是说get请求会被浏览器缓存下来，当再次访问仍然走服务器，服务器告诉客户端走缓存
+        IE              走强制缓存，不会访问服务器，导致的问题是不会接受到最新的数据
+    解决方式：浏览器的缓存是根据url地址来记录的，所以我们只需要修改url地址即可避免缓存问题
+        xhr.open("get","/testAJAX?t="+Date.now());
+四、JQuery中使用ajax
+    1.第一种方式：合写
+        $.ajax({
+            url:'http://localhost:3000'
+            type:'GET',
+            data:{name:'jack',age:18},
+            success: function(data){
+                console.log(data);
+            }
+            error: function(data){
+                console.log(data);
+            }
+        })
+    2.第二种方式：get请求
+        $.get('http://localhost:3000',{
+            name:'jack',
+            age:18
+        },(data)=>{
+            console.log(data);
+        })
+    3.第三种方式：post请求
+        $.post('http://localhost:3000',{
+            name:'jack',
+            age:18
+        },(data)=>{
+            console.log(data);
+        })
+五、跨域(一种浏览器安全策略)
+    1.同源策略
+        同源：            协议、域名、端口号 必须完全相同。
+        跨域(不同源)：     协议、域名、端口号有一个不一样就称之为跨域。
+    2.解决方案
+        ·jsonp
+            原理：利用script标签可以跨域的特性来解决
+            优点：不存在兼容问题
+            缺点：只能发送get请求(因为script标签只能发送get请求)
+            具体做法：
+                1.创建一个script标签，为它添加src属性，src='http://localhost:3000?callback=getData';
+                2.把创建好的script标签添加到body中， 通过document.body.appendChild(script);
+                3.服务端发送res.send(`${callback}(${JSON.Stringify(dataBase)})`);
+            -----------详情见《03jsonp原理》-------------------------
+            拓展：jquery提供的jsonp原理
+                $.getJSON('http://localhost:3000/jsonp?callback=?',function(data){
+                    console.log(data);
+                })
+        ·cors
+            原理：官方方案，直接写在http协议上
+            优点：能发送任意请求
+            缺点：兼容性差
+            具体做法：
+                ·普通的get请求
+                    1.前端直接发送ajax的get请求
+                    2.服务端设置get路由，设置响应头 res.set('Access-Control-Allow-Origin','*');
+                    3.创建database，再通过res.json(database)把数据传过去即可
+                ·普通post请求
+                    ★同上★
+
+            拓展1：cors需要设置的一些请求头说明：
+                // 允许跨域的网址
+                res.set('Access-Control-Allow-Origin', '*'); // 允许所有地址
+                // 允许跨域的请求方式
+                res.set('Access-Control-Allow-Method', 'GET, POST, PUT, DELETE');
+                // 允许跨域的请求头
+                res.set('Access-Control-Allow-Headers', 'Content-Type, token');
+                // 预检请求缓存时间
+                res.set('Access-Control-Max-Age', '86400');
+
+            拓展2：新请求方式   OPTIONS  预检请求
+                1)OPTIONS由来？
+                    为了解决和优化服务器发来的跨域响应而被浏览器拦截的问题而出现的
+                2)如何发送OPTION请求？
+                    只要符合以下任何一个条件的请求，都需要进行预检请求：
+                        ①、请求方式为GET、POST、HEAD之外的请求Method类型
+                        ②、请求头中包含自定义头部字段
+                        ③、向服务器发送了 application/json格式的数据
+                    在浏览器与服务器正是通信之前，浏览器会先发送OPTION请求进行预检，已获知服务器是否允许该实际请求，所以这一次的OPTION请求被称为'预检请求'。
+                    服务器陈宫相应预检请求后，才会发送真正的请求，并且携带真实数据。
+                3)OPTION的作用？
+                    检查当前请求是否允许跨域，首先浏览器发送一个option请求给服务器，服务器快速做出响应，浏览器通过这个响应来判断
+                    是否可以跨域，如果不能，则让服务器不要发了
+                4)服务器具体操作？
+                    1.先编写普通的post请求
+                    2.设置一个中间件即可
+                        app.use((req,res,next)=>{
+                            res.set('Access-Control-Allow-Origin', '*');
+                            res.set('Access-Control-Allow-Method', 'GET, POST, PUT, DELETE');
+                            res.set('Access-Control-Allow-Headers', 'Content-Type, xxx');
+                            res.set('Access-Control-Max-Age', '86400');
+                            if(req.method.toUpperCase()==='OPTIONS'){
+
+                            //快速响应
+                            res.end();
+                            reutrn;
+                            }
+                            next();
+                        })
+        ·window.postMessage()
+            介绍：
+                postMessage是html5引入的API可以更方便、有效、安全的解决这些问题。postMessage()方法允许来自不同源的脚本采用异步方式进行
+                有限的通信，可以实现跨文本档、多窗口、跨域消息传递。
+            使用：
+                1）postMessage(data,origin)方法接受两个参数
+                    1)data:要传递的数据，html5规范中提到该参数可以是JavaScript的任意基本类型或可复制的对象，然而并不是所有浏览器都做到
+                        了这点儿，部分浏览器只能处理字符串参数，所以我们在传递参数的时候需要使用JSON.stringify()方法对对象参数序列化，
+                        在低版本IE中引用json2.js可以实现类似效果。
+                    2)origin：字符串参数，指明目标窗口的源，协议+主机+端口号[+URL]，URL会被忽略，所以可以不写，这个参数是为了安全考虑，
+                        postMessage()方法只会将message传递给指定窗口，当然如果愿意也可以建参数设置为”*”，这样可以传递给任意窗口，如果
+                        要指定和当前窗口同源的话设置为”/”。
+        ·iframe 和 location.hash 进行跨域
+            (略 ~)
+六、缓存控制
+    (缓存的数据通常是图片、样式、js等，不会缓存html)
+    1.强制缓存(状态码是200，带memory cache或者disk cache)
+        特点：
+            1）状态码通常是200
+            2）响应头通过响应头(Response Headers)的cache-controll来控制，(例如：cache-control: max-age=300)
+            3）不会访问服务器
+            4) size属性为memory cache 内存缓存 disk cache 磁盘缓存
+        有两个版本，分别是：
+            http:1.1    cache-control
+            http:1.0    expires
+        具体用法：(以缓存css文件为例)
+            const { createReadStream } = require('fs');
+            app.get('css/index.css',(req, res)=>{
+                // 设置强制缓存
+                res.set('cache-control', 'max-age=86400');
+                const rs = createReadStream('./public/css/index.css');
+                rs.pipe(res);
+            })
+        整体流程：
+            设置cache-control后，第一次访问会正常访问，第一次刷新则走的是disk cache，第二次刷新的时候size变为memory cache
+    2.协商缓存(状态码是304)
+        特点：
+            1）状态码是304
+            2）响应头通过响应头(Response Headers)的etag和last-modified这两个字段来控制的
+                etag:               (文件内容的唯一标识)
+                last-modified:     (时间戳)
+            3）一定会访问服务器
+            4）强制缓存优先级高，协商缓存优先级更低
+        具体用法：(以缓存css文件为例)
+            // 1.引入etag库(不用下载)
+            const etag = require('etag');
+            const { createReadStream, stats } = require('fs');
+            
+
+            let etagName = '';
+            let lastModified = 0;
+            const jsFile = './public/js/index.js';
+             stats(jsFile, function(err, stats){
+                if(!err){
+                    etagName = etag(stats);
+                    lastModified = new Date().toGMTString();
+                }
+            })
+
+            // 2.开始设置
+            app.get('css/index.css',(req, res)=>{
+                // 设置强制缓存
+                const ifNoneMatch = req.headers('if-none-match');
+                const ifModifiedSince = req.headers('if-modified-since');
+                // 判断两两是否相等
+                if(ifNoneMatch === etagName && ifModifiedSince === lastModified) {
+                    // 只需要设置304状态码就行
+                    res.status(304);
+                    res.end();
+                    return;
+                }
+
+                res.set('etag', etagName); 
+                res.set('last-modified', lastModified);
+                const rs = createReadStream('./public/css/index.css');
+                rs.pipe(res);
+            })
+        整体流程：
+            1.客户端发送请求，请求资源
+            2.服务器会给请求的资源设置响应头etag和lastModified
+            3.客户端接收响应，将etag和lastModified存起来
+            4.客户端再次发相同的请求，此时会将etag改成if-none-match(值还是原来的)，将lastModified改成if-modified-since(值还是原来的)
+            5.服务端获取到这4个值，看是否相等，如果都一样，说明文件没有修改，返回304，如果不一样，返回最新的文件
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
+</script>   
+</body>
+</html>

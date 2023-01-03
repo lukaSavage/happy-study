@@ -1,0 +1,232 @@
+/*
+ * @Descripttion: 
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-09-21 19:00:17
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-09-23 18:41:25
+ */
+*{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+}
+.clearFix:after,.clearFix:before{
+    content: "\200B";
+    display: block;
+    height: 0;
+    clear: both;
+}
+/* *********head部分开始********* */
+#head{
+    width: 100%;
+    border-bottom: 4px solid #176fbb;
+}
+#head .container{
+    margin: 0 auto;
+    width: 1000px;
+    height: 113px;
+    /* background-color: #ccc; */
+}
+#head .container h1{
+    height: 100%;
+    line-height: 113px;
+    float: left;
+}
+#head .container img{
+    vertical-align: middle;
+}
+#head .aside{
+    width: 806px;
+    height: 100%;
+    float: right;
+    /* background-color: rgb(187, 255, 0); */
+}
+#head .aside .aside_top{
+    float: right;
+    margin: 15px 19px 0 0;
+
+}
+#head .aside .aside_top a{
+    display: inline-block;
+    vertical-align: top;
+    color: #3c3c3c;
+}
+#head .aside .aside_top a.search{
+    width: 26px;
+    height: 26px;
+    background: url(./images/伴手礼_03.png);
+    border-radius: 0 8px 8px 0;
+    border: 1px solid #3c3c3c;
+    border-left: none;
+}
+#head .aside .aside_top input{
+    outline: none;
+    border: 1px solid #000;
+    width: 154px;
+    height: 26px;
+    margin-right: -5px;
+}
+#head .aside .aside_top a.trunk{
+    margin: 5px 15px 0 7px;
+}
+#head .aside .aside_top a.boot{
+    width: 25px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 3px 0 0 15px;
+    background: url(./images/boot.png) no-repeat;
+    color: #fff;
+}
+#head .aside .aside_top a.register,a.login{
+    margin: 5px 0;
+    width: 60px;
+    height: 19px;
+    line-height: 19px;
+    text-align: center;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+#head .aside .aside_top a.login{
+    border-right: none;
+}
+#head .aside .aside_top a.tel{
+    width: 140px;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px 14px 0 0;
+    background: url(./images/tel.png) no-repeat;
+}
+#head .aside .aside_bottom{
+    margin-top: 80px;
+    height: 32px;
+    line-height: 32px;
+}
+#head .aside .aside_bottom li:hover{
+    color: #176fbb;
+    cursor: pointer;
+}
+#head .aside .aside_bottom ul li{
+    float: left;
+    margin-right: 40px;
+}
+#head .aside .aside_bottom ul li:first-child{
+    width: 23px;
+    height: 32px;
+    background: url(./images/index.png) no-repeat center;
+}
+/* ****************************** */
+
+/* ************文字部分************* */
+nav{
+    width: 1000px;
+    height: 53px;
+    line-height: 53px;
+    margin: 0 auto;
+    color: #3c3c3c;
+    font-size: 14px;
+}
+nav a{
+    color: #3c3c3c;   
+}
+/* ************图片部分************* */
+#banner{
+    width: 100%;
+    height: 350px;
+    background: url(./images/01.jpg) no-repeat center;
+}
+/* ************banner部分************* */
+#article{
+    width: 1000px;
+    margin: 0 auto;
+}
+#article h1{
+    text-align: center;
+    height: 98px;
+    line-height: 98px;
+}
+#article h1 span{
+    padding-left: 55px;
+    background: url(./images/li.jpg) no-repeat 0 center;
+}
+#article section{
+    width: 1032px;
+    margin-top: -28px; 
+}
+#article section img{
+    float: left;
+    width: 312px;
+    height: 211px;
+    margin-right: 30px;
+    margin-top: 28px;
+}
+#article footer{   
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+}
+#article footer a{
+    font-size: 12px;
+    display: inline-block;
+    height: 12px;
+    color: #737373;
+}
+#article footer .special{
+    width: 30px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;   
+    
+}
+#article footer .special.active{
+    background-color: #6e6e6e;
+    color: #fff;
+}
+/* ************尾部部分************* */
+#end{
+    width: 100%;
+    height: 235px;
+    background-color: #023c4d;
+}
+#end .end_top{
+    width: 1000px;
+    height: 177px;
+    /* background-color: rgb(7, 240, 96); */
+    margin: 0 auto;
+    font-size: 14px;
+    padding-bottom: 12px;
+}
+#end .end_top li{
+    float: left;
+    margin: 22px  0 0 93px;
+}
+#end .end_top li a:nth-child(1){
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+#end .end_top li a.big{
+    font-size: 28px;
+    font-weight: bold;
+}
+#end .end_top li a{
+    display: block;
+    font-size: 14px;
+    margin-bottom: 14px;
+    color: #fff;
+}
+.end_bottom{
+    width: 100%;
+    height: 57px;
+    border-top: 1px solid #fff;
+    margin: 0 auto;
+    font-size: 14px;
+    text-align: center;
+    line-height: 57px;
+    color: #d0d0d0;
+}
+
+
+
+

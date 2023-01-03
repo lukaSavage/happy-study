@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/* 
+*************** 1.移动端基础 *****************************
+一、移动端基础知识
+    ·三种APP
+        1.NativeApp (原生app)
+            概念：
+                原生APP就是利用Android、iOS平台官方的开发语言、开发类库、工具进行开发。比如安卓的java语言，iOS的object-c 语言。
+                在操作系统上直接运行的App。前端技术也是可以开发原生App的，比如 ReactNative、Weex、WeX5、uni-app、Cardova、
+                PhoneGap、Flutter等框架； 而且前端技术开发原生App，可以一次开发然后打包成不同的平台App。
+            优点：
+                1.拥有手机的各种功能的权限，比如获取个人信息，摄像头以及重力加速器等等。
+                2.性能最高，运行速度最快；即便加载大量的图片和动画，也依旧不卡。
+                3.手机用户无法上网也可访问APP应用中以前下载的数据。
+            缺点：
+                1.开发成本高，周期长。
+                2.安卓和ios都需要单独开发，且支持设备有限。
+                3.APP应用更新新功能，涉及到每次要向各个应用商店进行提交审核，审核期长。
+        2.WebApp (H5app)
+            概念：
+                以Web开发语言(HTML、CSS、JavaScript)开发的，在浏览器上运行的App。其本质是浏览器功能的叠加
+            优点：
+                1.支持范围广，兼容多种设备。
+                2.跨平台开发，用户通过浏览器访问，开发者更新仅需要通过服务器更新即可
+                3.开发成本低，周期短，可以即时上线。
+            缺点： 
+                1.和原生App相比，性能和体验都大打折扣，对动画和图片支持较差
+                2.并不能访问手机的所有功能，很多权限受到限制，比如摄像头和GPS，重力加速器等
+                3.假如没有联网，则不能使用
+        3.HybridApp (混合app)
+            概念：
+                即利用了原生APP的开发技术还应用了HTML5开发技术，是原生和HTML5技术的混合应用。混合比例不限。性能介于WebApp和原生App之间。
+                绝大部分大厂的App都早已是混合App的模式。
+            优点：
+                1.比web版实现功能多。
+                2.App的更新比较方便。
+                3.可离线运行。
+            缺点：
+                1.用户体验不如本地应用。
+                2.性能稍慢（需要连接网络）。
+                3.技术还不是很成熟。
+    ·屏幕
+        1)尺寸： 对角线的长度，单位是英寸。
+        2)分辨率： 屏幕上像素的个数，用 水平像素个数X*垂直像素个数Y
+        3)PPI  (屏幕的像素密度,pixels per inch)，  即★每英寸的像素个数
+            屏幕像素越大，屏幕越清晰,屏幕像素比较大的屏幕称之为“视网膜屏幕”、“高分屏
+            PPI=手机屏幕的斜边物理像素/尺寸   (单位dpi)
+        4)DPI： 每英寸的点数，和PPI是同一个概念，不同的是DPI最初用在打印机上，安卓的比较喜欢dpi，而iOS喜欢ppi
+    ·像素
+        ①、四种像素
+            1.设备像素：
+                设备像素（Device Pixel）也被称为物理像素,他是显示设备中一个最微小的物理部件。
+                每个像素可以根据操作系统设置自己的颜色和亮度。
+                任何设备的物理像素的数量都是固定的。
+            2.设备独立像素：(虚拟手机上最上方的两个数字)
+                设备独立像素（Device Independent Pixel）,也叫与设备无关像素。
+                代表可以通过程序控制使用的虚拟像素。
+                设备独立像素是一个总体概念，包括了CSS像素； CSS像素就设备独立像素；或者说，CSS中使用的像素是设备独立像素。
+                一台设备上的设备独立像素和设备像素一样，都是固定的。
+                设备独立像素获取方式：
+                window.screen.width
+                window.screen.height
+            3.CSS像素：   
+                CSS像素（CSS Pixel） 也被称为逻辑像素。
+                设备独立像素其实就包含了CSS像素，可以说CSS像素就是设备独立像素。
+                CSS像素是一个抽象的单位，主要使用在浏览器上，用来精确的度量（确定）Web页面上的内容。
+                它是为web开发者创造的，在css或者javascript中使用的一个抽象的层，指的是我们在样式代码中使用到的逻辑像素，是一个抽象概念，实际并不存在。
+                在一个标准的显示密度下(普通屏)，并且没有缩放时，一个CSS像素对应着一个设备像素。
+            4.位图像素
+                图片分为 位图和矢量图；  位图放大会失真，矢量图放大不会失真；前端开发用的图片都是位图。
+                图为也是由像素组成
+                为了位图在移动端显示效果更好，保持 位图像素和设备像素是 1:1
+            关系：
+                ·因为设备独立像素是包含了CSS像素的大类，通常我们可以直接比较设备独立像素和设备像素之前的区别和联系。
+                ·在普通屏幕下 1个设备独立像素 = 1个设备像素 （在100%，未缩放的情况下，如果缩放到200%可以说1个设备独立像素 = 2个设备像素）
+                ·在高分屏或视网膜屏幕上，根据 ppi 不同我们可以得到不同的换算关系，一个设备独立像素可能会等于2~3个设备像素
+                拓展：把设备像素比大于1的叫做高分屏或视网膜屏！！！
+        ②、设备像素比(通常情况下值为2,或者3)
+            计算公式：
+                设备像素比DPR = 设备像素 / 设备独立像素
+            说明：
+                ·把DPR超过1的屏幕成为 高分屏或者视网膜屏幕
+                ·DPR越大，PPI也越大
+            JavaScript中获取屏幕的DPR:
+                window.devicePixelRatio  //可以得到屏幕像素比
+    ·视口
+        概念：视口(viewport)是用户网页的可视区域。视口也被称为初始包含块
+        分类：
+            1.PC端的视口
+                获取视口方法如下↓
+                    window.innerWidth;        //浏览器视口（viewport）宽度（单位：像素），如果存在垂直滚动条则包括它。
+                    window.innerHeight;   //浏览器窗口的视口（viewport）高度（以像素为单位）；如果有水平滚动条，也包括滚动条高度。
+
+                    document.documentElement.clientWidth;   //浏览器视口（viewport）宽度（单位：像素），不包含垂直滚动条
+                    document.documentElement.clientHeihgt   //浏览器视口（viewport）高度（单位：像素），不包含水平滚动条
+
+                    window.screen.width；  // 屏幕的宽度  (设备独立像素)
+                    window.screen.height； // 屏幕的高度  (设备独立像素)
+            2.移动端的三大视口
+                *布局视口
+                    概念：布局视口是在html元素之上的容器(包含块)，我们的页面就“装”在布局视口中。通常是宽度是 980px(历史原因)
+                        手机上，为了容纳为桌面浏览器设计的网站，默认的布局视口的宽度远大于屏幕的宽度
+                        布局视口的出现，在极大程度上帮助了桌面网站到移动设备上的转移。
+                    获取布局视口方法↓
+                        document.documentElement.clientWidth;
+                        document.documentElement.clientHeiht;
+                *视觉视口
+                    概念：
+                        视觉视口是指用户通过设备屏幕看到的区域，可以通过缩放来改变视觉视口的大小。
+                    计算视觉视口的大小方法↓
+                        window.innerWidth;
+                        window.inenrHeight;
+                *理想视口
+                    概念
+                        理想视口是指网站在移动设备中的理想大小，这个大小就是设备的屏幕大小。是某种状态
+                        当布局视口宽度=屏幕的宽度（设备独立像素表示）的时候，就是理想视口
+                        对于进行了移动适配的网页，我们希望让布局视口跟设备屏幕宽度一样大，这就就是理想的布局视口
+                    设置布局视口等于理想视口↓
+                        <meta name="viewport" content="width=device-width initial-scale=1.0">
+    ·缩放(扩大或缩小)
+        1.用户缩放
+            *PC端中，缩放会改变视口，影响pc端的布局。用户内容缩小时，视口变大，反之亦反
+            *移动端中，缩放会改变视觉视口的尺寸，不会改变布局视口的尺寸，不影响布局
+                如：页面进行放大(initial-scale变大)，布局视口不变，视觉视口变小，页面上的内容放大
+        2.系统缩放
+            ★注意：只有移动端才可以进行系统缩放★
+            1.通过 meta 设置 initial-scale 可以设置系统缩放系数：
+                <meta name="viewport" content="initial-scale=比例" />
+            2.比例： 1.0~10.0 和 0.25~1.0
+                系统缩放 改变视觉视口的同时也会改变布局视口的宽度。
+                如：initial-scale 如果设置为 2.0， 布局视口会变为屏幕宽度的 1/2， 视觉视口也会变为屏幕宽度的 1/2。
+                    initial-scale 如果设置为 .25， 布局视口会变为屏幕宽度的 2倍， 视觉视口也会变为屏幕宽度的 2。
+            3.initial-scale = 屏幕宽度(设备独立像素表示)/ 布局(或者视觉)视口宽度
+    ·Meta&Viewport
+        *快捷键 meta:vp
+        1.ViewPort 相关属性
+            ·width            设置布局视口宽度  设置数字或者device-width
+            ·height           设置布局视口高度  同width
+            ·initial-scale    初始缩放比例  最小0.25 最大10.0
+            ·maximum-scale    最大缩放比例，它必须小于或等于maximum-scale设置  [1.0-10.0]
+            ·minimum-scale    最小缩放比例，它必须大于或等于minimum-scale设置  [0.0-1.0]
+            ·user-scalable    是否允许用户缩放 设置为no  值有yes / no，默认yes
+            ·viewport-fit     用于刘海屏水滴屏 通常设置为 cover  值有auto/contain/cover
+        2.注意事项
+            viewport 标签只对移动端浏览器有效，对  PC 端浏览器是无效的
+            即使设置了 user-scalable = no，在 Android Chrome 浏览器中也可以强制启用手动缩放；ios上的Safari浏览器也是无效的
+        3.width 与 initial-scale 冲突
+            布局视口在 width 与 inital-scale 产生分歧时会选择他们中比较大的那一个。
+        4.完美视口
+            主要写法：
+                <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit:cover" />
+            完整写法：
+                <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,viewport-fit:cover">
+    ·真机测试
+        ###实现原理
+            1. 让电脑变成一个WEB服务器，可以访问上面的网页。 http方式访问
+            2. 让电脑和手机处于同一个局域网；通过IP访问； 获取电脑的IP
+        ###操作步骤
+            1. 设置webstorm， File->Setting->Debugger; 修改端口，两个都勾上；端口建议8080
+            2. 电脑，开启热点，手机连上
+            3. 获取电脑无线网卡的IP地址； cmd, 输入命令 ipconfig  找无线的IP地址
+            4. 在websotorm打开网页，把网址中的 localhost 替换成 无线网卡的IP 
+            5. 把网址生成二维码（草料二维码）
+            6. 无法访问，尝试关闭防火墙。
+
+    ----总结----
+        4 个像素 : 设备像素、设备独立像素、CSS像素、位图像素
+        3 个视口 ： 布局视口、可视视口、理想视口
+        2 个操作 ： 放大、缩小
+        1 个比例 ： 设备像素比
+二、移动端事件基础
+    1.触摸事件
+        ·触屏事件
+            touchstart  手指触摸屏幕时触发，即使已经有手指在屏幕上也会触发
+            touchmove   手指在屏幕滑动时触发
+            touchend    手指从屏幕时移开时触发
+            touchcancel 当触控点被特定的实现方式打乱时触发（例如，弹框），一般不用
+        ·事件绑定机制
+            1) ('#box').ontouchstart=function(){};
+            2) ('#box').addEvnetListener('touchstart',function(){});
+
+            推荐使用第2种事件方式，因为最初的移动端浏览器只支持这种方式。
+        ·移动端响应 Mouse 事件
+            移动端没有鼠标，但不代表手机不能响应mouse事件（其实是借助touch去触发mouse事件）。
+            在手机上，当我们手触碰屏幕时，要过 300ms 左右才会触发 mouse 事件，所以 mouse 事件在手机上看起来就像慢半拍一样。
+    2.点击穿透
+        发生的原因：
+            移动端会模拟产生click动作，在发生了触摸动作约300ms之后产生。
+        发生的条件：
+            上层元素监听触摸事件，触摸之后元素消失
+            下层元素具有点击特性（监听click事件或者默认自带（超链接））
+        解决方法：
+            1) 阻止上层元素触摸事件内默认行为(推荐)
+                ('#box').addEvnetListener('touchend',function(e){
+                    e.preventDufault();
+                })
+            2) 全局阻止触摸事件浏览器默认行为(利用了冒泡原理，推荐)
+                ★注意：为提高性能，chrome56之后， window docuemnt body 触屏事件默认无法取消默认事件,需要给 addEventListener() 指定第三个参数              
+                    //1先取消所有默认事件
+                    document.addEventListener('touchstart', function(event){
+                        event.preventDefault();
+                    }, {passive: false});
+                    //2让遮罩层消失
+                    closeBtn.addEventListener('touchend',function(){
+                        modalBg.style.display = 'none';
+                    })
+                    //3重新让a元素具有点击效果
+                    allA.addEvnetListener('touchend',function(){
+                        location.href=this.href;
+                    })
+            3) 下层元素不使用具有点击特性的元素
+                即：使用没有点击特性的元素来代替 a 元素
+            4) 利用css属性 pointer-events(了解)
+                closeBtn.addEventListener('touchend', function(event){
+                    aNodes.forEach(function(aNode){
+                        aNode.style.pointerEvents = 'none';
+                    });
+                    modalBg.remove();
+                    //当300ms之后，模拟的click动作发生之后，再让超链接具备点击特性
+                    setTimeout(function(){
+                        aNodes.forEach(function(aNode){
+                            aNode.style.pointerEvents = 'auto';
+                        });
+                    }, 350);
+                });
+            5) 让上层元素不立即消失，等到模拟的click动作发生之后，再消失。
+                closeBtn.addEventListener('touchend', function(event){
+                    setTimeout(function(){
+                        modalBg.remove();
+                    }, 350);
+                });
+    3.阻止浏览器默认行为
+        *移动端浏览器有哪些默认行为（基于触摸事件）？
+            2. 文字、图片长按选中
+            3. 输入框获取焦点
+            4. 用户缩放
+            5. 模拟click动作（点击穿透）
+            6. 下滑的空白区域
+        *document 阻止默认行为的问题
+            新版chrome 默认不允许 document、html、body 三个元素的 触摸事件、滚动事件内阻止默认行为
+        *addEventListener 第三个参数
+            1.可以是布尔值，即规定是否是捕获型，默认为 false（冒泡）
+            2.可以是个对象，接受三个属性 (2015年新增) 
+                {
+                    passive: false/true(默认),  设置为false document可以阻止默认行为了
+                    capture: false(默认)/true   是否在捕获阶段触发
+                    once: false/true     是否只触发一次
+                }
+        *如何阻止默认行为？
+            1. 在document元素行 阻止，需要给addEventListener设置第三个参数
+            2. 自定义包裹元素，所有的内容都在包裹元素中；在包裹元素上阻止默认行为
+    4.touchEvent事件
+        ·TouchEvent 对象
+            e.touches				触发事件时屏幕上触点的个数
+            e.targetTouches       触发事件时元素上触点的个数；  适合touchstart和touchmove
+            e.changedTouches      触发事件时发生改变的触点个数； 如果是touchend事件使用changedTouches；全适合
+        ·touchList
+            触点对象的集合，类数组对象
+            touches、targetTouchs、changedTouchs 属性返回的都是touchList对象
+        ·touch对象
+            clientX   触点在视口上的x位置
+            clientY   触点在视口上的y位置
+            pageX	  触点在页面上的x位置
+            pageY     触点在页面上的y位置
+            screenX   触点在屏幕上的x位置
+            screenY   触点在屏幕上的y位置
+            force	  按压力度  0-1之间
+三、移动端适配
+    ·viewport 适配   
+        原理：通过设置 initial-scale , 将所有设备布局视口的宽度调整为设计图的宽度
+        优点：所量即所得避免复杂的计算，直接使用UI的标准像素值
+        缺点：
+            没有使用完美视口， 在一些设备上会出现问题，所以目前来讲不常用
+            图片无法进行适配，可能会造成失真
+        实现：
+            (function(){
+                var targetW = 375;      // 设置设计稿的宽度
+                var scale = document.documentElement.clientWidth / targetW;    // 计算当前视口与设计稿的比值
+                var meta =    document.querySelector("meta[name='viewport']");     // 获取 meta[name='viewport'] 元素
+                meta.content='width='+(targetW)+",initial-scale="+scale+",minimum-scale="+scale+",maximum-scale="+scale+",user-scalable=no";  //赋值
+            })()
+    ·rem 适配
+        ① 方案一、借助媒体查询media (以后用时直接复制即可)
+            @media screen and (min-width: 320px) {html{font-size:50px;}}
+            @media screen and (min-width: 360px) {html{font-size:56.25px;}}
+            @media screen and (min-width: 375px) {html{font-size:58.59375px;}}
+            @media screen and (min-width: 400px) {html{font-size:62.5px;}}
+            @media screen and (min-width: 414px) {html{font-size:64.6875px;}}
+            @media screen and (min-width: 440px) {html{font-size:68.75px;}}
+            @media screen and (min-width: 480px) {html{font-size:75px;}}
+            @media screen and (min-width: 520px) {html{font-size:81.25px;}}
+            @media screen and (min-width: 560px) {html{font-size:87.5px;}}
+            @media screen and (min-width: 600px) {html{font-size:93.75px;}}
+            @media screen and (min-width: 640px) {html{font-size:100px;}}
+            @media screen and (min-width: 680px) {html{font-size:106.25px;}}
+            @media screen and (min-width: 720px) {html{font-size:112.5px;}}
+            @media screen and (min-width: 760px) {html{font-size:118.75px;}}
+            @media screen and (min-width: 800px) {html{font-size:125px;}}
+            @media screen and (min-width: 960px) {html{font-size:150px;}}
+        ② 方案二、JS动态修改根元素字体大小
+            html{
+                font-size: 100px;  //字体大小可以随便设置，相当于一个基准值，这里为了好算设置成100
+            }
+            //设置设计稿的宽度
+            var designW = 375;
+            //获取当前视口宽度（屏幕宽度）
+            var deviceW = document.documentElement.clientWidth;
+            // 计算当前设备宽度和设计稿宽度的比例
+            var scale = deviceW / designW;
+            // 设置根元素字体大小
+            document.documentElement.style.fontSize = 100 * scale + 'px';
+        ③ 方案三、JS动态修改配合CSS预处理器 (推荐)
+            @rem:750/16rem;  //这个750/16是自己自定义的，可以随便设置
+            (function () {
+                //定义设计稿宽度
+                var designW = 375;
+                //设置屏幕宽度与设计稿宽度相同的时候，根元素字体大小
+                var rootFontSize = designW/12;
+                // 获取屏幕宽度（布局视口宽度）
+                var deviceW = document.documentElement.clientWidth;
+                // 计算屏幕宽度与设计稿宽度的比例
+                var scale = deviceW / designW;
+                // 根据比例，计算当前屏幕宽度下，根元素字体大小
+                document.documentElement.style.fontSize = rootFontSize * scale + 'px';
+            })();
+    ·1px物理像素边框
+        原理：
+            使用伪元素代替边框，根据屏幕的设备像素比，对伪元素进行缩放 如下：
+            @media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 2dppx) {
+                .box::after {
+                    transform: scaleY(.5);
+                }
+            }
+            @media (-webkit-min-device-pixel-ratio: 3),(min-resolution: 3dppx) {
+                .box::after {
+                    transform: scaleY(.33333333);
+                }
+            }
+            
+    ·图片适配  
+        为什么要图片适配？
+            为了解决图片在高分屏或者视网膜屏下失真问题。因此要对不同的dpr的屏幕进行适配。
+        ① 方案一 媒体查询+背景图
+            *1.由于媒体查询不能修改图片的路径，因此只能用背景图去修改图片。
+            *2.由于父级元素的高度为0，背景图设置高度百分比无效，因此用padding-top撑开
+            .banner {
+                width: 100%;
+                padding-top: 57%;   //  ★重要步骤！！！ 背景图片的宽/高
+                background-image: url('images/music_medium.png');
+                background-size: 100% 100%;
+            }
+            @media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 2dppx) {
+                .banner {
+                    background-image: url('images/music_medium_2x.png');
+                }
+            }
+        ② 方案二： picture 标签(先写最严格的的条件)
+            <picture>
+                <source srcset="images/music_medium_2x.png" media="(-webkit-min-device-pixel-ratio:2),(min-resolution:2dppx)">
+                <source srcset="images/music_medium.png">
+                <img src="images/music_medium.png" alt="图片">     <!--防止用户浏览器辣鸡而加的-->
+            </picture>
+        ③ 方案三： img 标签(最后写最严格的的条件,推荐方法)
+            <img srcset="images/music_medium.png,
+                        images/music_medium_2x.png 2x"
+                src="images/music_medium.png"         //这里为了防止某些浏览器不识别srcset属性
+                alt="图片">
+四、iOS手势和多指
+    1.iOS手势事件
+        ·gesturestart : 手指触碰当前元素，屏幕上有两个或者两个以上的手指
+        ·gesturechange : 手指触碰当前元素，屏幕上有两个或者两个以上的手指位置在发生移动
+        ·gestureend : 在gesturestart后, 屏幕上只剩下两根以下（不包括两根）的手指               
+    2.手势事件 touchEvent 的属性
+        ·属性 rotation : 表示手指变化引起的旋转角度，负值表示逆时针旋转，正值表示顺时针旋转。
+        ·属性 scale : 表示两个手指间距离的变化情况（例如向内收缩会缩短距离）；这个值从 1 开始，
+            并随距离拉大而 增长，随距离缩短而减小。根据我们的生理极限，不允许出现负值
+五、Android端的手势和多指判断
+    1.touchstart判断条件
+        ①、event.touches.length >= 2
+    2.touchmove判断条件
+        ①、event.touches/;emgtj >=2
+    3.touchend判断条件
+        ③、给touchstart添加内置变量，如obj.isTouched=true;
+        ②、设置obj.isTouched && event.touches<2
+        ③、在条件内部重新判断
+    具体如下：
+    obj.addEventListener('touchstart',function(e){
+            if(e.touches.length>=2){
+                this.isTouched=true;
+                //内容           
+            }
+        })
+        obj.addEventListener('touchmove',function(e){
+            if(e.touches.length>=2){
+                //内容
+            }
+        })
+        obj.addEventListener('touchend',function(e){
+            if(obj.isTouched && e.touches<2){
+                //内容
+                this.isTouched=false;
+            }
+
+*************** 2.bootstrap框架(UI库)*****************************
+一、bootstrap的概念
+    1.什么是bootstrap？
+        bootstrap是一个前端的UI框架，包括css部分和js部分
+    2.Bootstrap的特点
+        1.响应式框架
+        2.依赖于jQuery
+        3.移动优先
+二、起步
+    *需要引入的文件
+        1个CSS文件 ==> <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        2个js文件 ==>
+            <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"><script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"><script>
+三、全局样式
+    1.栅格系统
+        ·说明：
+            “行（row）”必须包含在 .container （固定宽度）或 .container-fluid （100% 宽度）中，
+            以便为其赋予合适的排列（aligment）和内补（padding）。注意，由于 padding 等属性的原因，这两种 容器类不能互相嵌套
+        ·基本用法
+            ①.container类用于固定宽度并支持响应式布局的容器(每个屏幕下都有一个固定宽度，比如768px一下的屏幕对应宽度为只显示750px,大多数情况用这个)
+                .container-fluid    类用于 100% 宽度(占用整个屏幕)，占据全部视口（viewport）的容器
+            ②、栅格系统：行(row)与列(col-x-x)组成的网格状布局
+                            ·超小屏幕           ·小屏幕             ·中等屏幕             ·大屏幕
+                对应种类：   手机 (<768px)     平板 (≥768px)       面显示器 (≥992px)     大桌面显示器 (≥1200px)
+                .container 最大宽度	None（自动）	750px	         970px	             1170px
+                栅格行为：    总是水平排列        开始是堆叠在一起的，当大于这些阈值时将变为水平排列C
+                类前缀	       .col-xs-	        .col-sm-	        .col-md-	         .col-lg- 	      
+            ③、不同屏幕的隐藏
+                hidden-xs/sm/md/lg 
+            ④、列偏移
+                col-xs-offset-*
+    2.表格系统
+        ·基本类                  .table
+        ·条纹类                  .table-striped 
+        ·边框类                  .table-bordered
+        ·鼠标悬停                .table-hover
+        ·紧缩                    .table-condensed
+    3.表单系统
+        基本样式：                .form     .form-group
+        内联表单：                .form-inline
+        水平排列表单：            .from-horizontal
+        表单控件：                .form-control   ==>input、textarea、select
+    4.按钮(类名：.btn)
+        白色框  btn-default(默认)
+        深蓝色  btn-primary
+        黄绿色  btn-success
+        天蓝色  btn-info
+        屎黄色  btn-warning
+        大红色  btn-danger
+        链接    btn-link
+    5.···(详见bootstrap文档)
+四、组件
+    
+
+        
+        
+
+
+
+
+
+
+
+    ④、文字对齐
+        text-center  
+    ⑤、轮播图注意事项
+        1.将carousel-example-generic改成一个好记的id ，eg：改成s1      ==》(这是为了防止出现多个轮播图而乱了节奏)
+        2.将图片改为背景图片，通过data传参来实现  
+        3.可以删除的内容有：
+            ①、role  
+            ②、img和下面同级的div(相当于图片说明书)
+            ③、aria-hidden="true"
+            ④、左右按钮下的屏幕阅读器<span class="sr-only">Next</span>
+    ⑥、导航条
+        1.将导航条颜色改成黑色    将navbar-default改成 ==> navbar-inverse即可
+
+五、插件
+ */
+</script>
+</body>
+</html>

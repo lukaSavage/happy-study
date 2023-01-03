@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>懒加载小案例</title>
+    <style>
+        img{
+            width: 600px;
+            height: 400px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <img src="../images/loading.gif" class='lazy' data-src='../images/1.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/2.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/3.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/4.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/5.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/6.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/7.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/8.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/9.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/10.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/11.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/12.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/13.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/14.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/15.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/16.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/17.jpg' alt="">
+    <img src="../images/loading.gif" class='lazy' data-src='../images/18.jpg' alt="">
+<script>
+    lazyLoad();
+    window.onscroll=function(){
+        lazyLoad();
+    }
+    function lazyLoad(){
+        let img=document.querySelectorAll('.lazy');
+        let window_h=window.innerHeight;
+        img.forEach((item,index)=>{
+            if(item.getBoundingClientRect().top<=window_h){
+                item.src=item.dataset.src;
+                //让已经加载好的图片不再进行forEach循环
+                item.classList.remove('lazy');
+            }
+        })  
+    }
+</script>
+</body>
+</html>

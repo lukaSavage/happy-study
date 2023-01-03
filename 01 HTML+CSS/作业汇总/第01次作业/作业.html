@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            list-style: none;
+        }
+        img{
+            width: 100px;
+            height: 100px;
+        }
+        #box{
+            width: 100%;
+            border: 1px solid rgb(255, 0, 0);
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>北京旅游景点攻略</h1>
+    <ul>
+        <li>
+            <h2>1.故宫</h2>
+            <img src="./images/故宫1.jpg" alt="">
+            <img src="./images/故宫2.jpg" alt="">
+            <img src="./images/故宫3.jpg" alt="">
+            <br>
+            <strong>北京故宫</strong>
+            <p>旧城为紫禁城，是中国明清两代为皇帝的宫殿。它是汉族宫殿建筑之精华，无与伦比的古代建筑杰作，
+                也是世界上现存规模最大，保存最为完整的木材结构的古建筑群</p>
+            <p>地址:北京市东城区景山前街4号</p>
+        </li>
+        <li>
+            <h2>2.颐和园</h2>
+            <img src="./images/颐和园1.jpg" alt="">
+            <img src="./images/颐和园2.jpg" alt="">
+            <br>
+            <strong>颐和园</strong>
+            <p>北京市古代皇家园林，前身为清漪园，坐落在北京西郊，距离城区15公里，占地约二百九十公顷，与圆明园毗邻。
+                它是以昆明湖，万寿山为基址，以杭州西湖为蓝本，汲取江南园林的设计手法，也是保存最为完整的一家皇家宫苑，
+                也是国家重点保护景点</p>
+            <p>地址:北京市海淀区新建新建宫门路19号</p>
+        </li>
+    </ul>
+    <div id="box">
+        <form action="###" method="GET">
+            <h2>选择你喜欢的景点</h2>
+            <div>
+                <input type="checkbox" name="scencery" value="故宫">故宫
+                <input type="checkbox" name="scencery" value="圆明园">圆明园
+                <input type="checkbox" name="scencery" value="颐和园">颐和园
+                <input type="checkbox" name="scencery" value="八大处">八大处
+                <input type="checkbox" name="scencery" value="后海">后海
+                <input type="checkbox" name="scencery" value="天坛">天坛
+                <input type="checkbox" name="scencery" value="鸟巢">鸟巢
+                <input type="checkbox" name="scencery" value="水立方">水立方
+            </div>
+            <br>
+            <h2>填写个人信息</h2>
+            <div>
+                用户名：<input type="text" name="user">
+                密码：<input type="password" name="password">
+            </div>
+            <div>
+                性别：<input type="radio" name="sex" value="男">男
+                      <input type="radio" name="sex" value="女">女
+            </div>
+            <div>
+                <span>请选择住址：</span>
+                <select name="city">
+                    <option value="东城区">东城区</option>
+                    <option value="西城区">西城区</option>
+                    <option value="南城区">南城区</option>
+                    <option value="北城区">北城区</option>
+                </select>
+            </div>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+</body>
+</html>

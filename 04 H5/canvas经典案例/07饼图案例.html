@@ -1,0 +1,70 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-21 11:04:50
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-21 14:27:29
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>饼图</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=1000;
+    canvas.height=800;
+    var ctx=canvas.getContext('2d');
+
+    // 定义数据
+    var data=[
+        {title:'华为', value:0.3, color: '#f90'},
+        {title:'小米', value:0.15, color: 'pink'},
+        {title:'Vivo', value:0.25, color: 'skyblue'},
+        {title:'OPPO', value:0.2, color: 'green'},
+        {title:'apple', value:0.05, color: '#000'},
+        {title:'其他', value:0.05, color: 'deeppink'}
+    ];
+    //定义文字信息
+    ctx.font='24px MicroSoft YaHei';
+    ctx.textBaseline='middle';
+    var startRound=0;
+    for(var i=0;i<data.length;i++){
+        var endRound=startRound+Math.PI*2*data[i].value;
+        ctx.beginPath();
+        ctx.fillStyle=data[i].color;
+        ctx.moveTo(canvas.width/2,canvas.height/2);
+        ctx.arc(canvas.width/2,canvas.height/2,300,startRound,endRound);
+        ctx.closePath();
+        ctx.fill();
+        
+        //开始描文字
+        var fontRound=(startRound+endRound)/2;
+        var fontX=canvas.width/2+Math.cos(fontRound)*320;
+        var fontY=canvas.height/2+Math.sin(fontRound)*320;
+        console.log(fontX);
+        if(fontX<300 ){
+            ctx.textAlign='end';
+        }else{
+            ctx.textAlign='start';
+        }
+        ctx.fillText(data[i].title+' '+data[i].value*100+'%',fontX,fontY);
+        startRound=endRound;
+    }
+    
+</script>
+</body>
+</html>

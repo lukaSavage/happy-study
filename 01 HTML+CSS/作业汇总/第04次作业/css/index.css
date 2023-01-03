@@ -1,0 +1,73 @@
+@import url("reset.css");
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+#box {
+  height: 100%;
+  background: url(../images/bg2.jpg) no-repeat;
+  background-size: cover;
+}
+#box header {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(116, 107, 107, 0.644);
+}
+#box header h1 {
+  margin-left: 15px;
+}
+#box header ul {
+  display: flex;
+  margin-right: 30px;
+}
+#box header ul li {
+  width: 70px;
+  height: 30px;
+  border: 1px solid #fff;
+  text-align: center;
+  line-height: 30px;
+  margin-left: 10px;
+  color: #fff;
+  border-radius: 5px;
+}
+#box section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#box section ul {
+  display: flex;
+  justify-content: space-between;
+}
+#box section ul li {
+  width: 130px;
+  height: 180px;
+  background-color: purple;
+  margin-right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+#box section ul li:nth-child(2) {
+  background-color: #df7410;
+}
+#box section ul li:nth-child(3) {
+  background-color: #10afdf;
+}
+#box section ul li:nth-child(4) {
+  background-color: #1052df;
+}
+#box section ul li:nth-child(5) {
+  background-color: #10df55;
+}
+#box section ul li:nth-child(6) {
+  background-color: #0d61a7;
+}

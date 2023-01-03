@@ -1,0 +1,46 @@
+.test {
+  color: var(--tc);
+}
+.swiper-tab {
+  width: 100%;
+  height: 340rpx;
+}
+.swiper-tab navigator image {
+  width: 100%;
+}
+.nav {
+  display: flex;
+}
+.nav navigator {
+  padding: 20rpx;
+  flex: 1;
+}
+.nav navigator > image {
+  width: 100%;
+}
+/* 商品楼层部分 */
+.group {
+  overflow: hidden;
+}
+.group .floor {
+  padding: 0 10rpx;
+  width: 100%;
+}
+.group .floor .group-category navigator {
+  width: 33.33%;
+  height: 100%;
+  float: left;
+  border-bottom: 10rpx solid #fff;
+}
+.group .floor .group-category navigator:nth-last-child(-n+4) {
+  height: 27.72711207vw;
+  border-left: 10rpx solid #fff;
+}
+.group .floor .group-category navigator:nth-child(2),
+.group .floor .group-category navigator:nth-child(3) {
+  box-sizing: border-box;
+}
+.group .floor .group-category navigator image {
+  width: 100%;
+  height: 100%;
+}

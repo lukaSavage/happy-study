@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            text-decoration: none;
+        }
+        body{
+            background-color: #ccc;
+        }
+        #app{
+            width: 260px;
+            height: 368px;
+            margin: 200px auto;
+            background-color: #fff;
+        }
+        #tab{
+            width: 100%;
+            height: 24px;
+        }
+        #tab ul{
+            width: 100%;
+            height: 100%;
+        }
+        #tab ul li{
+            
+            float: left;
+            margin-left: 12px;
+            height: 100%;
+            line-height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        #tab ul li:hover{
+            color: rgb(0, 192, 250);
+        }
+        #tab-box{
+            width: 100%;
+            height: 344px;
+            background-color: rgb(158, 46, 46);
+            position: relative;
+            overflow: hidden;
+        }
+        #tab-box .tab-box-ul{
+            width: 300%;
+            height: 100%;
+            position: absolute;
+            top: 1;
+            left: 0;
+        }
+        #tab-box .tab-box-ul div{
+            float: left;
+            width: 33.333%;
+            height: 100%;
+        }
+        .active{
+            color: rgb(0, 192, 250);
+            border-bottom: 1px solid rgb(0, 192, 250);
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="tab">
+        <ul>
+            <li class="active">直播排行</li>
+            <li>关注的主播</li>
+            <li>为你推荐</li>
+        </ul>
+    </div>
+    <div id="tab-box">
+        <div class="tab-box-ul">
+            <div style="background-image: url(../images/bili.png)"></div>
+            <div style="background-color: rgb(0, 255, 191)"></div>
+            <div style="background-color: rgb(255, 0, 179)"></div>
+        </div>
+    </div>
+</div> 
+<script src="../jquery-1.12.4.js"></script>
+<script>
+$(function(){
+    // var lis=$("#tab li");
+    // var width=$("#tab-box").width();
+    // var div=$(".tab-box-ul");
+    // lis.click(function(){
+    //     var i=$(this).index();
+    //     $(this).addClass("active").siblings().removeClass("active");
+    //     div.animate({left:-i*width},200);
+    // })
+    var lis=$("#tab li");
+    var ul =$(".tab-box-ul");
+    var lis2=ul.children();
+    var width=lis2.width();
+    console.log(width);
+    lis.click(function(){
+        var i=$(this).index();
+        $(this).addClass("active").siblings().removeClass("active");
+        ul.animate({left:-i*width},200);
+    })
+})
+
+</script> 
+</body>
+</html>

@@ -1,0 +1,9 @@
+<view class="search-tabs">
+    <view class="tab-items {{ item.isActive? 'active': '' }}" catch:tap="clickTab" wx:for="{{tabData}}" wx:key="id" data-item="{{item}}">
+        {{item.title}}
+    </view>
+</view>
+<view>
+    <slot></slot>
+</view>
+  

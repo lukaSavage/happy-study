@@ -1,0 +1,3 @@
+<view class="search" hover-class="none" hover-stop-propagation="false">
+    <navigator class="tag" url="/pages/searchDetail/index" open-type="navigate">搜索</navigator>
+</view>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas {
+            background-color: #eeeeee7e;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="1200" height="300" id="canvas"></canvas>
+    <img src="" alt="" id="img" style="display: none;">
+    <script>
+        function getCuboid() {
+            const canvas = document.getElementById('cuboid')
+            const ctx = canvas.getContext('2d')
+            ctx.beginPath()
+            ctx.strokeStyle = '#333'
+            ctx.strokeRect(60, 120, 935, 130)
+            ctx.beginPath()
+            ctx.moveTo(60, 120)
+            ctx.lineTo(210, 50)
+            ctx.lineTo(1145, 50)
+            ctx.lineTo(995, 120)
+            ctx.moveTo(1145, 50)
+            ctx.lineTo(1145, 180)
+            ctx.lineTo(995, 250)
+            ctx.stroke()
+            ctx.beginPath()
+            ctx.setLineDash([3]);
+            ctx.moveTo(210, 50)
+            ctx.lineTo(210, 180)
+            ctx.lineTo(60, 250)
+            ctx.moveTo(210, 180)
+            ctx.lineTo(1145, 180)
+            ctx.stroke()
+        }
+
+    </script>
+</body>
+
+</html>

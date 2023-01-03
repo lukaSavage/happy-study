@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box"></div>
+<script>
+    
+
+
+    function myPromise(executor){
+        //promise的初始状态
+        this.status='pending';
+        this.value=undefined;
+        //此时保存当前的this,一遍后续的使用
+        const that=this;
+        //promise函数调用了,立马就调用executor方法，参数是两个函数
+        //如果在executor函数中抛出一个错误，那么该promise 状态为rejected。所以需要结合try...catch使用
+        try{
+            executor(resolve,reject);
+        }catch(error){
+            reject(error);
+        }       
+  
+        /* -----------------------------分割线-------------------------- */
+        function resolve(value){
+            //一调用resolve，就会改变状态为fulfilled(前提是初始化状态)
+            if(that.status==='pending'){
+                that.status='resolved';
+                that.value=value;
+            }
+        }
+        function reject(reason){
+            if(that.status==='pending'){
+                that.status='rejected';
+                that.value=reason;
+            }
+        }
+        
+    }
+
+    
+    let p=new myPromise((resolve,reject)=>{
+        reject('heheda');
+    })
+    console.log(p);
+</script>
+</body>
+</html>

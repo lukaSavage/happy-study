@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    list-style: none;
+}
+.swiper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.swiper-wrapper {
+    width: 500%;
+    display: flex;
+}
+.swiper-item {
+    width: 20%;
+}
+.swiper-item img {
+    width: 100%;
+    display: block;
+}
+.paginations {
+    position: absolute;
+    left: 0;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    font-size: 0;
+}
+.paginations span {
+    margin: 0 2px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #999;
+    border-radius: 50%;
+}
+.paginations span.actived {
+    background-color: deeppink;
+}
+#content img {
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+}

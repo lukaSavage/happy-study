@@ -1,0 +1,38 @@
+<!-- pages/my/index.wxml -->
+<text>wxs的测试1</text>
+<view>接收wxs中的数据{{ name1.testFunc(demoNum) }}</view>
+<text>-----------------------</text>
+<view>wxs的测试2</view>
+<view class="sss" hover-class="none" hover-stop-propagation="false">
+    接收到wxs2的数据是{{ name2.my(1,2) }}
+</view>
+<text>---------------------------------------</text>
+<view>
+    <text>自定义组件及父子组件之间的通信</text>
+    <view style="width: 100%;height: 600rpx;background-color: yellow">
+        <myT1 value="{{ 121212 }}" />
+    </view>
+</view>
+<text>--------------------------------------</text>
+<view>父子组件之间通信triggerEvent</view>
+<view bind:tap="clickDemo">我是父组件，我要接收到子组件的值是：</view>
+<myT1 bind:myClick="handleClick" id="one"></myT1>
+<view>----------------------------------------</view>
+<view>双向数据绑定测试一波</view>
+<view>
+    input框：<input type="text" model:value="{{inputValue}}" />
+    <view>{{inputValue}}</view>
+</view>
+
+
+
+<wxs module="name1">
+    function t(num){
+        console.log(1111)
+        return num + 2;
+    }
+    module.exports = {
+        testFunc: t
+    }
+</wxs>
+<wxs module="name2" src="./mywxs.wxs"></wxs>

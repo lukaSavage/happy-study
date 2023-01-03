@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>webp的兼容</title>
+</head>
+<body>
+<script>
+        /*
+      兼容webp：
+        1. 前端：
+        2. 后端：大部分是后端完成 --> 通过user-agent / cookie
+    */
+
+    const imgs = document.querySelectorAll('.webp');
+
+    for (let index = 0; index < imgs.length; index++) {
+      const img = imgs[index];
+      // 怎么判断当前浏览器是否支持webp
+      img.onerror = function () {
+        // 当图片加载失败，会出错。 --> 不支持webp
+        img.src = img.src.slice(0, -5);
+        // 解绑事件（内存泄漏） removeEventListener('事件名', 事件回调函数)
+        img.onerror = null;
+      }
+    }
+</script>
+</body>
+</html>

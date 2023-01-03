@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "CommonSearch": "../../components/common-search/common-search",
+    "tabs": "../../components/my-search-tabs/my-search-tabs"
+},
+  "navigationBarTitleText": "商品列表",
+  "enablePullDownRefresh": true
+}

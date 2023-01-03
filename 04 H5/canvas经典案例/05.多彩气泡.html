@@ -1,0 +1,73 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-21 09:33:30
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-21 10:42:45
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多彩气泡</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+            display: block;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+
+
+
+<script>
+(function(){
+    var canvas=document.querySelector('canvas');
+    canvas.width=236;
+    canvas.height=448;
+    var ctx=canvas.getContext('2d');
+
+    var temp=[];
+    //创建数据
+    setInterval(function(){
+        var obj={};
+        obj.x=Math.random()*canvas.width;
+        obj.y=canvas.height;
+        obj.radius=Math.random()*8;
+        obj.r=Math.floor(Math.random()*256);
+        obj.g=Math.floor(Math.random()*256);
+        obj.b=Math.floor(Math.random()*256);
+        obj.circle=0;   //定义每次圆心y的坐标量
+        obj.scale=Math.random()*8+8;   //定义每个小球来回摆动
+        temp.push(obj);
+    },40);
+    //开始绘图
+    setInterval(function(){      
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        temp.forEach(function(item,index){  
+            item.circle+=0.5;
+            item.x=item.x+(Math.sin(item.circle))*item.scale;
+            item.y-=item.circle; 
+            if(item.y<=0){
+                temp.splice(index,1);                
+                return;
+            }     
+            ctx.beginPath();           
+            ctx.fillStyle='rgb('+item.r+','+item.g+','+item.b+')';
+            ctx.arc(item.x,item.y,item.radius,0,Math.PI*2);           
+            ctx.fill();                    
+        })
+        
+    },50)
+
+
+})();
+</script>
+</body>
+</html>

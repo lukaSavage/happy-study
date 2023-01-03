@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			text-decoration: none;
+		}
+
+		.box {
+			width: 300px;
+			/*		height: 450px;*/
+			border: 1px solid #000;
+			margin: 100px auto;
+		}
+    .box h2{
+			width: 100%;
+			height: 50px;
+			line-height: 50px;
+			font-size: 35px;
+			text-align: center;
+			background-color: #09e42d;
+		}
+		.box div li{
+			background-color: #0b93e2;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			border-bottom: 1px solid #d60d89;
+		}
+    .box div div{
+			display: none;
+			/* transition: all 1s linear; */
+			position: relative;
+			
+		}
+		.box div div img{
+			position: relative;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 75px;
+			height: 75px;
+		}
+		/* .box div:nth-child(2) div img{
+			position: absolute;
+			margin-left: 50%;
+			left: -20px;
+		} */
+		.box div div p{
+			text-indent: 2em;
+		}
+		/* .box div:hover div{
+        display: block;
+				
+		} */
+	</style>
+</head>
+
+<body>
+	<div class="box">
+		<h2>电影排行榜</h2>
+		
+			<div>
+				<li>
+					<span>1</span>电影名称
+				</li>
+			  <div>
+				  <img src="../images/01.jpg" alt="">
+				  <p>xx这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容</p>
+			  </div>
+			</div>
+			<div>
+					<li><span>2</span>电影名称</li>
+					<div>
+						<img src="../images/02.jpg" alt="">
+						<p>这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容</p>
+					</div>
+			</div>
+			<div>
+					<li><span>3</span>电影名称</li>
+					<div>
+						<img src="../images/03.jpg" alt="">
+						<p>这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容</p>
+					</div>
+			</div>
+			<div>
+					<li><span>4</span>电影名称</li>
+					<div>
+						<img src="../images/04.jpg" alt="">
+						这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容
+					</div>
+			</div>
+			<div>
+					<li><span>5</span>电影名称</li>
+					<div>
+						<img src="../images/05.jpg" alt="">
+						这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容这是电影内容
+					</div>
+			</div>
+
+		
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="./jquery-1.12.4.js"></script>
+	<script>
+		// //先用原生js方法来做
+
+
+		// //1.获取需要操作的属性
+		// var lis = document.getElementsByTagName("li");
+		// var box = document.getElementsByClassName("box")[0];
+		// var divs = box.getElementsByTagName("div");
+
+		// //2.为所有的li监听鼠标事件
+		// for (var i = 0; i < lis.length; i++) {
+		// 	divs[i].setAttribute("class", "container");
+		// 	lis[i].index = i;
+		// 	//3.1鼠标进入
+		// 	lis[i].onmouseover = function () {
+
+		// 		lis[this.index].nextElementSibling.style.display = "block";
+		// 		divs[this.index].onmouseover = function () {
+		// 		}
+		// 	}
+		// 	//3.2鼠标移开
+		// 	lis[i].onmouseout = function () {
+
+		// 		lis[this.index].nextElementSibling.style.display = "none";
+
+		// 	}
+		// }
+		// console.log(hehe);
+
+
+
+		$(function(){
+			var flag=true;
+			$(".box>div").click(function(){		        	
+                $(this).children("div").slideToggle();
+                $(this).siblings().children("div").slideUp();
+			})
+			
+			// $(".box>div").mouseleave(function(){
+            //   $(this).children("div").stop().slideUp();
+			// })
+			// $(".box").mouseleave(function(){
+			// 	$(".box>div").children("div").stop().slideUp();
+			// })
+				
+				
+			
+		})
+    
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/* 
+★★★★★★★★★★★★ 1. 音频、视频 ★★★★★★★★★★★★★★★★★★★★★
+一、音视频标签
+    1.video
+        属性：(复习)
+            src
+            width/height
+            controls  显示控制条
+            muted  设置静音
+            autoplay   自动播放（chrome要求静音的视频才可以自动播放）
+            loop   循环播放
+            preload  预先加载
+            poster   封面图
+    2.audio
+        属性：
+            src
+            controls  显示控制条
+            muted  设置静音
+            autoplay   自动播放（chrome要求静音的视频才可以自动播放）
+            loop   循环播放
+            preload  预先加载
+    3.source
+        <video controls>
+            <source src="test.webm" type='video/webm; codecs="vp8, vorbis"'>
+            <source src="test.ogg" type='video/ogg; codecs="theora, vorbis"'>
+            <source src="test.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+    4.让视频沾满整个屏幕的一个CSS属性
+        object-fit：cover；
+二、HTML5音视频DOM
+    1.音视频DOM属性
+        1) paused        返回是否暂停（只读）      布尔值
+        2) volume        设置或返回音量 0~1之间，超出范围报错
+        3) muted         设置或返回是否静音        布尔值
+        4) loop          设置或返回是否循环播放    布尔值
+        5) currentTime   设置或返回当前的播放进度,不用判断范围（单位秒）
+        6) playBackRate  设置或返回播放倍速 数字
+        7) duration	     返回总播放时长（单位秒） 只读
+    2.DOM方法
+        play()   播放
+        pause()  暂停
+        load()     重新加载音视频
+    3.DOM事件
+        loadedmetadata  音视视频的元信息加载完毕
+        timeupdate		currentTime属性发生改变（播放过程中，实时触发,通常和currentTime连用）
+        ended			音视频播放完毕时触发
+三、全屏操作
+    var isFullScreen = false;
+    full.onclick=function(){
+        if(isFullScreen){
+            isFullScreen = false
+            if (document.exitFullscreen) {  
+                document.exitFullscreen();  
+            }else if (document.mozCancelFullScreen) {  
+                document.mozCancelFullScreen();  
+            }else if (document.webkitCancelFullScreen) {  
+                document.webkitCancelFullScreen();  
+            }else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }else{
+            isFullScreen = true
+            var docElm = document.documentElement;      
+            if (docElm.requestFullscreen) {                 //W3C 实验方案 
+                docElm.requestFullscreen();  
+            }else if (docElm.mozRequestFullScreen) {        //FireFox 
+                docElm.mozRequestFullScreen();  
+            }else if (docElm.webkitRequestFullScreen) {      //Chrome等 
+                docElm.webkitRequestFullScreen();  
+            }else if (docElm.msRequestFullscreen) {            //IE11
+                docElm.msRequestFullscreen();
+            }
+        }
+    }
+    //监听全屏事件
+    document.addEventListener('fullscreenchange', fullScreenChangeFn);
+    document.addEventListener('webkitfullscreenchange', fullScreenChangeFn);
+    document.addEventListener('mozfullscreenchange', fullScreenChangeFn);
+    document.addEventListener('msfullscreenchange', fullScreenChangeFn);  // IE下无效果然
+    function fullScreenChangeFn(){     
+        // 判断是否是全屏
+        var  isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.webkitIsFullScreen || document.mozFullScreen;
+        if (isFullScreen) {
+            isFullScreen = true;
+        } else {
+            // 非全屏状态  
+            isFullScreen = false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+ */
+</script>
+</body>
+</html>

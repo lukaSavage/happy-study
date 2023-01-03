@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/* 
+★★★★★★★★★★★  1、Jquery  ★★★★★★★★★★★★★★★★★★★★★★★★★
+零、铭哥教程
+    http://learn.fuming.site/
+一、jQuery介绍
+    1.jQuery的优势
+        ·开源、免费
+        ·兼容性
+        ·便捷的DOM操作
+        ·事件机制
+        ...
+    2.jQuery的版本
+        ①、1.x.x          兼容IE6—IE8
+        ②、2.x.x ~3.x.x   兼容IE9+
+        ③、slim版，需要IE9+，没有动画模块和ajax模块
+    3.zepto类库
+        zepto是jQuery的简化版，相比jQuery，少了动画模块，ajax模块，选择器模块。
+二、jQuery基础
+    1.实现根据浏览器版本不同，导入不同版本的jQuery(了解,)
+        <!--IE9及以上以及其他浏览器-->
+        <!--[if gt IE 8]><!-->
+        <Script src="../../dist/jquery-3.1.1.min.js"></Script>
+        <!--<![endif]-->
+        <!--IE8以及以下浏览器-->
+        <!--[if lte IE 8]>
+        <Script src="../../dist/jquery-1.12.4.min.js"></Script>
+        <![endif]-->
+    2.核心函数
+        · $();    获取dom元素
+        ·jQuery()
+        作用：
+            1.参数传选择器（字符串），获取dom元素 （类似于querySelect）
+            2.参数传递回调函数，表示文档就绪事件。
+            3.传入的参数是原生DOM对象， 把元素DOM转为jQueryDOM
+            4.创建元素
+    3.文档就绪事件ready
+        $(document).ready(functoin(){
+            //内容
+        })
+        简写如下：
+            $(function(){
+                //内容
+            })
+        ready和load的区别：
+            ready是jQuery自定义的事件；load是原生事件。
+            ready是页面中的dom元素加载完毕； loaded是页面中所以的一切加载完毕（包含图片）            
+            注意：ready的实现原理是什么？
+                利用了 DOMContentLoaded 事件。
+    4.原生DOM和JQueryDOM的区别
+        ①、原生DOM是使用原生JS的方式获取的dom对象
+        ②、jQuery使用核心函数获取的dom对象
+        ③、原生DOM和jQueryDOM是两类不同的对象，各自具有各自的属性和方法。
+        两者之间的转换
+            ·jQueryDOM转为原生DOM：
+                jQueryDOM本质是个伪数组，是原生DOM组成的集合
+                通过取索引的方式获取里面包含的元素DOM
+
+                如：var li=$('li')[0];  or    var li=$("#btn").get(0);  
+
+            ·原生DOM转为jQuertDOM	
+                使用核心函数 $(元素dom)
+
+                如：var demo=document.querySelector('li');
+                    var $demo=$(demo);
+三、选择器
+    1.基本选择器(复习)
+        ①、#id        
+        ②、.className
+        ③、tagName
+        ④、*
+    2.层级选择器(复习)
+        ①、子代
+        ②、后代
+        ③、通用兄弟
+        ④、相邻兄弟
+        ⑤、交集
+        ⑥、并集
+    3.过滤选择器(CSS3没有)
+        ① :first                 所有整体元素中的第一个(只会选择一个！)             如：$('li:first');
+        ② :last                  所有整体元素中的最后一个(只会选择一个！)           如：$('li:last');
+        ③ :eq(index)             通过索引查找元素(只会选择一个！)                  如：$('li:eq(4)');
+        ④ :lt(index)             索引小于index的所有符合要求的元素                 如：$('li:lt(4)'); (不包含索引4，即0,1,2,3)   
+        ⑤ :gt(index)             索引大于index的所有符合要求的元素                 如：$('li:lt(4)');(不包含索引4，即5,6,7...) 
+        ⑥ :odd                   索引值为奇数的所有符合要求的元素                  如：$('li:odd');                  
+        ⑦ :even                  索引值为偶数的所有符合要求的元素                  如：$('li:even');
+        ⑧ :header                匹配h1~h6之类的标题元素                          如：$(':header');
+        ⑨ :animated              匹配所有正在执行动画效果的元素                    如：$(':animated');
+        ⑩ :not(选择器)            除了指定选择器以外的所有符合要求的元素            ★如：$('li:not(:ifrst)');   
+    4.内容选择器(CSS3没有)
+        ①、:has(选择器)		      从拥有指定选择器的所有父辈元素筛选出':'之前符合要求的元素(自身不算)     如：$(li:has(.item));
+        ②、:contains(text)        选择包含指定文本的元素
+        ③、:parent			      选择当爹的元素(有内容或者有子元素)                                    如：$('li:parent');
+        ④、:empty                 选择光棍元素(没有内容且没有子元素)                                    如：$('li:empty');
+        
+    5.可见性选择器(CSS3没有)
+        ①、:hidden              匹配所有不可见元素，或者表单的type类型为hide的元素
+        ②、:visible              匹配所有可见元素
+    6.属性选择器
+        ①、[attrName]
+        ②、[attrName=value]
+        ③、[attrName!=value]
+        ④、[attrName^=value]
+        ⑤、[attrName$=value]
+        ⑥、[attrName*=value]
+        ⑦、[attrName=value][attrName=value][attrName=value]
+    7.子元素选择器
+        ①、:first-child            匹配所给选择器( :之前的选择器)的第一个子元素
+        ②、:last-child             匹配最后一个子元素
+        ③、:nth-child()            匹配其父元素下的第N个子或奇偶元素
+        ④、:nth-last-child()       选择所有他们父元素的第n个子元素。计数从最后一个元素开始到第一个    1.9+
+        ⑤、:only-child             如果某个元素是父元素中唯一的子元素，那将会被匹配
+        ⑥、:first-of-type          结构化伪类，匹配E的父元素的第一个E类型的孩子        1.9+
+        ⑦、:last-of-type           结构化伪类，匹配E的父元素的最后一个E类型的孩子    1.9+
+        ⑧、:nth-of-type()          选择同属于一个父元素之下，并且标签名相同的子元素中的第n个    1.9+
+        ⑨、:nth-last-of-type()    选择的所有他们的父级元素的第n个子元素，计数从最后一个元素到第一个    1.9+
+        ⑩、:only-of-type          选择所有没有兄弟元素，且具有相同的元素名称的元素    1.9+
+    8.表单选择器
+        ①、:input            匹配所有 input, textarea, select 和 button 元素
+        ②、:text             匹配所有的单行文本框
+        ③、:password         匹配所有密码框
+        ④、:radio            匹配所有单选按钮
+        ⑤、:checkbox         匹配所有复选框
+        ⑥、:file             匹配所有文件域
+        ⑦、:submit           匹配所有提交按钮，匹配 type="submit" 的input或者button
+        ⑧、:reset            匹配所有重置按钮
+        ⑨、:button           匹配所有按钮
+    9.表单对象选择器
+        ①、:disabled         匹配所有禁用元素
+        ②、:enabled          匹配所有可用元素
+        ③、:checked          匹配所有选中的被选中元素(复选框、单选框等，select中的option)
+        ④、:selected         匹配所有选中的option元素
+四、使用筛选器获取元素(jQDOM提供的方法总结)
+    注：[选择器]代表可填可不填
+    1.过滤方法
+        ①、first()                      获取第一个元素
+        ②、last()                       获取最后个元素
+        ③、eq(index|-index)             获取当前链式操作中第N个jQuery对象，返回jQuery对象
+        ④、filter(选择器|obj|ele|fn)     相当于$('li .item');  即找后代
+        ⑤、not(选择器|ele|fn)           从匹配元素的集合中删除与指定表达式匹配的元素
+        ⑥、has(选择器|ele)              保留包含特定后代的元素，去掉那些不含有指定后代的元素。(自身不算)
+        ⑦、slice(start,[end])           选取一个匹配的子集
+    2.查找方法
+        ①、children([选择器])            找子代元素
+        ②、find(选择器)             找后代元素。find必须传参才有效  （这个函数是找出正在处理的元素的后代元素的好方法）
+
+        ③、parent([选择器])              获取父元素
+        ④、parents([选择器])             取得一个包含着所有匹配元素的祖先元素的元素集合(直到html，html也会被匹配),如果些参数，就会匹配到那个参数(一个)
+        ⑤、parentsUntil([选择器])      查找当前元素的所有的父辈元素，直到遇到匹配的那个元素为止(和parents相比，可以匹配多个，但不会匹配到最后一个父辈元素)
+        ⑥、offsetParent()               返回第一个匹配元素用于定位的父节点。
+
+        ⑦、next([选择器])                取得一个包含匹配的元素集合中每一个元素紧邻的后面同辈元素的元素集合，内部传参意义不大
+        ⑧、nextAll([选择器])             查找当前元素之后所有的同辈元素
+        ⑨、nextUntil([选择器])         查找当前元素之后所有的同辈元素，直到遇到匹配的那个元素为止(不会匹配到最后一个元素)
+        ⑩、prev([选择器])                取得一个包含匹配的元素集合中每一个元素紧邻的前一个同辈元素的元素集合
+        ⑪、prevall([选择器])             查找当前元素之前所有的同辈元素
+        ⑫、prevUntil([选择器])          查找当前元素之前所有的同辈元素，直到遇到匹配的那个元素为止
+        ⑬、siblings([选择器])             取得一个包含匹配的元素集合中每一个元素的所有唯一同辈元素的元素集合
+
+        ⑭、closest([选择器])            1.7* 从元素本身开始，逐级向上级元素匹配，并返回最先匹配的元素
+    3.串联
+        ①、add(选择器)          如$('li').add(p);   即返回的是li和p一起组成的类数组		
+        ②、addBack()	       把破坏性操作之前的元素加入当前集合，如$('ul').find('li').addBack() 本来返回的是li组成的类数组，但有addBack所以加了ul到类数组中
+            注意：连续调用只生效一次，如果没有破坏性操作，则把document加入进来,但document的css不会生效
+        ③、end()               返回上一个破坏性操作之前(可以连续调并生效多次)
+        拓展：破坏性操作
+            调用完方法，返回的jQueryDOM与调用方法的jQueryDOM不同；如过滤方法、查找方法。
+    4.其他操作
+        is（选择器）            判断是否满足选择器条件（集合中只有一个满足，返回true）
+        map(callback)  	       分别从元素上获取数据，回调函数需要返回值(通常和get连用)
+        each(callback)         遍历jQueryDOM		
+        get()			       把jQueryDom伪数组一键转为纯数组； 以下标作为参数，得到jQueryDOM中的某个成员
+        index()                取索引（元素在父元素中的索引）
+五、DOM操作(没有破坏性操作)
+    1.创建jQueryDOM元素
+        1) $('<li>');          //空的li元素
+        2) $('<li>内容</li>')  //带内容的li元素
+    2.内部插入(添加子元素)
+        1) append()  		   在父元素中追加一个子元素（父元素调用）
+        2) appendTo()		   把元素追加到父元素的后面 （子元素调用）
+        3) prepend()           在父元素中前面添加一个子元素 （父元素调用）
+        4) prependTo()         把元素添加到父元素的最前面（子元素调用）
+        注意：小括号内部可以直接创建元素
+    2.外部插入(添加兄弟元素)
+        1) after()	           在每个匹配的元素之后插入内容		
+        2) insertAfter()	   在每个匹配的元素之前插入内容
+        3) before()            把所有匹配的元素插入到另一个、指定的元素元素集合的后面
+        4) insertBefore()      把所有匹配的元素插入到另一个、指定的元素元素集合的前面
+    3.包裹
+        1) wrap()		       给每一个包裹一个父元素 如$('li').wrap('<ol>');
+        2) wrapAll()           总的包裹一个元素
+        3) wrapInner()         在元素和内容之间加一层
+        4) unwrap()            删除包裹的元素(直到body，但不删除body)
+    5.替换 
+        1) replaceWith()	   旧.replaceWith(新)
+        2) replaceAll()        新.replaceAll(旧)
+    6.移除
+        1) remove()            删自己
+        2) empty()             清空元素里的内容
+    7.克隆
+        clone()                深度克隆
+六、属性和样式操作
+    ·属性操作
+        1.系统自带和自定义属性
+            1) attr(attrName[, value])       设置或者获取元素的属性（一个参数获取，两个参数是设置）
+            2) removeAttr(attrName)			 把属性从元素上移出
+            3) prop(propName[, value])       设置或者获取原生dom对象的属性
+            4) removeProp(propName)	         把属性从DOM对象上移出
+            拓展：data(attrName[, value])    适合以data-开头的自定义属性，设置了不会在内联显示，但可以读写
+        2.class属性
+            1) addClass()		// classList.add()
+            2) removeClass()   // classList.remove()
+            3) toggleClass()   // classList.toggle()
+            4) hasClass()		//判断有么有某个类  返回布尔值
+        3.代码、文本、值
+            1) html([html])  设置或获取元素的html内容  innerHTML
+            2) text([text])  设置或获取元素的文本内容  innerText
+            3) val([value])  设置或获取表单控件的输入内容   value属性
+    ·CSS样式操作
+        1.css样式
+            css('属性名')  获取某个属性的值
+            css('属性名', 值)   给元素设置css属性
+            css({        同时设置多个值
+                属性名：值,
+                属性名: 值
+            })
+            ★注：用css获取地样式为计算属性，相当于原生js的getComputedStyle(元素)
+        2.元素位置
+            1) offset([offset])            可读可写；获取或者设置元素在页面上的位置；返回对象，对象有left和top两个属性
+            2) scrollLeft([值])		       类似于scrollLeft 
+            3) scrollTop([值])             类似于scrollTop
+        3.元素尺寸
+           1) width([number])             设置或者获取元素内容的宽度
+           2) height([number])            设置或者获取元素内容的高度
+           3) innerWidth([number])        设置或者获取元素内容+padding的宽度
+           4) innerHeight([number])       设置或者获取元素内容+padding的高度
+           5) outerWidth([number])	      设置或者获取元素内容+padding+border的宽度(相当于offsetWidth)
+           6) outerHeight([number])       设置或者获取元素内容+padding+border的高度(相当于offsetHeight)
+七、jQuery事件机制
+    1.事件绑定的三种方式
+        click(function(){});              把事件当做方法
+        on('click',function(){});         1.7+  既可以绑定多事件，又可以做事件委托
+        one('click',function(){});        只能绑定一次
+    2.解除事件绑定
+        off();                            不写参数，解除元素上所有事件，也可以把指定的参数名的事件删除掉
+    3.trigger('事件名');                   页面启动后自行触发一次该事件
+    4.事件委托(委派)
+        $(parent).on('eventName', '选择器', callback);
+        ★：把事件监听给一直都存在的祖先元素，在on的第二个参数写下子元素的选择器
+    5.事件切换
+        hover(function(){})            相当于mousenter和mouseleave都会触发hover        
+八、jQuery动画
+    ①、基本动画
+        show([s,[e],[fn]])             显示隐藏的匹配元素
+        hide([s,[e],[fn]])             隐藏显示的元素
+        toggle([s],[e],[fn])           如果元素是可见的，切换为隐藏的；如果元素是隐藏的，切换为可见的
+
+        基本动画： width\height\opacity  最后display
+    ②、滑动效果
+        slideDown([s],[e],[fn])        通过高度变化（向下增大）来动态地显示所有匹配的元素
+        slideUp([s,[e],[fn]])          通过高度变化（向上减小）来动态地隐藏所有匹配的元素
+        slideToggle([s],[e],[fn])      通过高度变化来切换所有匹配元素的可见性
+        
+        滑动效果： height  最后 display
+    ③、淡入淡出
+        fadeIn([s],[e],[fn])        通过不透明度的变化来实现所有匹配元素的淡入效果
+        fadeOut([s],[e],[fn])        通过不透明度的变化来实现所有匹配元素的淡出效果
+        fadeToggle([s,[e],[fn]])    通过不透明度的变化来开关所有匹配元素的淡入和淡出效果
+        fadeTo([[s],o,[e],[fn]])    把所有匹配元素的不透明度以渐进方式调整到指定的不透明度
+
+        淡入淡出： opacity  最后 display
+    ④、自定义动画
+        animate(params, speed, easing ,fn);
+        注意：
+            参数如果带-的，如background-color,如果写成对象要加引号
+            如果属性值不是数值，没有过渡效果
+
+    ★参数详解★
+        params    : 一组包含作为动画属性和终值的样式属性和及其值的集合
+        speed     : 三种预定速度之一的字符串("slow","normal", or "fast")或表示动画时长的毫秒数值(如：1000)
+        easing    : 要使用的擦除效果的名称(需要插件支持).jQuery提供"linear" 和 "swing".  默认是swing
+        fn        : 在动画完成时执行的函数，每个元素执行一次。
+    ⑤、动画控制
+        stop([c],[j])        停止所有在指定元素上正在运行的动画
+        delay(d,[q])        设置一个延时来推迟执行队列中之后的项目
+        finish([queue])        停止当前正在运行的动画，删除所有排队的动画，并完成匹配元素所有的动画
+    
+    
+        
+
+          
+
+
+        
+
+        
+        
+        
+        
+
+        
+
+
+ */
+</script>   
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax初体验</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">发送ajax请求</button>
+<script>
+    btn.onclick=function(){
+        //请求阶段
+        const xhr=new XMLHttpRequest();
+        xhr.open('GET','http://localhost:3000/ajax?name=jack');
+        xhr.send();
+        //访问阶段
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4&&xhr.status===200){
+                console.log(JSON.parse(xhr.responseText));
+            }
+        }
+        // console.log('全部执行完毕');
+    } 
+</script>
+</body>
+</html>

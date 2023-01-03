@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas {
+            background-color: #ccc;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="600" id="canvas"></canvas>
+    <img src="" alt="" id="img" style="display: none;">
+    <script>
+        // const canvas = document.querySelector('canvas')
+        // const ctx = canvas.getContext('2d')
+        // let url = ''
+        // let img = document.getElementById('img')
+        // canvas.onmousedown = function (e) {
+        //     // let img = new Image();
+        //     // img.src = url;
+        //     // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //     url = canvas.toDataURL();
+        //     ctx.beginPath()
+        //     const startX = e.offsetX
+        //     const startY = e.offsetY
+        //     ctx.moveTo(startX, startY)
+        //     canvas.onmousemove = function (e) {
+        //         img.src = url
+        //         ctx.clearRect(0, 0, canvas.width, canvas.height)
+        //         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //         ctx.strokeStyle = 'red'
+        //         ctx.lineWidth = 10
+        //         ctx.strokeRect(startX, startY, e.offsetX - startX, e.offsetY - startY)
+        //     }
+        // }
+        // document.onmouseup = function () {
+        //     canvas.onmousemove = null
+        // }
+        myCanvas({
+            canvasId: 'canvas',
+            imgId: 'img',
+            strokeStyle: '#f90',
+            lineWidth: 5
+        })
+        function myCanvas({ canvasId, imgId, strokeStyle, lineWidth }) {
+            const canvas = document.querySelector(canvasId)
+            const ctx = canvas.getContext('2d')
+            let url = ''
+            let img = document.getElementById(imgId)
+            canvas.onmousedown = function (e) {
+                url = canvas.toDataURL();
+                ctx.beginPath()
+                const startX = e.offsetX
+                const startY = e.offsetY
+                ctx.moveTo(startX, startY)
+                canvas.onmousemove = function (e) {
+                    img.src = url
+                    ctx.clearRect(0, 0, canvas.width, canvas.height)
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = strokeStyle
+                    ctx.lineWidth = lineWidth
+                    ctx.strokeRect(startX, startY, e.offsetX - startX, e.offsetY - startY)
+                }
+            }
+            document.onmouseup = function () {
+                canvas.onmousemove = null
+            }
+        }
+
+    </script>
+</body>
+
+</html>

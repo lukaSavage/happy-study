@@ -1,0 +1,83 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-22 20:31:19
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-22 22:09:46
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>马赛克案例</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=800;
+    canvas.height=600;
+    var ctx=canvas.getContext('2d');
+    
+    var img=new Image();
+    img.src='../images/1.jpg';
+    img.onload=function(){
+        ctx.drawImage(img,0,0,400,600);
+        var oldImageData=ctx.getImageData(0,0,400,600);
+        var newImageData=ctx.createImageData(400,600);
+        //定义马赛克的大小
+        var size=5;
+        for(var i=0;i<oldImageData.width;i+=size){
+            for(var j=0;j<oldImageData.height;j+=size){
+                //获取每个指定块的第一个像素信息
+                    /* 
+                    *   这里也可以取随机数，比如
+                    *   var x=Math.floor(Math.random()*size);
+                    *   var y=Math.floor(Math.random()*size);
+                    *   var colors=getPixel(oldImageData,x,y);
+                     */
+                var colors=getPixel(oldImageData,i,j);
+                //让每个指定块都设置相同的颜色
+                for(var a=0;a<size;a++){
+                    for(var b=0;b<size;b++){
+                        setPixel(newImageData,i+a,j+b,colors);
+                        
+                    }
+                }
+            }
+        }
+        ctx.putImageData(newImageData,400,0);
+        //获取指定颜色块
+        function getPixel(imageData,x,y){
+            var color=[];
+            var index=(imageData.width*y+x)*4;
+            color[0]=imageData.data[index];
+            color[1]=imageData.data[index+1];
+            color[2]=imageData.data[index+2];
+            color[3]=imageData.data[index+3];
+            return color;
+        }
+
+        //设置颜色块
+        function setPixel(imageData,x,y,color=[0,0,0,0]){
+            var index=(imageData.width*y+x)*4;
+            imageData.data[index]=color[0];
+            imageData.data[index+1]=color[1];
+            imageData.data[index+2]=color[2];
+            imageData.data[index+3]=color[3];
+        }
+        
+    }
+</script>   
+</body>
+</html>

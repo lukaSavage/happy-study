@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">   
+    <meta name="viewport" content="initial-scale=2">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>移动端</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #box{
+            width: 600px;
+            height: 50px;
+            border: 10px solid #000;
+            margin: 100px auto;
+        }
+        #inner{
+            width: 0;
+            height: 50px;
+            background-color: #f90;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="inner"></div>
+    </div>
+<script src="./移动端经典案例/transformCss.js"></script>
+<script src="./移动端经典案例/tween.js"></script>
+<script>
+    var tween={
+            linear:function(t,b,c,d){ return c*t/d + b; },
+            cutEaseOut: function(t,b,c,d){return c*((t=t/d-1)*t*t + 1) + b; },
+            backEaseOut: function(t,b,c,d,s){if (s == undefined) s = 1.70158;return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b; },
+        }
+        //定义tween函数参数
+        var t=0;     //当前时间
+        var b=0;     //初始值
+        var c=600;    //变化量
+        var d=3000;    //持续时间
+
+        //开启定时
+        timer=setInterval(function(){
+            t+=10;
+            var value=tween.backEaseOut(t,b,c,d);
+            inner.style.width=value + 'px';
+            if(t>=d){
+                clearInterval(timer);
+            }
+        },10);
+</script>
+</body>
+</html>

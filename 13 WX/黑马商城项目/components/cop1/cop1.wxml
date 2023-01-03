@@ -1,0 +1,2 @@
+<!--components/cop1/cop1.wxml-->
+<text catch:tap="compClick" id="two">我是comp1组件，我从父组件拿到的值是：{{ value }}</text>

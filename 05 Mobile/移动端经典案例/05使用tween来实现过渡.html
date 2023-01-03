@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>页面竖向滑动</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        html,body,#app{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #box{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="box"></div>
+        <span class="scrollBar"></span>
+    </div>
+<script src="./transformCss.js"></script>
+<script src="./tween.js"></script>
+<script>
+    for(var i=0;i<100;i++){
+        box.innerHTML+=(i+'<br>');
+    }
+    // var timer=null;
+    //阻止所有默认行为
+    document.addEventListener('touchstart',function(e){
+        e.preventDefault();
+    },{passive:false});
+    box.addEventListener('touchstart',function(e){
+        this.startY=e.targetTouches[0].clientY;
+        this.eleY=transformCss(box,'translateY');
+        this.startTime=Date.now();
+        this.disY=0;
+        //注意这个定时器最后一定要清
+        clearInterval(box.timer);
+    });
+    box.addEventListener('touchmove',function(e){
+        var endY=e.targetTouches[0].clientY;
+        this.disY=endY-this.startY;
+        var translateY=this.eleY+this.disY;
+        if(translateY>0){
+            var scale=1-translateY/(app.clientHeight*1.9);
+            translateY*=scale;
+        }else if(translateY<app.clientHeight-box.offsetHeight){
+            var bottomY=app.clientHeight-(box.offsetHeight+translateY);
+            var scale=1-bottomY/(app.clientHeight*1.9);
+            bottomY*=scale;
+            translateY=app.clientHeight-bottomY-box.offsetHeight;
+        }
+        transformCss(box,'translateY',translateY);
+    });
+    box.addEventListener('touchend',function(e){
+        this.endTime=Date.now();
+        var disTime=this.endTime-this.startTime;
+        var speed=this.disY/disTime*200;
+        var translateY=transformCss(box,'translateY');
+        translateY+=speed;
+        //定义一个过渡类型
+        var type='cutEaseOut';
+        if(translateY>=0){
+            translateY=0;
+            type='backEaseOut';
+        }else if(translateY<=app.clientHeight-box.offsetHeight){
+            translateY=app.clientHeight-box.offsetHeight;
+            type='backEaseOut';
+        }
+        //重新定义box的位置
+        tweenTo(box,translateY,500,type);
+    });
+</script>
+</body>
+</html>

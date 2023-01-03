@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">获取数据</button>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+<script>
+    btn.onclick=function(){
+        /* const script=document.createElement('script');
+        script.src='http://localhost:3000/jsonp?callback=getData';
+        //定义一个全局的响应成功的回调函数
+
+        //data得到的是一个调用 getData({name:'jack,age:18})
+        window.getData=function(data){
+            console.log('从服务器请求回来的数据是：',data);
+        };
+        document.body.appendChild(script); */
+        /* $.getJSON('http://localhost:3000/jsonp?callback=?',function(data){
+            console.log(data);
+        }) */
+
+
+
+
+
+
+        $.getJSON('http://localhost:3000/jsonp?callback=?',function(data){
+            console.log(data);
+        })
+    }
+</script>
+</body>
+</html>

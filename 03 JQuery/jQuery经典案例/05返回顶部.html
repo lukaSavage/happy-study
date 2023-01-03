@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            border: none;
+        }
+
+        body {
+            background-color: #ccc;
+            height: 5000px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #top {
+            width: 43px;
+            height: 43px;
+            background-size: 100% 100%;
+            position: fixed;
+            right: 10px;
+            bottom: 30px;
+            display: none;
+			background-color: #000;
+        }
+    </style>
+</head>
+<body>
+<span id="top"></span>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+<p>今天天气很好!</p>
+
+
+<script src="jquery-1.12.4.js"></script>
+<script>
+// window.onload=function(){
+//     var btn=document.getElementById("top");
+//     var begin=0,end=0,timer=null;
+//     window.onscroll=function(){
+//         if(window.scrollY>1000){
+//             btn.style.display="block";
+//         }else{
+//             btn.style.display="none";
+//         }
+//         begin=this.scrollY;      //重要步骤
+//      }
+//      btn.onclick=function(){                //注意脱离onscroll函数
+//         clearInterval(timer);
+//         timer=setInterval(function(){
+//             begin = begin + (end - begin)*0.2;
+//             window.scrollTo(0,begin);
+//             if(Math.round(begin)==0){
+//                 clearInterval(timer);
+//             }
+//         },20);
+//     }
+// }
+
+
+
+$(function(){
+    $(window).scroll(function(){
+        if($(this).scrollTop()>=1000){
+            $("#top").css("display","block");
+        }else{
+            $("#top").css("display","none");
+        }
+    })
+    //点击事件
+    $("#top").click(function(){             //注意脱离onscroll函数
+            $("html").animate({scrollTop:0},500);
+            // return false;     //防止在滚动的期间做其他的事情
+        })
+})
+</script>
+</body>
+</html>

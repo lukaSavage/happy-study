@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/category/index",
+    "pages/cart/index",
+    "pages/my/index",
+    "pages/searchDetail/index",
+    "pages/categoryDetail/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#e5414a",
+    "navigationBarTitleText": "FBI商城",
+    "navigationBarTextStyle": "black"
+  }, 
+  "tabBar": {
+      "color": "#333",
+      "selectedColor": "#ff2d4a",
+      "backgroundColor": "#fafafa",
+      "position": "bottom",
+      "borderStyle": "black",
+      "list": [
+          {
+              "pagePath": "pages/index/index",
+              "text": "首页",
+              "iconPath": "assets/images/home.png",
+              "selectedIconPath": "assets/images/home-o.png"
+          },
+          {
+              "pagePath": "pages/category/index",
+              "text": "分类",
+              "iconPath": "assets/images/category.png",
+              "selectedIconPath": "assets/images/category-o.png"
+          },
+          {
+              "pagePath": "pages/cart/index",
+              "text": "购物车",
+              "iconPath": "assets/images/cart.png",
+              "selectedIconPath": "assets/images/cart-o.png"
+          },
+          {
+              "pagePath": "pages/my/index",
+              "text": "我的",
+              "iconPath": "assets/images/my.png",
+              "selectedIconPath": "assets/images/my-o.png"
+          }
+      ]
+  },
+  
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

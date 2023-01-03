@@ -1,0 +1,3 @@
+<!--components/A/A.wxml-->
+<view>我是A组件</view>
+<image mode="aspectFill" lazy-load src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.51tietu.net%2Fupload%2Fwww.51tietu.net%2F2016-051116%2F20160511161410sdgptjfdwql488.jpg&refer=http%3A%2F%2Fimg2.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624699735&t=531de6f50ec20a2244ffdb4e3d64f6fb"></image>

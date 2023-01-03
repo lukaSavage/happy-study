@@ -16,6 +16,7 @@ let finish = after(2, (data) => {
     console.log(data);
 })
 
+// 注意，这里的是根目录读取的
 fs.readFile('./01before函数的使用.js', 'utf8', (err, data) => {
     setTimeout(() => {
         finish('张三', '我爱你');

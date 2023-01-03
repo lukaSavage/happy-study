@@ -1580,6 +1580,12 @@
                 ③ 如果一个不使用的对象，设置为null，对象会变为垃圾对象，被回收。   
                     (注意：null表示空的对象，浏览器引擎在解析的时候不会报错)
                 小结：和undefined相比null表示确确实实存在的对象，当某一个变量未确定值的时候可暂时赋值为null
+            4. 判断数组的方法有哪些
+                ①、Array.isArray()
+                ②、Array.prototype.isPrototypeOf(target)
+                ③、Object.prototype.toString.call(target).slice(8, -1)
+                ④、target instanceOf Array
+                ⑤、typeof arr == "object" && arr.constructor == Array
     ·数据、变量、内存之间的关系
         内存是一块存储空间，里面存数据
         变量是对象这块内存标识，通过变量名可以找到这块内存，从而获取数据  
@@ -2488,6 +2494,7 @@
             9) forEach()		用于遍历
         ④Map实例的属性
             1)size      获取Map对象键值对的个数
+    拓展：WeakMap对象
 十三、iterator 迭代器/遍历器
     ·iterator对象
         0.背景

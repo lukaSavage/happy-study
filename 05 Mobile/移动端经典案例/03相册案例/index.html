@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>移动端相册案例</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        html,body,#app{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        h2{
+            width: 100vw;
+            height: 10vw;
+            background-color: rgba(0,0,0,.8);
+            text-align: center;
+            color: #fff;
+            font: normal 5vw/10vw 'Microsoft YaHei';
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 99;
+        }
+        #swiper{
+            width: 100vw;
+            padding-top: 10vw;
+            position: relative;
+        }
+        #ul{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #ul li{
+            margin: 3vw;
+            width: 44vw;
+            height: 44vw;
+            overflow: hidden;
+            background: url(./img/loadingImg.gif) no-repeat center;
+        }
+        .tip{
+            position: absolute;
+            width: 100vw;
+            height: 30vw;
+            text-align: center;
+            line-height: 30vw;
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        #ul img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        #scale{
+            width: 100vw;
+            height: 100vh;
+            background-color: #ccc;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            transform: scale(0);
+            transition: transform .5s;
+            
+        }
+        .header,.header h2{
+            width: 100vw;
+            height: 20vw;
+            background-color: rgba(0,0,0,.8);
+            text-align: center;
+            color: #fff;
+            font: normal normal 10vw/20vw 'Microsoft YaHei';
+        }
+        .header span{
+            position: absolute;
+            right: 2vw;
+            top: 0;
+            z-index: 1000;            
+        }
+        .view{
+            width: 100vw;
+            height: 100vh;
+            text-align: center;
+            line-height: 100vh;
+        }
+        .scroll-bar{
+            position: absolute;
+            width: 4px;
+            background-color: deeppink;
+            top: 0;
+            right: 0;
+            z-index: 9999999;
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity .3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>三国女将</h2>
+        <div id="swiper">
+            <ul id="ul">
+            </ul>
+            <div class="tip">下拉加载更多...</div>
+        </div>
+        <!-- 缩放层 -->
+        <div id="scale">
+            <header class="header">
+                <h2>放大图</h2>
+                <span>×</span>
+            </header>
+            <div class="view">
+                <img src="./img/1.jpg" alt="">
+            </div>
+        </div>
+        <!-- 滚动条层 -->
+        <div class="scroll-bar"></div>
+    </div>
+<script src="./js/transformcss.js"></script>
+<script src="./js/touchscroll.js"></script>
+<script src="./js/gesture.js"></script>
+<script src="./js/index.js"></script>
+</body>
+</html>

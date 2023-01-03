@@ -1,0 +1,6 @@
+function cc(a, b) {
+    return a + b
+}
+module.exports = {
+    my: cc
+}

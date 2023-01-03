@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #box{
+            width: 800px;
+            border: 1px solid #ccc;
+            margin: 100px auto;
+            padding: 20px;
+        }
+
+        #my_textarea{
+            width: 80%;
+            height: 120px;
+            resize: none;
+        }
+
+        .box-top{
+            margin-bottom: 20px;
+        }
+
+        #ul{
+            margin: 0 80px;
+        }
+
+        #ul li{
+            border-bottom: 1px dashed #ccc;
+            color: red;
+            line-height: 44px;
+        }
+
+        #ul li a{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+   <div id="box">
+       <div class="box-top">
+           <label>发表评论：</label>
+           <textarea id="my_textarea" cols="60" rows="10"></textarea>
+           <button id="btn">发表</button>
+       </div>
+       <ul id="ul">
+
+       </ul>
+   </div>
+<script src="jquery-1.12.4.js"></script>
+<script>	
+//原生js方法
+window.onload=function(){
+	var textarea=document.getElementById("my_textarea");
+	var btn=document.getElementById("btn");
+    var ul=document.getElementById("ul");
+    
+    btn.onclick=function(){
+        if(textarea.value.length==0){
+            alert("内容不能为空");
+        }else{
+            var li = document.createElement("li");
+            li.innerHTML="<span>"+textarea.value+"</span><a href='javascript:;'>删除</a>";
+            ul.insertBefore(li,ul.children[0]);
+            textarea.value="";
+            var a=li.children[1];
+            a.onclick=function(){
+                this.parentNode.remove();
+            }   
+        }
+    }
+}
+
+//jq方法
+// $(function(){
+//     $("#btn").click(function(){
+//         if($("#my_textarea").val().length==0){
+//             alert("内容不能为空");
+//         }else{
+//             var $li=$("<li><span>"+$("#my_textarea").val()+"</span><a href='#'>删除</a></li>");
+//             $("#ul").prepend($li);
+//             $("#my_textarea").val("");
+//             $("#ul a").click(function(){
+//                 $(this).parent().remove(); 
+//             }) 
+//         }
+//     })
+// })
+
+// $(function(){
+//     var textarea=$("#my_textarea");
+//     var btn=$("#btn");
+//     var ul=$("#ul");
+//     btn.click(function(){
+//         if(textarea.val()==""){
+//             alert("此内容不能为空!");
+//         }else{
+//             var $li=$("<li><span>"+$("#my_textarea").val()+"</span><a href='#'>删除</a></li>");
+//             $li.prependTo(ul);
+//             textarea.val("");
+//             $("#ul a").click(function(){
+//                 $(this).parent().remove(); 
+//             })            
+//         }
+//     })
+// })	
+
+</script>
+</body>
+</html>

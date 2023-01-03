@@ -1,0 +1,54 @@
+<!--
+ * @Description: 呵呵哒
+ * @version: v1.0
+ * @Author: LukaSavage
+ * @Date: 2019-11-22 19:25:45
+ * @LastEditors: LukaSavage
+ * @LastEditTime: 2019-11-22 19:48:51
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>刮刮卡</title>
+    <style>
+        canvas{
+            background-color: #ccc;
+            display: block;
+            margin: 0 auto;
+            background: url(../images/img21.jpg) no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+<script>
+    var canvas=document.querySelector('canvas');
+    canvas.width=700;
+    canvas.height=700;
+    var ctx=canvas.getContext('2d');
+    
+    //绘制目标图像
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(0,0,700,700);
+
+    //全球复合操作
+    ctx.globalCompositeOperation='destination-out';
+    //绘制源图像
+    canvas.onmousedown=function(e){
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX,e.offsetY);
+        document.onmousemove=function(e){
+            ctx.lineTo(e.clientX-canvas.offsetLeft,e.clientY-canvas.offsetTop);
+            ctx.lineWidth=10;
+            ctx.stroke();
+        }
+    }
+    document.onmouseup=function(){
+        document.onmousemove=null;
+    }
+</script>
+</body>
+</html>

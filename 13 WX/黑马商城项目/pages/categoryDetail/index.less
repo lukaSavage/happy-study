@@ -1,0 +1,29 @@
+.first-tab{
+    .cate-item{
+        display: flex;
+        border-bottom: 1px solid #ccc;
+        .left-wrap{
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            image{
+                width: 70%;
+            }
+        }
+        .right-wrap{
+            flex: 3;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: space-between;
+            .goods-name{
+                width: 100%;
+            }
+            .goods-price{
+                color: var(--tc);
+                font-size: 30rpx;
+                margin: 0 0 10rpx 10rpx;
+            }
+        }
+    }
+}

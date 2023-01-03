@@ -1,0 +1,24 @@
+<view class="category">
+    <!-- 搜索组件 -->
+    <CommonSearch></CommonSearch>
+    <view class="category-body">
+        <!-- 左侧导航 -->
+        <scroll-view scroll-y class="left-scroll">
+            <view wx:for="{{categoryAllList}}" wx:key="cat_id" class="{{currentCheck===item.cat_name? 'active':''}}" data-item="{{item}}" catch:tap="handleNav">
+                {{item.cat_name}}
+            </view>
+        </scroll-view>
+        <!-- 右侧列表 -->
+        <scroll-view scroll-y class="right-scroll" scroll-top="{{scrollTop}}">
+            <view wx:for="{{rightArr}}" wx:key="cat_id">
+                <view class="right-title"> / {{ item.cat_name }} /</view>
+                <view class="right-body">
+                    <navigator url="/pages/categoryDetail/index?cid={{item.cat_id}}" open-type="navigate" wx:for="{{item.children}}" wx:for-item="itm" wx:for-index="idx" wx:key="idx">
+                        <image mode="widthFix" src="{{itm.cat_icon}}"></image>
+                        <view class="inner-title">{{itm.cat_name}}</view>
+                    </navigator>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>
