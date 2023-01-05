@@ -114,7 +114,7 @@ class Promise {
     })
     return promise2;
   }
-  catch (failCallback) {
+  catch(failCallback) {
     return this.then(null, failCallback);
   };
   finally(cb) {

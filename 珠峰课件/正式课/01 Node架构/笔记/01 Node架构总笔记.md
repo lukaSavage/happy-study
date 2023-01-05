@@ -176,14 +176,11 @@ child.setState('不开心了');
 
 - 实现then方法的链式调用
 
-  1.then能链式调用需要返回一个新的promise
-
-  2.根据状态不同调用onFulfilled、onRejected(同时需要try catch)
-
-  3.通过定义一个resolvePromise函数单独判断onFulfilled、onRejected返回值的情况
-
-  4.这个时候需要包裹一层settimeout，不然拿不到promise2
-
+  1. then能链式调用需要返回一个新的promise
+2. 根据状态不同调用onFulfilled、onRejected(同时需要try catch)
+  3. 通过定义一个resolvePromise函数单独判断onFulfilled、onRejected返回值的情况
+4. 这个时候需要包裹一层settimeout，不然拿不到promise2
+  
 - 实现resolvePromise
 
   1.先判断循环引用
@@ -280,7 +277,7 @@ class Promise {
 
     // 给实例对象上添加一个静态方法,then方法接收两个函数作为参数，onFulfilled、onRejected-
     then(onFulfilled, onRejected) {
-        // onFulfilled、onRejected是可选的
+        // 解决onFulfilled、onRejected值传递的问题
         onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
         onRejected = typeof onRejected === 'function' ? onRejected : e => {
             throw e
@@ -342,6 +339,7 @@ class Promise {
     catch (onError) {
         return this.then(null, onError);
     };
+    /* finally方法的实现 */
     finally(cb) {
         return this.then(y => {
             return Promise.resolve(cb()).then(() => y);
@@ -784,10 +782,3 @@ const event = new EventEmitter();
 ### 十二、TCP/IP参考模型（五层模型）
 
 ### 十三、koa的实现
-
-
-
-
-
-​	
-
