@@ -180,7 +180,7 @@ child.setState('不开心了');
 2. 根据状态不同调用onFulfilled、onRejected(同时需要try catch)
   3. 通过定义一个resolvePromise函数单独判断onFulfilled、onRejected返回值的情况
 4. 这个时候需要包裹一层settimeout，不然拿不到promise2
-  
+
 - 实现resolvePromise
 
   1.先判断循环引用
@@ -548,7 +548,7 @@ Promise.resolve().then(()=>{
 > 1. <font color="#f00">定时器（times）：</font><font color="#08e">存放所有的定时器回调</font>
 > 2. <font color="#f00">待定回调（pending callback）：</font><font color="#08e">执行延迟到下一个循环迭代的I/O操作</font>
 > 3. <font color="#f00">idle，prepar：</font><font color="#08e">仅系统内部使用</font>
-> 4. <font color="#f00">轮询（poll）：</font><font color="#08e">轮询阶段</font>
+> 4. <font color="#f00">轮询（poll）：</font><font color="#08e">轮询阶段，用于等待还未返回的 I/O 事件，比如服务器的回应、用户移动鼠标等等</font>
 > 5. <font color="#f00">检测（check）：</font><font color="#08e">setImmediate在这里执行</font>
 > 6. <font color="#f00">关闭回调（close callback）：</font><font color="#08e">一些关闭的回调函数，如socket.on('close', ...)</font>
 

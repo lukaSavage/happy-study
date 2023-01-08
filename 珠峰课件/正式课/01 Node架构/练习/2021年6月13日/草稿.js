@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @Author: lukasavage
+ * @Date: 2022-09-14 22:45:45
+ * @LastEditors: lukasavage
+ * @LastEditTime: 2023-01-08 16:31:47
+ * @FilePath: \happy-study\珠峰课件\正式课\01 Node架构\练习\2021年6月13日\草稿.js
+ */
 // const Promise = require('./10promise的race、allSettled方法实现');
 
 // let p = new Promise((resolve, reject) => {
@@ -76,147 +84,32 @@
 //     console.log('err', err);
 // })
 
-const PENDING = 'PENDING'
-const FULFILLED = 'FULFILLED'
-const REJECTED = 'REJECTED'
 
-function resolvePromise(x, promise2, resolve, reject) {
-    if (x === promise2) return reject(new TypeError('循环引用'))
-    if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
-        let called = false
-        try {
-            const then = x.then
-            if (typeof then === 'function') {
-                then.call(
-                    x,
-                    (y) => {
-                        if (called) return
-                        called = true
-                        resolvePromise(y, promise2, resolve, reject)
-                    },
-                    (r) => {
-                        if (called) return
-                        called = true
-                        reject(r)
-                    }
-                )
-            } else {
-                resolve(x)
-            }
-        } catch (error) {
-            if (called) return
-            called = true
-            reject(error)
-        }
-    } else {
-        // 说明是一个值类型
-        resolve(x)
-    }
+async function async1(){
+    console.log("1")
+    await async2();
+    console.log("2")
 }
-class Promise {
-    constructor(executor) {
-        this.state = PENDING
-        this.value = undefined
-        this.reason = undefined
-        this.fulfilledCallbacks = []
-        this.rejectedCallbacks = []
-        const resolve = (value) => {
-            if (this.state === PENDING) {
-                this.state = FULFILLED
-                this.value = value
-                this.fulfilledCallbacks.forEach((fn) => fn())
-            }
-        }
-        const reject = (reason) => {
-            if ((this.state = PENDING)) {
-                this.state = REJECTED
-                this.reason = reason
-                this.rejectedCallbacks.forEach((fn) => fn())
-            }
-        }
-        try {
-            executor(resolve, reject)
-        } catch (error) {
-            reject(error)
-        }
-    }
-
-    then(onFulfilled, onRejected) {
-        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (v) => v
-        onRejected =
-            typeof onRejected === 'function'
-                ? onRejected
-                : (e) => {
-                      throw e
-                  }
-
-        let promise2 = new Promise((resolve, reject) => {
-            if (this.state === FULFILLED) {
-                setTimeout(() => {
-                    try {
-                        const x = onFulfilled(this.value)
-                        resolvePromise(x, promise2, resolve, reject)
-                    } catch (error) {
-                        reject(error)
-                    }
-                })
-            }
-
-            if (this.state === REJECTED) {
-                setTimeout(() => {
-                    try {
-                        const x = onRejected(this.reason)
-                        resolvePromise(x, promise2, resolve, reject)
-                    } catch (error) {
-                        reject(error)
-                    }
-                })
-            }
-            if (this.state === PENDING) {
-                this.fulfilledCallbacks.push(() => {
-                    setTimeout(() => {
-                        try {
-                            const x = onFulfilled(this.value)
-                            resolvePromise(x, promise2, resolve, reject)
-                        } catch (error) {
-                            reject(error)
-                        }
-                    })
-                })
-                this.rejectedCallbacks.push(() => {
-                    setTimeout(() => {
-                        try {
-                            const x = onRejected(this.reason)
-                            resolvePromise(x, promise2, resolve, reject)
-                        } catch (error) {
-                            reject(error)
-                        }
-                    })
-                })
-            }
-        })
-        return promise2
-    }
+async function async2(){
+    console.log("3")
 }
-
-const p = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('ok')
-        console.log(22222)
-    }, 1111)
+console.log("4")
+setTimeout(()=>{
+    console.log(5)
+},0)
+setTimeout(()=>{
+    console.log("6")
+},3)
+setImmediate(()=> console.log("7"))
+process.nextTick(()=> console.log("8"))
+async1()
+new Promise(function(resolve){
+    console.log("9")
+    resolve()
+    console.log("10")
+}).then(function(){
+    console.log("11")
 })
 
-p.then((res) => {
-    console.log(111111)
-})
 
-Promise.deferred = function () {
-    let dfd = {}
-    dfd.promise = new Promise((resolve, reject) => {
-        dfd.resolve = resolve
-        dfd.reject = reject
-    })
-    return dfd
-}
-
-module.exports = Promise
+// 'async1 start' async2 start 'async1 end' timer3 timer1 timer2

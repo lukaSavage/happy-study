@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-09-14 22:15:16
  * @LastEditors: lukasavage
- * @LastEditTime: 2023-01-04 18:11:53
+ * @LastEditTime: 2023-01-07 15:33:16
  * @FilePath: \happy-study\02 JavaScript\第二阶段笔记\demo.html
 -->
 <!DOCTYPE html>
@@ -87,9 +87,21 @@
 
     </script>
     <script>
-        // var a = new Map([12,34,56])
-        // console.log(a);
-        const a = null
+        Promise.resolve('1')
+            .then(res => {
+                console.log(res)
+            })
+            .finally(() => {
+                console.log('finally')
+            })
+        Promise.resolve('2')
+            .finally(() => {
+                console.log('finally2')
+                return '我是finally2返回的值'
+            })
+            .then(res => {
+                console.log('finally2后面的then函数', res)
+            })
     </script>
 </body>
 
