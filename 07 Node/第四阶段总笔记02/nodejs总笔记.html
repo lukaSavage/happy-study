@@ -79,8 +79,8 @@
                             set NODE_ENV=development && node ./demo.js
                             (上面命令行就代表设置NODE_ENV属性的值并执行demo.js文件)
         argv:             代表执行命令时所带的参数,用法如下：
-                            console.log(process.argv);         ----> [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js' ]
-                            通过命令node ./demo.js xxx1 xxx2可以获取参数           ---> [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js', 'xxx1', 'xxx2' ] 
+                            console.log(process.argv);         --- [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js' ]
+                            通过命令node ./demo.js xxx1 xxx2可以获取参数           --- [ 'E:\\node.js\\node.exe', 'E:\\study\\07 Node\\demo.js', 'xxx1', 'xxx2' ] 
                                      
 
             
@@ -990,7 +990,8 @@
                 HTTP/1.1 200 OK
                     协议名/版本号 响应状态码
                     常见的状态码：
-                        1xx 代表请求还需要进一步处理（请求处理中..）
+                        1xx 代表请求已接收但还需要进一步处理（请求处理中..）
+                            100 服务器已收到初始请求，现正在等待接收其余部分
                             101 websocket协议（跟服务器协商，第一次走http，后续要切换协议）
                         2xx 代表请求成功（响应成功） 200
                             200 请求ok
@@ -1720,7 +1721,7 @@
         2）可以用mongoDB来实 现数据的缓存（缓存层）
         3）MongoDB搭建集群环境，实现存储数据横向扩展
     ·安装
-        MongoDB官方网址：https://www.mongodb.com/   （resources --> server --> installation --> install MongoDB Community Edition）
+        MongoDB官方网址：https://www.mongodb.com/   （resources --》 server --》 installation --》 install MongoDB Community Edition）
         注意：mongoDB的默认端口：27017
 二、Mongo可视化工具
     ·Robo 3T
@@ -1970,7 +1971,7 @@
         readyState值代表请求的不同的阶段(5个阶段)
             0：请求初始化阶段，xhr刚刚创建
             1：send方法还没调用（还没有发送请求），还可以设置请求信息
-            2：send方法已经调用了（已经发送请求），并接受到了部分响应（响应首行 --> 响应状态码 和响应头 --> 其他信息）
+            2：send方法已经调用了（已经发送请求），并接受到了部分响应（响应首行 --》 响应状态码 和响应头 --》 其他信息）
             3：接受到了部分响应体数据（如果响应体较小，就全部接受完毕）
             4：全部接受完毕响应体数据
 三、解决IE浏览器缓存问题
