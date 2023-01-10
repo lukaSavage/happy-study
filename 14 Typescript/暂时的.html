@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 字符串类型
+        // 数字 布尔 字符串 数组 元祖 void any never null和undefined object enum
+        class Father {
+            static name = '张三';
+            age = 18;
+            static eat() {
+                console.log('我能吃');
+            }
+            sleep() {
+                console.log('我能睡！');
+            }
+
+        }
+        class Son extends Father {
+            sex = 'nan';
+            constructor() {
+                super()
+            }
+        }
+        const p = new Son();
+        console.dir(p);
+
+        let arr = [23, 43, 54, 66, 76, 45, 43];
+        // function quickSort(arr) {
+        //     if (arr.length <= 1) return arr;
+        //     const i = Math.floor(arr.length / 2);
+        //     const middle = arr.splice(i, 1)[0];
+        //     let leftArr = [], rightArr = [];
+        //     for (let i = 0; i < arr.length; i++) {
+        //         if (arr[i] < middle) {
+        //             leftArr.push(arr[i])
+        //         } else {
+        //             rightArr.push(arr[i])
+        //         }
+        //     }
+        //     const left = quickSort(leftArr);
+        //     const right = quickSort(rightArr);
+        //     return left.concat([middle], right);
+        // }
+        // console.log(quickSort(arr));
+
+        function bubbleSort(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = 0; j < arr.length - 1 - i; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        let temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+
+                }
+
+            }
+            return arr;
+        }
+        console.log(bubbleSort(arr));
+    </script>
+</body>
+
+</html>
