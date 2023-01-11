@@ -97,7 +97,8 @@
                 simpleCase = {}; // ok
     ·unknown类型（ts3.0新增）
         对照于any，unknown是类型安全的。 任何值都可以赋给unknown，但是当没有类型断言或基于控制流的类型细化时unknown不可以赋值给
-        其它类型，除了它自己和any外。 同样地，在unknown没有被断言或细化到一个确切类型之前，是不允许在其上进行任何操作的
+        其它类型，除了它自己和any外。 同样地，在unknown没有被断言或细化到一个确切类型之前，是不允许在其上进行任何操作的(例如调用属性或方法)
+        解决该问题的办法是使用类型断言或者类型保护
         示例：
             type T00 = unknown & null;                 // null
             type T01 = unknown & undefined;            // undefined
@@ -700,6 +701,112 @@
             age: number;
         }
         type Demo = Pick<A, 'name'>;    // 等同于 type A = { name: string; }
+十、内置条件类型
+    ·Exclude<T, U> -- 从T中剔除可以赋值给U的类型
+        这个接口主要是运用到了条件类型的分发！源码如下
+            type Exclude<T, U> = T extends U ? never : T;
+        例如
+            type R = Exclude<1 | 2 | 3 , 1 | 2>
+            // R = 3
+            解释一下：
+                1）1是 1 | 2 的子类型，所以得到的结果是never
+                2）2是 1 | 2 的子类型，所以得到的结果是never
+                3）3不是 1 | 2 的子类型，所以得到的结果是 3
+                最终R的类型为 never | never | never | 3,即 type R = 3
+        
+    ·Extract<T, U> -- 提取T中可以赋值给U的类型。
+        和Exclude接口相反
+        例如：
+            type R = Extract<1 | 2 | 3 , 1 | 2>
+            // R = 1 | 2
+    ·NonNullable<T> -- 从T中剔除null和undefined。
+        源码如下
+            type NonNullable<T> = T extends null | undefined ? never : T;
+        例子：
+            type R = NonNullable<'a' | null |undefined>
+            // R = 'a'
+    ·ReturnType<T> -- 获取函数返回值类型。
+        源码如下
+            type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any; 
+            (infer：用于条件中的类型推导，该关键字这里暂时不做过多解释，推文：https://blog.csdn.net/huangfengnt/article/details/124734974)
+        例子：
+            type Fuc = (name: string, age: number) => void
+            type getFucReturn<T> = T extends (name: any, xx: number) => infer U ? U : T
+            type F = getFucReturn<Fuc>  // void
+    ·InstanceType<T> -- 获取构造函数类型的实例类型(了解)。
+        源码如下
+            type InstanceType<T extends Constructor> = T extends new (...args: any[]) => infer R ? R : any;
+        例子：
+            class Person {
+                name: string;
+                constructor(name: string) {
+                    this.name = name;
+                }
+                getName() { console.log(this.name) }
+            }
+            type Instance = InstanceType<typeof Person>;
+            // Person
+    
+十一、内置工具类型
+    ·Partial<T>  将传入对象类型的属性由非可选变为可选
+        源码
+            // 注意：这里传入的T是一个类型，通常会传<typeof obj>进去
+            type Partial<T> = { [P in keyof T]?: T[P] };
+        例子：
+            interface A {
+                a1: string;
+                a2: number;
+                a3: boolean;
+            }
+            type aPartial = Partial<A>;
+            const a: aPartial = {}; // 不会报错
+    ·Required<T> 将所有传入对象类型的属性变为必选项（这里用-?修饰符来实现，+?代表变为可选，-?代表必选）
+        源码
+            type Require<T> = { [P in keyof T]-?: T[P] };
+        例子：
+            interface Person{
+                name:string;
+                age:number;
+                gender?:'male'|'female';
+            }
+
+            let p:Required<Person> = {
+                name:'zhufeng',
+                age:10,
+                //gender:'male' // 这里会报错，gender必填！！！
+            }
+    ·ReadOnly<T> 通过为传入的属性每一项都加上 readonly 修饰符来实现
+        源码：
+            type Readonly<T> = { readonly [P in keyof T]: T[P] };
+    ·Pick<T, K extends keyof T>  能够帮助我们从传入的属性中摘取某一项返回
+        源码：
+            type Pick<T, K extends keyof T> = { [P in K]: T[P] }
+        例子：
+            interface Person {
+                name: string;
+                age: number;
+                married: boolean
+            }
+            let person: Person = { name: 'zhufeng', age: 10, married: true };
+            type P = Pick<Person, 'name' | 'age'> // { name: string; age: number }
+    ·Record 将一个类型的所有属性值都映射到另一个类型上并创造一个新的类型
+        源码：
+            // 注意：keyof any ==》 string | number | Symbol
+            type Record<K extends keyof any, T> = {
+                [P in K]: T;
+            };
+        例子：
+            interface Person {
+                name: string;
+                age: number;
+                married: boolean
+            }
+            type A = Record<string, string>
+            let eg: A = {
+                name: '战三',
+                age: 22, // 报错，不能将类型“number”分配给类型“string”。
+                married: 1 // 报错，不能将类型“number”分配给类型“string”。
+            }
 七、模块与命名空间(了解)
     命名空间主要解决命名变量的冲突而创造的，用的很少
     namespace A {
@@ -713,7 +820,22 @@
         }
     }
     let a = new A.Dog();
-    let b = new A.Dog();
+    let b = new B.Dog();
+    --------------------
+    我们来看下命名空间的原理：
+        其实一个命名空间本质上一个对象，它的作用是将一系列相关的全局变量组织到一个对象的属性
+        namespace Numbers {
+            export let a = 1;
+            export let b = 2;
+            export let c = 3;
+        }
+        它将会编译成↓
+        var Numbers;
+        (function (Numbers) {
+            Numbers.a = 1;
+            Numbers.b = 2;
+            Numbers.c = 3;
+        })(Numbers || (Numbers = {}));
 八、类型声明
     ·介绍
         声明文件可以让我们不需要将js重构为ts。只需要加上声明文件就可以使用的系统
@@ -724,7 +846,23 @@
             width(length: string): void
         }
         $('#root').click();
-
+    ·(.d.ts)文件声明
+        ①、我们需要在tsconfig.json中修改配置项
+            {
+                "include": [
+                    "src\/**\/*",
+                    "typings\/**\/*"
+                ]
+            }
+        ②、根目录新建一个文件夹typings,并创建一个demo.d.ts文件
+            declare global{
+                interface String {
+                    double():string;
+                }
+                interface Window{
+                    myname:string
+                }
+            }
 
 
 

@@ -9,38 +9,20 @@
 /**
  * 为class添加一个属性
  */
+// 尝试一下获取函数的返回值
 
-// interface A {
-//     age: string;
-//     name: unknown;
-// }
-// interface B {
-//     name: number;
-//     sex: '男' | '女'
-// }
-
-// type C = A & B;
-
-// const d: C = {
-//     age: '234',
-//     sex: '女',
-//     name: 234,
-// }
-
-function aa(tag: any) {
-    // 这里的tag指向的是class A
-    console.log(tag)
+// type Constructor = new (...args: any[]) => any;
+// type ConstructorParameters<T extends Constructor> = T extends new (...args: infer P) => any ? P : never;
+// type InstanceType<T extends Constructor> = T extends new (...args: any[]) => infer R ? R : any;
+interface Person {
+    name: string;
+    age: number;
+    married: boolean
+}
+type A = Overw<string, string>
+let eg: A = {
+    name: '战三',
+    age: 22, // 报错，不是string类型
+    married: 1 // 报错，不是string类型
 }
 
-@aa
-class A {
-    name: string | undefined
-    age: number | undefined
-    constructor() {
-        this.name = 'zhangsan'
-        this.age = 23
-    }
-}
-// Symbol('key') === Symbol('key')
-// console.log(hell);
-// console.log(d);
