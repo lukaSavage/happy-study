@@ -663,4 +663,6 @@ export default observer(App)
    createRoot(document.getElementById('root') as Element).render(<App />)
    ```
 
-   
+# 三、mobx源码解析
+
+TODO...
