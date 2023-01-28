@@ -155,9 +155,131 @@ export let updateQueue = {
 4. 如果新旧vdom都有，但是类型不一样，删除老的，插入新的
 5. 如果新旧vdom都有，并且类型一样，开始走`Element-Diff`
 
+```js
+export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
+	// 前面的代码废弃，开始新的DOM-DIFF
+	// let oldDOM = findDOM(oldVdom);
+	// let newDOM = createDOM(newVdom);
+	// parentDOM.replaceChild(newDOM, oldDOM);
+
+	// 如果新老vdom都为null, 什么都不做
+	if (!oldVdom && !newVdom) {
+		return;
+	} else if (oldVdom && !newVdom) {
+		// 如果老的有，新的没有，干掉老的
+		unMountVdom(oldVdom);
+	} else if (!oldVdom && newVdom) {
+		// 如果老的没有，新的有，插入即可(同时判断下componentDidMount)
+		const newDOM = createDOM(newVdom);
+		if (nextDOM) {
+			parentDOM.insertBefore(newDOM, nextDOM);
+		} else {
+			parentDOM.appendChild(newDOM);
+		}
+		if (newDOM.componentDidMount) newDOM.componentDidMount();
+	} else if (oldVdom && newVdom && oldVdom.type !== newVdom.type) {
+		// 如果新老都有，但是类型不同，则把老的删掉，新的插入进来
+		unMountVdom(oldVdom);
+		const newDOM = createDOM(newVdom);
+		if (nextDOM) {
+			parentDOM.insertBefore(newDOM, nextDOM);
+		} else {
+			parentDOM.appendChild(newDOM);
+		}
+		if (newDOM.componentDidMount) newDOM.componentDidMount();
+	} else {
+		// 如果新老都有，并且还一样，就可以深度dom-diff并且可以复用当前的DOM节点
+		updateElement(oldVdom, newVdom);
+	}
+}
+```
+
+
+
 ### 4.1 Element-Diff详细流程
 
 ![](imgs/03、element-diff原理.png)
+
+### 4.2 代码参考
+
+```js
+function updateChildren(parentDOM, oldVChildren, newVChildren) {
+	oldVChildren = (
+		Array.isArray(oldVChildren) ? oldVChildren : [oldVChildren]
+	).filter(i => i);
+	newVChildren = (
+		Array.isArray(newVChildren) ? newVChildren : [newVChildren]
+	).filter(i => i);
+	// 开始使用element-diff
+	// ①、把老节点存放到一个以key为属性，以节点为值得数组中
+	let keyedOldMap = {};
+	// ②、定义一个索引值，代表上一次老节点匹配到的索引值
+	let lastPlacedIndex = 0;
+	oldVChildren.forEach((item, index) => {
+		keyedOldMap[item.key | index] = oldVChildren;
+	});
+
+	// ③、遍历newVChildren并map上面的keyedOldMap,把没有找到的、找到了但需要移动的插入到patch数组中
+	let patch = [];
+	newVChildren.forEach((newVChild, index) => {
+		let newKey = newVChild.key || index;
+		let oldVChild = keyedOldMap[newKey];
+		// 匹配到了，存起来
+		if (oldVChild) {
+			updateElement(oldVChild, newVChild);
+			if (oldVChild.mountIndex < lastPlacedIndex) {
+				patch.push({
+					type: MOVE,
+					oldVChild,
+					newVChild,
+					mountIndex: index,
+				});
+			}
+			// 从Map中删除已经复用好的节点
+			delete keyedOldMap[newKey];
+			lastPlacedIndex = Math.max(lastPlacedIndex, oldVChild.mountIndex);
+		} else {
+			// 找不到代表新属性，插入进去
+			patch.push({
+				type: PLACEMENT,
+				newVChild,
+				mountIndex: index,
+			});
+		}
+	});
+	// 先把需要移动和需要删除的全部干掉
+	let moveChild = patch
+		.filter(item => item.type === MOVE)
+		.map(i => i.oldVChild);
+	// 此时keyedOldMap只剩下newVdom里面没有匹配到的老节点了，之后把对应的真实oldDom以及需要移动的真实moveDom全部从老的真实dom中干掉
+	// 这个时候老的dom书里面只剩下匹配到的并且没有移动的节点了
+	Object.values(keyedOldMap)
+		.concat(moveChild)
+		.forEach(oldVChild => {
+			let currentDOM = findDOM(oldVChild);
+			parentDOM.removeChild(currentDOM);
+		});
+	// patch此时存放了需要移动的、oldVdom里面没有的节点
+	patch.forEach(action => {
+		let { type, oldVChild, newVChild, mountIndex } = action;
+		let childNodes = parentDOM.childNodes;  // 此时的childNodes中只剩下匹配到了但没有移动的节点了
+		let currentDOM;
+		if (type === PLACEMENT) {
+			currentDOM = createDOM(newVChild);
+		} else if (type === MOVE) {
+			currentDOM = findDOM(oldVChild);
+		}
+		let childNode = childNodes[mountIndex];
+		if (childNode) {
+			parentDOM.insertBefore(currentDOM, childNode);
+		} else {
+			parentDOM.appendChild(currentDOM);
+		}
+	});
+}
+```
+
+
 
 ## 五、React生命周期
 
