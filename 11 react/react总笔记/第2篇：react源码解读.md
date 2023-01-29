@@ -279,6 +279,8 @@ function updateChildren(parentDOM, oldVChildren, newVChildren) {
 }
 ```
 
+### 4.3流程说明
+
 
 
 ## 五、React生命周期
@@ -376,7 +378,7 @@ function mountContextComponent(vdom) {
 
 ### 7.1 React.PureComponent
 
-`React.PureComponent` 与 [`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 很相似。两者的区别在于 [`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 并未实现 [`shouldComponentUpdate()`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate)，而 `React.PureComponent` 中<font color='#f00'>以浅层对比 prop 和 state 的方式来实现了该函数。即改写了`shouldComponentUpdate`方法。</font>以下为浅比较函数↓
+`React.PureComponent` 继承于[`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 。两者的区别在于 [`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 并未实现 [`shouldComponentUpdate()`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate)，而 `React.PureComponent` 中<font color='#f00'>以浅层对比 prop 和 state 的方式来实现了该函数。即改写了`shouldComponentUpdate`方法。</font>以下为浅比较函数↓
 
 ```js
 export function shallowEqual(obj1, obj2) {
@@ -426,6 +428,11 @@ class PureComponent extends Component {
 具体实现方法如下↓
 
 ```js
+/**
+参数说明：
+    type: FunctionComponent类型，代表我们需要优化的组件
+    compare：Function类型，代表对比的函数，默认使用PureComponent的shallowEqual对比函数
+*/
 function memo(type, compare = shallowEqual) {
   return {
     $$typeof: REACT_MEMO,
@@ -437,8 +444,28 @@ function memo(type, compare = shallowEqual) {
 function mountMemoComponent(vdom) {
   let { type, props } = vdom;
   let renderVdom = type.type(props);
+  vdom.prevProps = props; // 记录下老的属性对象，方便更新的时候进行对比！！！
   vdom.oldRenderVdom = renderVdom;
   return createDOM(renderVdom);
 }
+
+// 更新的时候
+function updateMemoComponent(oldVdom, newVdom) {
+    let { type, prevProps } = oldVdom;
+    // 如果新老属性比较后是不相等的，进入更新逻辑
+    if(!type.compare(prevProps, newVdom.props)) {
+        let oldDOM = findDOM(oldVdom); // 老的真实DOM
+        let parentDOM = oldDOM.parentNode; // 真实父DOM
+        let { type, props } = newVdom;
+        let renderVdom = type.type(props);
+        compareTwoVdom(parentDOM, oldVdom.oldRenderVdom, renderVdom);
+        newVdom.prevPorps = props;
+        newVdom.oldRenderVdom = oldVdom.renderVdom;
+    } else { // 如果新老属性比较后是相等的，跳过更新，直接赋值
+        newVdom.prevPorps = prevProps;
+        newVdom.oldRenderVdom = oldVdom.oldRenderVdom;
+    }
+}
 ```
 
+**总结一下memo原理：在渲染memo的时候，它会收集你的老的属性对象，同时在更新的时候进行新旧属性的判断,相等则跳过更新，不相等则进入更新逻辑**
