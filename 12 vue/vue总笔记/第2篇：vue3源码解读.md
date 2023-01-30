@@ -2259,7 +2259,7 @@ TEXT2:
 - 判断是否有节点需要移动，以及应该如何移动；
 - 找出那些需要被添加或移除的节点。
 
-　　所以接下来我们的任务就是，判断哪些节点需要移动，以及应该如何移动。观察图 11-17 可知，在这种非理想的情况下，当相同的前置节点和后置节点被处理完毕后，索引 `j`、`newEnd` 和 `oldEnd` 不满足下面两个条件中的任何一个：
+　　所以接下来我们的任务就是，判断哪些节点需要移动，以及应该如何移动。观察上图可知，在这种非理想的情况下，当相同的前置节点和后置节点被处理完毕后，索引 `j`、`newEnd` 和 `oldEnd` 不满足下面两个条件中的任何一个：
 
 - `j > oldEnd && j <= newEnd`
 - `j > newEnd && j <= oldEnd`
@@ -2315,7 +2315,7 @@ TEXT2:
 
 **填充 `source` 数组**
 
-　　图 11-19 展示了填充 `source` 数组的过程。由于 `source` 数组存储的是新子节点在旧的一组子节点中的位置索引，所以有：
+　　上图展示了填充 `source` 数组的过程。由于 `source` 数组存储的是新子节点在旧的一组子节点中的位置索引，所以有：
 
 - 新的一组子节点中的节点 `p-3` 在旧的一组子节点中的索引为 `2`，因此 `source` 数组的第一个元素值为 `2`；
 - 新的一组子节点中的节点 `p-4` 在旧的一组子节点中的索引为 `3`，因此 `source` 数组的第二个元素值为 `3`；
@@ -2654,36 +2654,36 @@ TEXT2:
 
 　　在第二步中，我们知道了节点 `p-2` 所对应的真实 DOM 应该移动。实现代码如下：
 
-```
-01 if (moved) {
-02   const seq = lis(sources)
-03
-04   // s 指向最长递增子序列的最后一个元素
-05   let s = seq.length - 1
-06   let i = count - 1
-07   for (i; i >= 0; i--) {
-08     if (source[i] === -1) {
-09       // 省略部分代码
-10     } else if (i !== seq[s]) {
-11       // 说明该节点需要移动
-12       // 该节点在新的一组子节点中的真实位置索引
-13       const pos = i + newStart
-14       const newVNode = newChildren[pos]
-15       // 该节点的下一个节点的位置索引
-16       const nextPos = pos + 1
-17       // 锚点
-18       const anchor = nextPos < newChildren.length
-19         ? newChildren[nextPos].el
-20         : null
-21       // 移动
-22       insert(newVNode.el, container, anchor)
-23     } else {
-24       // 当 i === seq[s] 时，说明该位置的节点不需要移动
-25       // 并让 s 指向下一个位置
-26       s--
-27     }
-28   }
-29 }
+```js
+ if (moved) {
+   const seq = lis(sources)
+
+   // s 指向最长递增子序列的最后一个元素
+   let s = seq.length - 1
+   let i = count - 1
+   for (i; i >= 0; i--) {
+     if (source[i] === -1) {
+       // 省略部分代码
+     } else if (i !== seq[s]) {
+       // 说明该节点需要移动
+       // 该节点在新的一组子节点中的真实位置索引
+       const pos = i + newStart
+       const newVNode = newChildren[pos]
+       // 该节点的下一个节点的位置索引
+       const nextPos = pos + 1
+       // 锚点
+       const anchor = nextPos < newChildren.length
+         ? newChildren[nextPos].el
+         : null
+       // 移动
+       insert(newVNode.el, container, anchor)
+     } else {
+       // 当 i === seq[s] 时，说明该位置的节点不需要移动
+       // 并让 s 指向下一个位置
+       s--
+     }
+   }
+ }
 ```
 
 　　可以看到，移动节点的实现思路类似于挂载全新的节点。不同点在于，移动节点是通过 `insert` 函数来完成的。
