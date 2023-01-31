@@ -56,10 +56,35 @@
         }
 三、vue中的指令
     ·v-model
-        介绍：用于数据的双向绑定，注意：v-model只能用于表单元素中(input,textarea,checkbox...)
+        介绍：用于数据的双向绑定。有两种用法↓
+        1）用于表单元素中(input,textarea,checkbox...)
         基本使用：v-model="表达式"
             <input type="text" v-model='msg'>
             <h1>{{msg}}</h1>
+        2）用于组件中
+            <CustomInput v-model="searchText" />
+            其实相当于如下写法
+            <CustomInput
+                :modelValue="searchText"
+                @update:modelValue="newValue => searchText = newValue"
+            />
+            -----------------------
+            在customInput.vue文件中
+
+            <!-- CustomInput.vue -->
+            <script setup>
+            defineProps(['modelValue'])
+            defineEmits(['update:modelValue'])
+            </script>
+
+            <template>
+            <input
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
+            </template>
+            默认情况下，v-model 在组件上都是使用 modelValue 作为 prop，并以 update:modelValue 作为对应的事件。我们可以通过给 v-model 指定一个参数来更改这些名字：
+            <MyComponent v-model:title="bookTitle" />
     ·v-bind
         介绍：强制数据绑定，用来绑定data中的一些数据，简写为：:href="http"
         基本使用：v-bind:属性名="表达式";
@@ -251,6 +276,13 @@
         还可以自定义按键修饰符别名，通过全局 config.keyCodes 对象设置：
             // 可以使用 `v-on:keyup.f1`
             Vue.config.keyCodes.f1 = 112
+    ·内置修饰符
+        ·lazy   默认情况下，v-model 会在每次 input 事件后更新数据 (IME 拼字阶段的状态例外)。你可以添加 lazy 修饰符来改为在每次 change 事件后更新数据：
+                    eg: <input v-model.lazy="msg" />
+        ·number 用户输入自动转换为数字
+                    eg: <input v-model.number="age" />
+        ·trim   如果你想要默认自动去除用户输入内容中两端的空格，你可以在 v-model 后添加 .trim 修饰符
+                    eg: <input v-model.trim="msg" />
 十、vue中的生命周期
     介绍：
         vm实例在创建的时候就会产生自己的生命周期(一共有11个回调函数(也叫作钩子),)
@@ -500,7 +532,7 @@
                         //这样一来，就实现了孙子组件使用了爷爷组件的this.xxx方法了
                         PubSub.publish('发送数据名',给订阅方传的数据)
 
-        ④、事件总线------------------------------->任意组件
+        ④、事件总线------------------------------->任意组件(vue3已移除)
             简单介绍：在任意的一个组件中绑定事件，其他任意组件都可以触发这个事件
             方法汇总：
                 *vm.$on()       -------事件总线的绑定
@@ -591,7 +623,7 @@
                         }
                     }
         ⑨、$parent和$children----------------------------------->父子组件(父传子)
-        ⑩、$attrs和$listeners------------------------------------>父子组件(父传子)
+        ⑩、$attrs和$listeners------------------------------------>父子组件(父传子)(vue3中移除了$listeners)
 
 十七、各种通信的原理代码
     略...
@@ -1158,7 +1190,7 @@
         4.属性
             ·include 值为组件的name值。只有匹配的组件的会被缓存。
             .exclude 值为组件的name值。只有除写的组件以外的组件会被缓存。相当于include的取反
-            ·max     要缓存组件的最大数量
+            ·max     要缓存组件的最大数量，如果缓存的实例数量即将超过指定的那个最大数量，则最久没有被访问的缓存实例将被销毁，以便为新的实例腾出空间。
         注意：！！！
             如果想让include和exclude生效，必须给组件设置name属性
     ·异步组件
@@ -2147,10 +2179,29 @@
                     plusOne.value = 1
                     console.log(count.value) // 0
         ·watchEffect()
-            在响应式地跟踪其依赖项时立即运行一个函数，并在更改依赖项时重新运行它。(与watch()相比多了immediate：true配置项)
+            在响应式地跟踪其依赖项时立即运行一个函数，并在更改依赖项时重新运行它。返回值是一个函数，可以停止侦听
+            参数说明：
+                第一个参数代表要运行的副作用函数。
+                第二个参数代表可选项，用来调整副作用的刷新时机或调试副作用的依赖。
             const count = ref(0)
 
-            watchEffect(() => console.log(count.value))        // 当count.value变动时，立即打印count.value的值
+            // 当count.value变动时，立即打印count.value的值
+            const stop = watchEffect(
+                () => console.log(count.value), 
+                {
+                    flush: 'post',
+                    onTrack(e) {
+                        debugger
+                    },
+                    onTrigger(e) {
+                        debugger
+                    }
+                })       
+            // 当不再需要此侦听器时：
+            stop()
+
+            ----------
+            注意事项：watchEffect 仅会在其同步执行期间，才追踪依赖。在使用异步回调时，只有在第一个 await 正常工作前访问到的属性才会被追踪。
         ·watch()
             watch API 与选项式 API this.$watch (以及相应的 watch 选项) 完全等效。watch 需要侦听特定的 data 源，
             并在单独的回调函数中副作用。默认情况下，它也是惰性的——即，回调是仅在侦听源发生更改时调用。
