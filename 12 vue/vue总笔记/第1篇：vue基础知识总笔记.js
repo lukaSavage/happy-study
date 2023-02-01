@@ -276,7 +276,7 @@
         还可以自定义按键修饰符别名，通过全局 config.keyCodes 对象设置：
             // 可以使用 `v-on:keyup.f1`
             Vue.config.keyCodes.f1 = 112
-    ·内置修饰符
+    ·内置修饰符(表单修饰符)
         ·lazy   默认情况下，v-model 会在每次 input 事件后更新数据 (IME 拼字阶段的状态例外)。你可以添加 lazy 修饰符来改为在每次 change 事件后更新数据：
                     eg: <input v-model.lazy="msg" />
         ·number 用户输入自动转换为数字
@@ -1686,8 +1686,16 @@
     5)vue中的虚拟DOM diff算法和react中的有啥区别？
         vue会跟踪每一个组件的依赖关系, 不需要重新渲染整个组件树。
         react而对于React而言,每当应用的状态被改变时,全部组件都会重新渲染
-    6)
-        
+    6)vue中的scoped的实现原理（详情请看：https://juejin.cn/post/6991354556349153293#heading-13）
+        ①、每个 Vue 文件都将对应一个唯一的 id，该 id 根据文件路径名和内容 hash 生成，通过组合形成scopeId。
+        ②、编译 template 标签时，会为每个标签添加了当前组件的scopeId，如 
+            <div class="demo">test</div>
+            // 会被编译成:
+            <div class="demo" data-v-12e4e11e>test</div>
+        ③、编译 style 标签时，会根据当前组件的 scopeId 通过属性选择器和组合选择器输出样式，
+            .demo{color: red;}
+            // 会被编译成:
+            .demo[data-v-12e4e11e]{color: red;}
 
 
 
@@ -2536,7 +2544,7 @@
         _e: 用来停止所有状态的
 
     
-十四、vue3.0面试题
+十四、vue面试题
     vue3有哪些变化？
         可以从两个方面讲：
             1.性能优化方面：

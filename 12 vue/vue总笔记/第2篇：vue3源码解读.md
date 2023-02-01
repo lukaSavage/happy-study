@@ -150,7 +150,7 @@ const vnode = {
 
 ## 3.区分编译时和运行时
 
-- 我们需要有一个虚拟 DOM，调用渲染方法将虚拟 DOM 渲染成真实 DOM （缺点就是虚拟 DOM 编写麻烦）
+- 编译时：将你的模板语法编译成虚拟DOM的过程
 - 专门写个编译时可以将模板编译成虚拟 DOM （在构建的时候进行编译性能更高，不需要再运行的时候进行编译，而且 vue3 在编译中做了很多优化）
 
 ## 4.vue3 新增设计
@@ -164,7 +164,7 @@ const vnode = {
 
 ## 1.reactive
 
-先说结论：<font color="#08e">vue3的响应式原理主要还是<font color="#f00">通过proxy配合Reflect反射形成的，其中Reflect主要是将内部的this指向指为当前的proxy代理对象。</font></font>
+先说结论：<font color="#08e">vue3的响应式原理主要还是<font color="#f00">通过proxy配合Reflect反射形成的，其中Reflect主要是将内部的this指向指为当前的proxy代理对象。解决了普通对象内部使用this（指向普通对象）无法被proxy监听的问题。</font></font>
 
 需要关注的点如下↓
 

@@ -3071,7 +3071,7 @@ function scrollMove(event) {
     3）tcp因为要保存数据不丢失往往相对于udp的性能开销大，耗时长，udp虽然速度比tcp快，但可能会丢包。
 拓展10.script标签async和deffer的区别？
     首先都是实现js文件的异步加载，不阻塞页面的渲染；
-    区别就是defer必须等到整个文档渲染完成后才执行，而async在加载完成后，会暂停html的解析，转去执行js。
+    区别就是defer必须等到整个文档渲染完成后才执行，多个脚本按顺序执行;而async在加载完成后，会暂停html的解析，转去执行js。多个脚本的执行顺序无法保证。
 拓展11.如何通过url获取参数？(面试题)
     function getUrlFn() {
         var querystr = window.location.href.split("?");
