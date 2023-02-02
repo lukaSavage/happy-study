@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-
+<h3>我是B页面</h3>
 <body>
     <script>
         window.onmessage = function (e) {
-            // b页面通过e.source.send方法来发给a页面
+            console.log(e.data);
+            // b页面通过e.source.postMessage方法来发给a页面
             e.source.postMessage('我讨厌你', e.origin);
         }
     </script>

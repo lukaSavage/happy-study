@@ -10,10 +10,11 @@
 
 <body>
     <iframe src="http://localhost:4000/b.html" id="frame" frameborder="0" onload="load()"></iframe>
-
+    <h1>我是A页面</h1>
     <script>
         /* 需求：a页面请求b页面拿去参数 */
         function load() {
+            // frame.contentWindow：拿B页面里面的window
             frame.contentWindow.postMessage('你好呀，postMessage', 'http://localhost:4000');
 
             window.onmessage = function (e) {
