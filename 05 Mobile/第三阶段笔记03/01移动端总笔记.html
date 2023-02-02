@@ -111,14 +111,15 @@
                         手机上，为了容纳为桌面浏览器设计的网站，默认的布局视口的宽度远大于屏幕的宽度
                         布局视口的出现，在极大程度上帮助了桌面网站到移动设备上的转移。
                     获取布局视口方法↓
-                        document.documentElement.clientWidth;
-                        document.documentElement.clientHeiht;
+                        window.innerWidth;
+                        window.inenrHeight;
+                        
                 *视觉视口
                     概念：
                         视觉视口是指用户通过设备屏幕看到的区域，可以通过缩放来改变视觉视口的大小。
                     计算视觉视口的大小方法↓
-                        window.innerWidth;
-                        window.inenrHeight;
+                    document.documentElement.clientWidth;
+                    document.documentElement.clientHeiht;   
                 *理想视口
                     概念
                         理想视口是指网站在移动设备中的理想大小，这个大小就是设备的屏幕大小。是某种状态
@@ -286,7 +287,7 @@
                 var targetW = 375;      // 设置设计稿的宽度
                 var scale = document.documentElement.clientWidth / targetW;    // 计算当前视口与设计稿的比值
                 var meta =    document.querySelector("meta[name='viewport']");     // 获取 meta[name='viewport'] 元素
-                meta.content='width='+(targetW)+",initial-scale="+scale+",minimum-scale="+scale+",maximum-scale="+scale+",user-scalable=no";  //赋值
+                meta.content="initial-scale="+scale+",minimum-scale="+scale+",maximum-scale="+scale+",user-scalable=no";  //赋值
             })()
     ·rem 适配
         ① 方案一、借助媒体查询media (以后用时直接复制即可)

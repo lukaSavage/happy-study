@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
@@ -29,6 +29,9 @@
     <div id="box"></div>
 
 <script>
+    console.log(document.documentElement.clientWidth);
+    // console.log(window.screen.width);
+    console.log(window.innerWidth);
     document.addEventListener('touchstart',e=>{
         e.preventDefault();
     },{passive:false});
