@@ -314,3 +314,21 @@ function deep_set(o, path, value) {
 }
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
+
+/**
+ * 实现函数组合方法
+    // compose(f,g)(x) === f(g(x))
+    // compose(f,g,m)(x) === f(g(m(x)))
+    // compose(f,g,m)(x) === f(g(m(x)))
+    // compose(f,g,m,n)(x) === f(g(m(n(x))))
+ *
+ * @param  {...Function} fns 一系列的聚合函数
+ * @returns Function 聚合后的函数
+ */
+function compose(...fns) {
+  return function(...x) {
+    return fns.reduceRight((arg, fn)=>{
+      return fn(arg)
+    }, x)
+  } 
+}

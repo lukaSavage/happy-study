@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=2">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,viewport-fit:cover"> -->
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,viewport-fit:cover">
     <title>移动端</title>
     <style>
         * {
             padding: 0;
             margin: 0;
         }
-        
+
         #box {
             width: 500px;
             height: 300px;
@@ -20,24 +20,49 @@
             padding: 100px;
             background-color: rgb(255, 174, 0);
             border: 100px solid #000;
+            /* position: relative; */
         }
+
         .small {
-            width: 100px;
-            height: 100px;
+            width: 100rem;
+            height: 100rem;
             background-color: #f00;
-            margin-top: -10%;
+            /* margin-top: -10%; */
+            /* margin-left: -20%; */
+            /* position: absolute; */
         }
     </style>
 </head>
 
 <body>
     <!-- <img src="./images/bilibili01.jpg" alt=""> -->
-    <div id="box">
-        <div class="small"></div>
-    </div>
+    <!-- <div id="box"> -->
+    <div class="small">1111</div>
+    <!-- </div> -->
 
     <!-- <script src="./mobile.js"></script> -->
+    <script>
+        // console.log(document.documentElement.clientWidth);
+        // console.log(window.innerWidth);
+        // (function () {
+        //     // 设置设计稿的宽度
+        //     var targetW = 375;
 
+        //     // 计算当前视口与设计稿的比值
+        //     var scale = document.documentElement.clientWidth / targetW;
+
+        //     // 获取 meta[name='viewport'] 元素
+        //     var meta = document.querySelector("meta[name='viewport']");
+
+        //     // 设置meta元素 content的值，重点是设置 initial-scale 的值为前面计算的比例
+        //     meta.content = "initial-scale=" + scale + ",minimum-scale=" + scale + ",maximum-scale=" + scale + ",user-scalable=no";
+        // })()
+        var designWidth = 375;  // 设计稿宽度
+        var rem2px = 100;                // 在屏幕宽度375px，的时候，设置根元素字体大小 100px
+
+        // 根据屏幕宽度 动态计算根元素的 字体大小
+        document.documentElement.style.fontSize = ((window.innerWidth / designWidth) * rem2px) + 'px'
+    </script>
 </body>
 
 </html>
