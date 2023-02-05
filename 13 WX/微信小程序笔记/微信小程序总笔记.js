@@ -107,12 +107,13 @@
                 拓展：wx:key 的值以两种形式提供：
                     1.<view wx:for="{{data}}" wx:key="id"></view>
                         字符串，代表在 for 循环的 array 中 item 的某个 property，该 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
-                    2.保留关键字 *this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字。
+                    2.<view wx:for="{{data}}" wx:key="*this"></view>
+                        保留关键字 *this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字。例如data = [1, 2, 3] 或者 ['fd', 'ewf', 322]只能用这种方式
         3.条件渲染
             ①、wx:if
             相当于vue中的v-if,在框架中，使用 wx:if="" 来判断是否需要渲染该代码块：
                 <view wx:if="{{length > 5}}"> 1 </view>
-                <view wx:elif="{{length > 2}}"> 2 </view>
+                <view wx:elif="{{length > 2}}"> 2 </view> 
                 <view wx:else> 3 </view>
                 注意：如果需要包裹多个标签属性，请用block标签
                     <block wx:if="{{true}}">
@@ -166,6 +167,13 @@
                     this.setData({
                         num: xxx  
                     })
+                }
+        表单输入框值得获取:
+            在我们对于表单组件获取值得时候，我们可以通过 e.detail.xxx 来获取
+            <input bindinput="hanldeInput" />
+            js文件中，
+                handleInput(e) {
+                    console.log(e.detail.xxx)
                 }
     ·模板的用法
         ①、第一种写法：只在wxml中实现模板的定义和使用

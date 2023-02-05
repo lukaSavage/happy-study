@@ -1,3 +1,5 @@
 <!--pages/index/index.wxml-->
-<text>hello，再一次见面了</text>
+<text>hello，再一次见面了{{ count }}</text>
+<input type="text" bindinput="bindKeyInput" />
+<view></view>
 <A></A>

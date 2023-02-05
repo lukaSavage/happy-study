@@ -1,6 +1,6 @@
 // app.js
 App({
   onLaunch() {
-    console.log(1111)
+    console.log(1111222)
   }
 })
