@@ -396,7 +396,7 @@
                         },
                     ],
                 },
-        ④、html文件(实现其他资源在html文件自动引入)
+        ④、html文件(实现其他资源(如css、js文件)在html文件自动引入)
             需要下载的包：
                 npm i html-webpack-plugin -D
             先引入到webpack.dev.js中
@@ -551,9 +551,30 @@
                         })
                     ]
         11、提取css(MinCssExtractPlugin的应用)
-            MiniCssExtractPlugin插件将CSS提取到单独的文件中。它为每个包含CSS的JS文件创建一个CSS文件。
+            为什么要使用它？
+                当我们使用style-loader的时候，它会将编译好的css文件以动态的方式插入到html中，但这样会出现闪屏现象。
+                而MiniCssExtractPlugin插件则用于取代style-loader。它会将CSS提取到单独的文件中。它为每个包含CSS的JS文件创建一个CSS文件。
             下载安装
                 cnpm install mini-css-extract-plugin -D
+            使用
+                const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+                module.exports = {
+                    // plugins: [new MiniCssExtractPlugin()],
+                    // 也可以配置打包名称
+                    plugins: [new MiniCssExtractPlugin({
+                        filename: './css/[name].css', // 默认名为name,
+                        chunkFilename: './css/[id].css' // css分隔成多个文件配置的名称
+                    })],
+                    module: {
+                        rules: [
+                        {
+                            test: /\.css$/i,
+                            use: [MiniCssExtractPlugin.loader, "css-loader"],
+                        },
+                        ],
+                    },
+                };
         12、定义环境变量的插件
             需要下载的包：
                 无
