@@ -618,7 +618,7 @@
             最后在使用MiniCssExtractPlugin.loader取代style.loader
             ---------------------------
             拓展：让css压缩成一行
-                MiniCssExtractPlugin插件下的Minimizing For Production，专门将css压缩的更加彻底
+                optimize-css-assets-webpack-plugin插件下的Minimizing For Production，专门将css压缩的更加彻底
                 具体使用步骤：
                     ①、先下载
                         npm i optimize-css-assets-webpack-plugin -D
@@ -745,13 +745,21 @@
 三、优化处理
     ①、oneof配置(rules的优化)
         介绍：
-            查询rules当查到符合的立马跳出,加快打包速度
+            配置前：会将rule数组都加载一遍再进行匹配
+            配置后：在rule中查询到与之匹配的loader之后，立马跳出
         优点：
             1.让打包速度更快
             2.节约性能
         用法：
-            在module模块的rules对象的外面添加  oneOf: [] 即可
-        注意：但如果碰到两个test值相同的情况，应该吧第二个从oneOf脱离，重新写入一个对象中
+            module: {
+                rules: [{
+                    oneof: [{
+                        test: /.css$/,
+                        use: ['style-loader', 'css-loader']
+                    },{...}]
+                }]
+            }
+        注意：但如果碰到两个test值相同的情况，应该把第二个从oneOf脱离，重新写入一个对象中
     ②、babel-loader的优化(让第二次打包走缓存,速度更快些)
         cacheDirectory：true, 默认值为 false。当有设置时，指定的目录将用来缓存 loader 的执行结果。
     ③、tree shaking 
@@ -813,8 +821,10 @@
             实现html文件中自动将js文件引入
         ②、MiniCssExtractPlugin
             将css文件单独打包引入
-        ③、clean-webpack-plugin
+        ③、cleanWebpackPlugin
             清除build再重新打包
+        ④、OptimizeCSSAssetsPlugin
+            将css文件压缩成一行代码
     3）webpack优化有哪些？
         ①、HMR热模块替换
             模块热替换(hot module replacement 或 HMR)是 webpack 提供的最有用的功能之一。它允许在运行时更新所有类型的模块，而无需完全刷新。
