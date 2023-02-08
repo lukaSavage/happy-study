@@ -736,47 +736,6 @@
                 }
             }
 
-    
-            
-            
-
-            
-                
-三、优化处理
-    ①、oneof配置(rules的优化)
-        介绍：
-            配置前：会将rule数组都加载一遍再进行匹配
-            配置后：在rule中查询到与之匹配的loader之后，立马跳出
-        优点：
-            1.让打包速度更快
-            2.节约性能
-        用法：
-            module: {
-                rules: [{
-                    oneof: [{
-                        test: /.css$/,
-                        use: ['style-loader', 'css-loader']
-                    },{...}]
-                }]
-            }
-        注意：但如果碰到两个test值相同的情况，应该把第二个从oneOf脱离，重新写入一个对象中
-    ②、babel-loader的优化(让第二次打包走缓存,速度更快些)
-        cacheDirectory：true, 默认值为 false。当有设置时，指定的目录将用来缓存 loader 的执行结果。
-    ③、tree shaking 
-        介绍：去除无用的js代码(满足添加自动触发)
-        满足条件：
-            1.必须使用ES6模块化
-            2.需要将webpack环境调成生产环境
-    ④、缓存问题
-    ⑤、code-splitting
-        介绍：
-            重复代码分离，即a文件和b文件有相同的代码，这些相同的代码用一个c文件分离出来，这样重复的代码可以走缓存
-        使用：
-            让entry模块由单入口变为多入口
-    ⑥、shamming(垫片)技术
-    ⑦、pwa(progressive web application，渐进式web应用程序)
-
-
 四、AST语法树
     ·什么是AST语法树？
         在计算机科学中，抽象语法树（Abstract Syntax Tree，AST），或简称语法树（Syntax tree），是源代码语法结构的一种抽象表示。
@@ -844,7 +803,23 @@
                         module.hot.accept('./module3', () => {
                         });
                     }
-        ②、oneof技术，要处理的文件会智能匹配loader模块中需要的那个loader，找到即退出，而不是遍历整个loader
+        ①、oneof配置(rules的优化)
+            介绍：
+                配置前：会将rule数组都加载一遍再进行匹配
+                配置后：在rule中查询到与之匹配的loader之后，立马跳出
+            优点：
+                1.让打包速度更快
+                2.节约性能
+            用法：
+                module: {
+                    rules: [{
+                        oneof: [{
+                            test: /.css$/,
+                            use: ['style-loader', 'css-loader']
+                        },{...}]
+                    }]
+                }
+            注意：但如果碰到两个test值相同的情况，应该把第二个从oneOf脱离，重新写入一个对象中
         ③、babel-cache
             由于babel-loader要花费的时间较长，所以需要缓存起来更好些(找到对应的loader->use->options->设置cacheDirectory:true)
         ④、tree-shaking
@@ -853,15 +828,19 @@
                 1.必须使用ES6模块化
                 2.需要将webpack环境调整为生产环境
         ⑤、code-spliting(代码分割技术)
-            1.通过多入口打包(在entry中配置多入口)
-            2.提取多入口的公共代码单独打包成一个文件，配置如下：  
-                optimization: {
-                    splitChunks: {
-                        chunks: all
+            1.通过多入口打包(在entry中配置多入口)将公共代码给抽离出来
+            2.提取多入口的公共代码单独打包成一个文件，根配置目录下：  
+                module.exports = {
+                    ...,
+                    // 提取多个模块的公共代码进行单独打包
+                    optimization: {
+                        splitChunks: {
+                            chunks: all
+                        }
                     }
                 }
-        ⑥、shamming(垫片)技术
-            将主体公共资源变成全局资源，配置如下
+        ⑥、shimming(垫片)技术
+            将主体公共资源变成全局资源，使我们不需要在文件中引入使用而是直接使用变量。配置如下
             plugins: [
                 new webpack.ProviderPlugin({
                     $: 'jquery',
@@ -877,7 +856,7 @@
                     skipWaiting: true
                 })
         ⑧、dll技术
-            将不会变的资源(如jquery、react等)单独打包
+            将不会变的资源(如第三方库jquery、react等)不在加入构建中来，直接去动态链接库里面去找
         ⑨、thread-loader技术
             主要针对于babel-loader开启多线程优化
             npm i thread-loader -D
