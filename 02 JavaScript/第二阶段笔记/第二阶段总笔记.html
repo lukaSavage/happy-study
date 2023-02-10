@@ -236,9 +236,9 @@
                     规则：0对1、1对0==>结果为1
                           0对0、 1对1 ==>结果为0
                 ~ 按位取反
-                << 左移
+                << 逻辑左移
                     a的二进制位0111, a<<2的结果为11100
-                >> 右移
+                >> 逻辑右移
                     ★同上！
             ·赋值运算符	(11个)
                 =  赋值
@@ -417,6 +417,11 @@
             ·arguments
             ·NodeList（querySelector）、HTMLCollection (getElementByTagName)
             ·jQuery对象
+        拓展：伪数组转真数组方法？
+            ①、es6拓展运算符
+            ②、Array.from
+            ③、Array.prototype.slice.apply(xxx)
+
     ·作为数组的字符串 
         字符串可以通过 [] 取到指定的字符，只能取值无法修改；
         字符串属性 .length可获取字符串的长度（字符的个数）
@@ -701,7 +706,7 @@
         4.原型是实例对象的原型，而不是构造函数的原型，构造函数通过prototype找到原型
         注意：在构造函数中，person1.__proto__==Person.prototype 
     ·原型链
-        由对象的隐式原型属性组成的链叫原型链
+        实例对象与原型之间的引用关系所产生的的联调叫做原型链，原型链的尽头为 null
     ·判断属性和方法是否为对象自身的还是属于原型的  是自身的返回true 不是返回false
         用法：hasOwnProperty('属性名');
             eg：arr.hasOwnProperty('push');  //false
@@ -709,7 +714,7 @@
         原型自带的一个方法，布尔类型，是返回true，否返回false
     ·创建对象并且指定对象原型(ES5新语法)                        
         用法：Object.create(对象)               // 创建一个新对象，使用现有的对象来提供新创建的对象的__proto__。
-            eg: var obj=Object.create(xxx);   // 这里吧xxx当做obj的__proto__,既：obj.__proto__ = xxx;
+            eg: var obj=Object.create(xxx);   // 这里把xxx当做obj的__proto__,既：obj.__proto__ = xxx;
         参数是个对象，对象作为将来创建的对象的原型()
         如果指定null，认为创建的对象没有原型
     ·值类型和引用类型
@@ -818,7 +823,7 @@
             concat()
             slice()
             -----------(下面是ECMA5方法,只能用于数组，类数组无法使用)
-            1.foreach   用于遍历循环     
+            1.forEach   用于遍历循环     
                 ★注意：该方法没有返回值★
                 arr.forEach(function(items,index,arr){          
                     console.log(items,index,arr);
@@ -1526,7 +1531,7 @@
         1)QQ验证
             /^\d{5,11}$/
         2)手机号验证
-            /^1[3-9]\w{9}$/
+            /^1[3-9]\d{9}$/
         3)邮箱验证
             /^[\w-]+@[\w-]+(\.[^\.]+){1,3}$/
         4)图片验证
