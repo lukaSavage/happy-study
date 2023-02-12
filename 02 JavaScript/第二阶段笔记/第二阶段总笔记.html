@@ -899,7 +899,7 @@
             2.call(10,1,2,3)
                 call可以调用，有多个参数，参数一：改变this的指向 参数二及以后：给声明的函数传参，没有参数可以不写
             3.bind()
-                var fn = obj.bind('我是this');
+                var fn = f.bind('我是this');
                 fn(1,2,3);
                 bind不会调用，也不会传参，它会返回一个新的函数function,返回的function的this指向已经修改,bind方式在fn中传参，并且传的是参数列表
         应用：apply和call方法可以让伪数组arguments用forEach遍历
@@ -931,6 +931,7 @@
                 例如： 
                     var test1="http://www.w3school.com.cn/My first/"
                     document.write(encodeURIComponent(test1));    // 结果是http%3A%2F%2Fwww.w3school.com.cn%2FMy%20first%2F
+                    document.write(encodeURI(test1)) // http://www.w3school.com.cn/My%20first/
             2.decodeURIComponent()             函数可对 encodeURIComponent() 函数编码的 URI 进行解码。
                 例如：
                     document.write(decodeURIComponent(test1))    // 结果就是text1： http://www.w3school.com.cn/My first/
@@ -988,7 +989,7 @@
         scrollRestoration     滚动恢复属性允许web应用程序在历史导航上显式地设置默认滚动恢复行为(了解)
     方法
         1.back()	 	加载 history 列表中的前一个 URL,即返回上一步。
-        2.forward()	加载 history 列表中的下一个 URL，即返回下一步。
+        2.forward()	    加载 history 列表中的下一个 URL，即返回下一步。
         3.go(-1)		加载 history 列表中的某个具体页面(写正数返回下几步，写负数返回上几步)。
         4.pushState(stateObject, title, url)  pushState函数向浏览器的历史堆栈压入一个url为设定值的记录，并改变历史堆栈的当前指针至栈顶
             第一个参数用于存储该url对应的状态对象state，该对象可在onpopstate事件中获取，也可在history对象中获取
@@ -1920,7 +1921,7 @@
                 让子类的显示原型=父类的实例
                 设置子类的显示原型的constructor指向子类
                 缺点：
-                    子类实例化的时候只能读取父类上的属性，无法给父类赋值(只能看到__proto__上有父类继承过来的属性，值都为undefined)
+                    子类实例化的时候只能读取父类上的属性，无法给父类继承过来的属性赋值(只能看到__proto__上有父类继承过来的属性，值都为undefined)
                 拓展：原型链继承的其他写法
                     ①、Object.setPrototypeOf(Son,EventEmitter.prototype); es6
                     ②、Girl.prototype = Object.create(EventEmitter) // es5
@@ -3236,9 +3237,20 @@ function scrollMove(event) {
         .addOrder(new Hotel());
         
         order.create();
-
-    
-
+拓展14：js中new一个对象的时候发生了什么？
+    ①、以构造器的prototype属性为原型，创造一个新的、空的对象
+    ②、将它的引用赋给构造器的 this，同时将参数传到构造器中执行
+    ③、如果构造器没有手动返回对象，则返回第一步创建的新对象，如果有，则舍弃掉第一步创建的新对象，返回手动return的对象。
+    ## 自己实现一个new方法
+    // 自己定义的new方法
+    const newMethod = function (Parent, ...rest) {
+        // 1.以构造器的prototype属性为原型，创建新对象；
+        const child = Object.create(Parent.prototype)
+        // 2.将this和调用参数传给构造器执行
+        const result = Parent.apply(child, rest)
+        // 3.如果构造器没有手动返回对象，则返回第一步的对象
+        return typeof result === 'object' ? result : child
+    }
         
             
 
