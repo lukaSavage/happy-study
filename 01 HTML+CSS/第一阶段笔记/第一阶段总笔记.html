@@ -889,7 +889,7 @@
         定位的初始位置：
             ·如果没有设置top或者left，默认它是以内容的位置对齐的
             ·如果设置了left或者top，则以padding的左上角计算
-            ·设置成百分比，按padding+content的和 * 百分比计算
+            ·设置成百分比，按包含块(通常是padding+content的总和)宽度 * 百分比计算
         包含块：
             如何确定一个元素的包含块，完全取决于它自身的position属性：
                 1、如果一个元素自身的position属性是 static或者是relative：
