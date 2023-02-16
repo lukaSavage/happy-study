@@ -2006,10 +2006,13 @@
         ECMAScript3.0  简称ES3   
         ES5.0 / ES5.1  新增一些扩展
         ES6	2015年6月 又叫ES2015 (以后每年6月份出一个新的版本)
-        ES7	ES2016
-        ES8 ES2017
-        ES9 ES2018
-        ES10 ES2019
+        ES7	ES2016 增加了指数运算符、数组的includes方法
+        ES8 ES2017 字符串的padStart、padEnd以及Object构造函数的一些方法
+        ES9 ES2018 对象的拓展运算符、对象的解构赋值
+        ES10 ES2019 字符串的trimStart、trimEnd方法，数组的flat、flatMap方法
+        ES11 ES2020 可选链运算符、空值合并运算符
+        ES12 ES2021 增加了promise.any
+        ES13 ES2022 数组的at方法（用索引去取值）
     ·学习参考网站
         http://es6.ruanyifeng.com/
 二、关键字拓展
@@ -3029,7 +3032,7 @@ function scrollMove(event) {
 拓展7.tcp的三次握手(以下S代表服务器，C代表客户端)
     （1）第一次握手：建立连接时，客户端A发送SYN包（seq=0）到服务器B，并进入SYN_SEND状态，等待服务器B确认。
     （2）第二次握手：服务器B收到SYN包，必须确认客户A的SYN（seq=0,ack=1），同时自己也发送一个SYN包（SYN=k），
-        即SYN+ACK包，此时服务器B进入SYN_RCVD状态。
+        即SYN+ACK包，此时服务器B进入SYN_REVD状态。
     （3）第三次握手：客户端A收到服务器B的SYN＋ACK包，向服务器B发送确认包ACK（seq=1,ack=1），此包发送完毕，
         客户端A和服务器B进入ESTABLISHED状态，完成三次握手。
 

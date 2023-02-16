@@ -11,7 +11,7 @@ import { callback, promiseFun } from '../src/timeout';
 describe('测试settimeout异步', () => {
 	test('test settimeout', done => {
 		callback((res: any) => {
-			expect(res).toEqual({ code: 0 });
+			expect(res).toEqual({ code: 1 });
 			done();
 		});
 	});

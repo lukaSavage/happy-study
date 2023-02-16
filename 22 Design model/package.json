@@ -1,0 +1,20 @@
+{
+  "name": "design-model",
+  "version": "1.0.0",
+  "description": "前端设计者模式学习",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukaSavage/design-model.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukaSavage/design-model/issues"
+  },
+  "homepage": "https://github.com/lukaSavage/design-model#readme"
+}
