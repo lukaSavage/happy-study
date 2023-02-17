@@ -622,7 +622,7 @@
                             }
                         }
                     }
-        ⑨、$parent和$children----------------------------------->父子组件(父传子)
+        ⑨、$parent和$children----------------------------------->父子组件(父传子)(Vue3中移除了$listeners)
         ⑩、$attrs和$listeners------------------------------------>父子组件(父传子)(vue3中移除了$listeners)
 
 十七、各种通信的原理代码
@@ -1484,7 +1484,7 @@
                 this.$options.haha();  // haha
             },
             </script>
-十九、.sync
+十九、.sync(vue3中已移除)
     ·介绍
         在父子组件中，通常子级组件直接修改父级组件的数据会报警告($parent除外)，这时如果我们需要更急简便的修改父级组建的数据，
         我们可以使用.sync+prop的方式解决。
@@ -2197,7 +2197,7 @@
             const stop = watchEffect(
                 () => console.log(count.value), 
                 {
-                    flush: 'post',
+                    flush: 'post', // 可选post、sync、pre(默认)，具体看 https://cn.vuejs.org/api/reactivity-core.html#watcheffect
                     onTrack(e) {
                         debugger
                     },
