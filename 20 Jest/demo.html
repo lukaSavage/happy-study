@@ -17,10 +17,36 @@
 
 <body>
     <script>
-        function add(a, b) {
-            return a + b;
+        function add1(str) {
+            return '1' + str;
         }
-        console.assert(add(1,2) === 3, '错了哦~')
+        function add2(str) {
+            return '2' + str;
+        }
+        function add3(str) {
+            return '3' + str;
+        }
+
+        function compose(...funcs) {
+            if (funcs.length === 0) {
+                return (arg) => arg
+            }
+
+            if (funcs.length === 1) {
+                return funcs[0]
+            }
+
+            return funcs.reduce((a, b) => (...args) => a(b(...args)))
+        }
+        const composeFunc = compose(add1, add2, add3)
+        const res = composeFunc('程雯琦')
+        console.log(res);
+        // let arr = [1, 2, 3]
+        // const res = arr.reduce((res, item) => {
+        //     console.log(`当前循环的res是=>${res}`, '当前的item值：' + item);
+        //     return res
+        // })
+        // console.log(res);
     </script>
 </body>
 
