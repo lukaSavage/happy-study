@@ -10,9 +10,24 @@
 
 <body>
     <script>
-        let str = '111';
-        const a = str.padStart(2, '#');
-        console.log(str,a);
+        function* generator() {            // const iterator = generator();   ==>返回一个遍历器/迭代器
+            const a = yield 111;           // console.log(iterator.next('1Value')) ==> 返回{value: 111, done: false}; 下面的代码不执行
+            console.log(a);  // 1value                
+            const b = yield 222;            // console.log(iterator.next('2Value')) ==> 返回{value: 111, done: false}; 打印出a的值为1Value
+            console.log(b);  // 2Value
+            const c = yield 333;            // console.log(iterator.next('3Value')) ==> 返回{value: 111, done: false}; 此时将bValue赋值给变量b
+            console.log(c);   // 3Value                               
+            // console.log(iterator.next('cValue')) ==> 返回{value: 111, done: true};
+        }
+
+        const iterator = generator()
+        console.log(iterator.next('0Value'))
+        console.log(iterator.next('1Value'))
+        console.log(iterator.next('2Value'))
+        console.log(iterator.next('3Value'))
+        let arr = [1,2,3]
+        const a = arr.splice(1,0,1,2,3);
+        console.log(a, arr);
     </script>
 </body>
 

@@ -1,4 +1,6 @@
-### 一、高阶函数
+# Nodejs高级总笔记
+
+## 一、高阶函数
 
 > 概念
 
@@ -30,7 +32,7 @@ let newFn = coreFn.before(() => {
 newFn(1,2,3);
 ```
 
-###  二、函数柯里化(高阶函数的应用
+##  二、函数柯里化(高阶函数的应用
 
 > 概念
 
@@ -67,9 +69,9 @@ fs.readFile('./01before函数的使用.js', 'utf8', (err, data) => {
 })
 ```
 
-### 三、设计者模式
+## 三、设计者模式
 
-#### 1.发布-订阅者模式
+### 3.1 发布-订阅者模式
 
 > 概念
 
@@ -111,7 +113,7 @@ fs.readFile('./01before函数的使用.js', 'utf8', (err, data) => {
 })
 ```
 
-#### 2.观察者模式
+### 3.2 观察者模式
 
 > 概念
 
@@ -160,7 +162,7 @@ child.attach(mother);
 child.setState('不开心了');
 ```
 
-### 四、Promise原理
+### 3.3 Promise原理
 
 > 练习：手写promise：<a href="https://promisesaplus.com/">promise A+规范</a>
 
@@ -459,6 +461,8 @@ module.exports = Promise;
 
 ### 五、generator生成器
 
+生成器就是生成遍历器的函数
+
 #### 					1.基本语法
 
 #### 		2.实现generator	
@@ -472,13 +476,18 @@ function co(generator) {
     return new Promise((resolve, reject)=>{
         function next(data) {
             let { value, done } = generator.next(data);
-            if(done) {
-                resolve(value);
+            if(!done) {
+                Promise.resolve(value).then((val)=>{
+                    next(val);
+                }, e => {
+                    reject(e)
+                })
+            } else {
+                resolve(value)
             }
-            Promise.resolve(value).then((val)=>{
-                next(val);
-            }, reject)
+            
         }
+        next()
     })
 }
 ```
@@ -487,7 +496,7 @@ function co(generator) {
 
 ### 七、浏览器事件环
 
-#### 		1.宏任务与微任务分类
+#### 		7.1 宏任务与微任务分类
 
 > - 宏任务：
 >
@@ -497,7 +506,7 @@ function co(generator) {
 >
 >   Promise、MutationObserver、object.observe(已废弃)、process.nextTick(Node环境)、queueMicroTask
 
-#### 		2.运行机制
+#### 		7.2 运行机制
 
 ​				①、先执行最大的宏任务script标签，执行完同步代码后，将宏任务和微任务进行分类，如果调用的是浏览器API，浏览器会开一个线程，等时间到了自动放入到宏任务队列汇总。微任务放入到微任务队列中。
 
@@ -506,7 +515,7 @@ function co(generator) {
 > 		1. 宏任务每次调用一个，微任务是清空所有
 > 		2. 微任务每次执行宏任务，都会创建一个新的队列，宏任务队列只有一个
 
-### 3.恶趣味面试题
+#### 7.3 恶趣味面试题
 
 ```js
 Promise.resolve().then(()=>{
@@ -541,9 +550,9 @@ Promise.resolve().then(()=>{
 
 
 
-### 八、node中的事件环
+## 八、node中的事件环
 
-#### 1.阶段概述
+#### 8.1 阶段概述
 
 > 1. <font color="#f00">定时器（times）：</font><font color="#08e">存放所有的定时器回调</font>
 > 2. <font color="#f00">待定回调（pending callback）：</font><font color="#08e">执行延迟到下一个循环迭代的I/O操作</font>
@@ -552,14 +561,14 @@ Promise.resolve().then(()=>{
 > 5. <font color="#f00">检测（check）：</font><font color="#08e">setImmediate在这里执行</font>
 > 6. <font color="#f00">关闭回调（close callback）：</font><font color="#08e">一些关闭的回调函数，如socket.on('close', ...)</font>
 
-2.执行规则
+#### 8.2 执行规则
 
 > 1. 检测定时器有没有到点，有就执行，(一次清空，并且是<font color="#f00">清空所有</font>times下到点的宏任务)，进入下一阶段。
 > 2. 当执行到poll阶段时候，也依然和timer阶段一样，此时看check中的setImmediate里面，有就清空check队列，如果没有了，则阻塞
 > 3. 此时不停的看timers阶段有没有定时器到点，如果有则回去继续执行1、2步骤
 > 4. 如果node.js检查到没有任何异步I/O或者计时器，则完全关闭。
 
-3.图解说明
+#### 8.3 图解说明
 
 ```
     本阶段执行已经被 setTimeout() 和 setInterval() 的调度回调函数。
@@ -590,12 +599,12 @@ Promise.resolve().then(()=>{
 
 ### 九、Node中的基本概念
 
-#### 1.Node组成及基本概念
+#### 9.1 Node组成及基本概念
 
 - Node可以理解成<font color="#f00">ECMAscript + 内置模块</font>组成的，有一个全球最大的开源库生态系统npm(node package manager).
 - Node中没有锁的概念，它的应用场景是处理I/O密集型（文件读写），不适合处理cpu密集型（压缩加密、计算）。
 
-### 2.node中常用的api
+#### 9.2 node中常用的api
 
 #### ①、this指向
 
@@ -613,7 +622,7 @@ Promise.resolve().then(()=>{
 | <font color="#f00">argv</font>        | 代表执行命令时所带的参数                                     |
 | <font color="#f00">nextTick</font>    | 是一个不在node事件环中的优先级最高的一个微任务。             |
 
-### 3.node的中的模块组成
+#### 9.3 node的中的模块组成
 
 #### 			①、node中的模块分为三大类
 
@@ -640,7 +649,7 @@ Promise.resolve().then(()=>{
       
 2. <font color="#fbc">vm模块</font>（该模块开发中基本用不到，它可以让一个字符串执行，类似new Function
 
-#### 4.exports和module.exports
+#### 9.4 exports和module.exports
 
 > 在vscode断点调试方法:
 >
@@ -653,7 +662,7 @@ Promise.resolve().then(()=>{
 
 ```
 
-#### 5.<font color="#fbc">events模块</font>
+#### 9.5 <font color="#fbc">events模块</font>
 
 ```js
 // events模块通过new方法创建
@@ -715,7 +724,7 @@ const event = new EventEmitter();
   module.exports = EventEmitter;
   ```
 
-#### 6.npm的基本使用
+#### 9.6 npm的基本使用
 
  - npm中一些常用的命令
 
@@ -741,11 +750,11 @@ const event = new EventEmitter();
   - ~2.3.0                固定两个版本号2和3，其他的只能往高的涨
   - '>=2.3.0'            比2.3版本高就行，其他的没限制
 
-#### 7.node中的编码（只支持utf8）
+#### 9.7 node中的编码（只支持utf8）
 
 ​	一个汉字通常由3个字节组成，一个字节通常由8个位(二进制)组成
 
-#### 8.base64编码规范
+#### 9.8 base64编码规范
 
 ​	略~~~
 
