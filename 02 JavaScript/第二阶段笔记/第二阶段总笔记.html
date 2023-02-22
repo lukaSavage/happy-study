@@ -2256,10 +2256,14 @@
                 let [a, ...b] = [10,20,30,40,50,50,60];
                 console.log(a, b);  // a是10， b是剩下的数组
     2.Array函数新增方法
-        1.Array.from()  把类数组/字符串转为纯数组   
+        1.Array.from()  把类数组/字符串转为纯数组,Array.from(array, mapperFunction) 接受 2 个参数：一个数组（通常是一个可迭代的）和一个映射器函数。  
         2.Array.of()     创建数组，参数是数组的成员（任意个数的参数）
             Array.of(2)和new Array(2)的区别？
                 区别在于只写一个参数的时候， Array.of的结果是[2];而new Array的结果是[empty*2];
+        拓展：Array.from的应用？=> 填充数组
+            const filledArray = Array.from(Array(3), () => {
+                return 0;
+            })
     3.Array实例新增方法    (★注意：除fill外，原数组不变，需重新赋值给一个新的变量)
         1) find(item=>item>200);	         参数是回调函数,查找★第一个★满足条件的数组元素,返回值是那个符合条件出来的元素,找不到返回undefined
         2) findIndex((item,index)=>{})      参数是回调函数,查找★第一个★满足条件的索引，返回值是那个符合条件的元素的索引,找不到返回-1
