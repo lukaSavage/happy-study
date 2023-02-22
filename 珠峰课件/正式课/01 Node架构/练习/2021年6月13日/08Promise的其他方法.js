@@ -138,59 +138,6 @@ class Promise {
         })
         return promise2;
     }
-
-    then(onFulfilled, onRejected) {
-        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
-        onRejected = typeof onRejected === 'function' ? onRejected : e => {
-            throw e
-        };
-        const promise2 = new Promise((resolve, reject) => {
-            if (this.status === FULFILLED) {
-                setTimeout(() => {
-                    try {
-                        const x = onFulfilled(this.value);
-                        resolvePromise(x, promise2, resolve, reject)
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
-            }
-            if (this.status === REJECTED) {
-                setTimeout(() => {
-                    try {
-                        const x = onRejected(this.reason);
-                        resolvePromise(x, promise2, resolve, reject)
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
-            }
-
-            if (this.status === PENDING) {
-                this.onFulfilledCallbacks.push(() => {
-                    setTimeout(() => {
-                        try {
-                            const x = onFulfilled(this.value)
-                            resolvePromise(x, promise2, resolve, reject)
-                        } catch (error) {
-                            reject(error);
-                        }
-                    });
-                });
-                this.onRejectedCallbacks.push(() => {
-                    setTimeout(() => {
-                        try {
-                            const x = onRejected(this.reason);
-                            resolvePromise(x, promise2, resolve, reject)
-                        } catch (error) {
-                            reject(error);
-                        }
-                    });
-                });
-            }
-        })
-        return promise2;
-    }
     catch (onError) {
         return this.then(null, onError);
     }

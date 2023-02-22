@@ -857,6 +857,12 @@
                 })
         ⑧、dll技术
             将不会变的资源(如第三方库jquery、react等)不在加入构建中来，直接去动态链接库里面去找
+            在plugins模块中配置：
+                plugins:[
+                    new webpack.DllReferencePlugin({
+                        manifest: require('./dll/vendor-menifest.json')
+                    })
+                ]
         ⑨、thread-loader技术
             主要针对于babel-loader开启多线程优化
             npm i thread-loader -D
