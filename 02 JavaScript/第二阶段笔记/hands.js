@@ -1,26 +1,26 @@
 /**
- * 冒泡排序
+ * 1.冒泡排序
  * @param {array} array 冒泡传递的数组
  */
 function bubbleSort(array) {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array.length - 1 - i; j++) {
-      array[j] > array[j + 1] && ([array[j], array[j + 1]] = [[array[j + 1]], array[j]])
+      array[j] > array[j + 1] && ([array[j], array[j + 1]] = [array[j + 1], array[j]])
     }
   }
 }
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 快速排序
+ * 2.快速排序
  * @param {arr} 需要快排的数组
  */
 function quickSort(arr) {
   if (arr.length <= 1) return arr
   const i = Math.floor(arr.length / 2)
   const middle = arr.splice(i, 1)[0]
-  let left = []
-  let right = []
+  let left = [],
+    right = []
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] < middle) {
       left.push(arr[i])
@@ -35,7 +35,7 @@ function quickSort(arr) {
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 手写call方法
+ * 3.手写call方法
  * @param {*} tag 目标this对象
  * @param  {...any} args 参数
  */
@@ -47,7 +47,7 @@ Function.prototype.myCall = function (tag = window, ...args) {
 }
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 手写bind方法
+ * 4.手写bind方法
  * @param {*} tag
  * @param  {...any} args
  */
@@ -60,7 +60,7 @@ Function.prototype.myBind = function (tag = window, ...args) {
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 手写防抖(单位时间内最后一次生效)
+ * 5.手写防抖(单位时间内最后一次生效)
  * @param {*} fn
  * @param {*} time
  */
@@ -77,7 +77,7 @@ function debounce(fn, time) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 手写节流(单位时间内第一次生效)
+ * 6.手写节流(单位时间内第一次生效)
  * @param {*} fn
  * @param {*} time
  */
@@ -94,7 +94,7 @@ function throttle(fn, time) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 手写深度克隆
+ * 7.手写深度克隆
  * @param {*} target
  */
 function deepClone(target) {
@@ -115,11 +115,11 @@ function deepClone(target) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 手写flat
+ * 8.手写flat
  * @param {*} array
  */
 function myFlat(arr) {
-  while (arr.some((item) => Array.isArray(item))) {
+  while (arr.some(item => Array.isArray(item))) {
     arr = [].concat(...arr)
   }
   return arr
@@ -128,7 +128,7 @@ function myFlat(arr) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 手写TolocaleString
+ * 9.手写TolocaleString
  * @param {*} n 表示要传入的数字
  */
 function myToLocaleString(n) {
@@ -145,7 +145,7 @@ function myToLocaleString(n) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 给定一个字符串，请你找出不含有重复字符的最长子串
+ * 10.给定一个字符串，请你找出不含有重复字符的最长子串
  * @param {string} str 传入的字符串
  * @returns max:传入的最长子串数目，maxStr:传入的最长子串
  */
@@ -171,7 +171,7 @@ function longStr(str) {
 }
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 给定一个只包括‘{’、‘}’、‘[’、‘]’、‘(’、‘)’的子串，判断是否有效。有效的字符需要满足以下两个条件
+ * 11.给定一个只包括‘{’、‘}’、‘[’、‘]’、‘(’、‘)’的子串，判断是否有效。有效的字符需要满足以下两个条件
  * 1.左括号必须以相同类型的括号闭合
  * 2.左括号必须以正确的顺序闭合
  * @param {string} str
@@ -196,7 +196,7 @@ console.log(valid('{[]}'))
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 给定一个不重复的正整数集合，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
+ * 12.给定一个不重复的正整数集合，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
  * 举例：
     sumN([1,3,8,5,2], 2, 11)        // [3, 8]
     sumN([1,3,8,5,2], 4, 3)         // null
@@ -217,7 +217,7 @@ function sumN(A, n, m, i = 0, decisions = []) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 反转二叉树
+ * 13.反转二叉树
  * @param {object} tree 传入的二叉树
  */
 function invertTree(tree) {
@@ -232,7 +232,7 @@ function invertTree(tree) {
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 求一个二叉树左边的轮廓
+ * 14.求一个二叉树左边的轮廓
  * @param {object} tree 代表数的节点
  * @param {number} d 树的层数
  * @param {array} outline 结果值
@@ -263,7 +263,7 @@ root.left.left = new Tree(4)
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 手写parse，要求满足以下所有条件
+ * 15.手写parse，要求满足以下所有条件
     console.log(parse('a=1&b=&c=5&f=hello'))
     console.log(parse('a&b&c'))
     console.log(parse('a[name]=fox&a[company]=tecent&b=why'))
@@ -278,7 +278,7 @@ function parse(str) {
     if (!value) return res
     deep_set(
       res,
-      key.split(/[\[\]]/g).filter((i) => i),
+      key.split(/[\[\]]/g).filter(i => i),
       value
     )
     return res
@@ -304,7 +304,7 @@ function deep_set(o, path, value) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 实现函数组合方法
+ * 16.实现函数组合方法
     // compose(f,g)(x) === f(g(x))
     // compose(f,g,m)(x) === f(g(m(x)))
     // compose(f,g,m)(x) === f(g(m(x)))
@@ -315,7 +315,7 @@ function deep_set(o, path, value) {
  */
 function compose(...fns) {
   if (fns.length === 0) {
-    return (args) => args
+    return args => args
   }
   if (fns.length === 1) {
     return fns[0]
@@ -330,9 +330,9 @@ function compose(...fns) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 
+ * 17.co函数
  * @param {Function*} gen generator函数
- * @returns 
+ * @returns
  */
 function co(gen) {
   return new Promise((resolve, reject) => {
@@ -340,10 +340,10 @@ function co(gen) {
       const { value, done } = gen.next()
       if (!done) {
         Promise.resolve(value)
-          .then((data) => {
+          .then(data => {
             step(data)
           })
-          .catch((e) => {
+          .catch(e => {
             reject(e)
           })
       } else {
