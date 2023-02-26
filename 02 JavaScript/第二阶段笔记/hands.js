@@ -195,29 +195,9 @@ function valid(str) {
 console.log(valid('{[]}'))
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
-/**
- * 12.给定一个不重复的正整数集合，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
- * 举例：
-    sumN([1,3,8,5,2], 2, 11)        // [3, 8]
-    sumN([1,3,8,5,2], 4, 3)         // null
- * @param {Array} A  代表正整数集合
- * @param {Number} n  代表N
- * @param {Number} m  代表M
- */
-function sumN(A, n, m, i = 0, decisions = []) {
-  if (m === 0) {
-    return decisions // 说明直接找到了，返回
-  }
-  if (i === A.length || n === 0 || m < 0) {
-    return null
-  }
-  return sumN(A, n - 1, m - A[i], i + 1, decisions.concat(A[i])) || sumN(A, n, m, i + 1, decisions)
-}
-
-/* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 13.反转二叉树
+ * 12.反转二叉树
  * @param {object} tree 传入的二叉树
  */
 function invertTree(tree) {
@@ -228,37 +208,58 @@ function invertTree(tree) {
   invertTree(right)
 }
 
-/* 数的结构如下↓↓↓ */
+/* ----------------------------------------------------分割线-------------------------------------------- */
+
+/**
+ * 13.实现函数组合方法
+    // compose(f,g)(x) === f(g(x))
+    // compose(f,g,m)(x) === f(g(m(x)))
+    // compose(f,g,m)(x) === f(g(m(x)))
+    // compose(f,g,m,n)(x) === f(g(m(n(x))))
+ *
+ * @param  {...Function} fns 一系列的聚合函数
+ * @returns Function 聚合后的函数
+ */
+function compose(...fns) {
+  if (fns.length === 0) {
+    return args => args
+  }
+  if (fns.length === 1) {
+    return fns[0]
+  }
+  return fns.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args))
+  )
+}
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
-/**
- * 14.求一个二叉树左边的轮廓
- * @param {object} tree 代表数的节点
- * @param {number} d 树的层数
- * @param {array} outline 结果值
- */
-function leftTree(tree, d = 0, outline = []) {
-  if (!tree) return
-  if (!outline[d]) {
-    outline[d] = value // 这里的value代表具体的树的值
-  }
-  // 递归操作
-  leftTree(tree.left, d + 1, outline)
-  leftTree(tree.right, d + 1, outline)
-  return outline
-}
 
-class Tree {
-  constructor(value) {
-    this.value = value
-    this.left = null
-    this.right = null
-  }
+/**
+ * 14.co函数
+ * @param {Function*} gen generator函数
+ * @returns
+ */
+function co(gen) {
+  return new Promise((resolve, reject) => {
+    function step(data) {
+      const { value, done } = gen.next()
+      if (!done) {
+        Promise.resolve(value)
+          .then(data => {
+            step(data)
+          })
+          .catch(e => {
+            reject(e)
+          })
+      } else {
+        resolve(value)
+      }
+    }
+    step()
+  })
 }
-const root = new Tree(1)
-root.left = new Tree(2)
-root.right = new Tree(3)
-root.left.left = new Tree(4)
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
@@ -302,54 +303,21 @@ function deep_set(o, path, value) {
 }
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
-
 /**
- * 16.实现函数组合方法
-    // compose(f,g)(x) === f(g(x))
-    // compose(f,g,m)(x) === f(g(m(x)))
-    // compose(f,g,m)(x) === f(g(m(x)))
-    // compose(f,g,m,n)(x) === f(g(m(n(x))))
- *
- * @param  {...Function} fns 一系列的聚合函数
- * @returns Function 聚合后的函数
+ * 16.给定一个不重复的正整数集合，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
+ * 举例：
+    sumN([1,3,8,5,2], 2, 11)        // [3, 8]
+    sumN([1,3,8,5,2], 4, 3)         // null
+ * @param {Array} A  代表正整数集合
+ * @param {Number} n  代表N
+ * @param {Number} m  代表M
  */
-function compose(...fns) {
-  if (fns.length === 0) {
-    return args => args
+function sumN(A, n, m, i = 0, decisions = []) {
+  if (m === 0) {
+    return decisions // 说明直接找到了，返回
   }
-  if (fns.length === 1) {
-    return fns[0]
+  if (i === A.length || n === 0 || m < 0) {
+    return null
   }
-  return fns.reduce(
-    (a, b) =>
-      (...args) =>
-        a(b(...args))
-  )
-}
-
-/* ----------------------------------------------------分割线-------------------------------------------- */
-
-/**
- * 17.co函数
- * @param {Function*} gen generator函数
- * @returns
- */
-function co(gen) {
-  return new Promise((resolve, reject) => {
-    function step(data) {
-      const { value, done } = gen.next()
-      if (!done) {
-        Promise.resolve(value)
-          .then(data => {
-            step(data)
-          })
-          .catch(e => {
-            reject(e)
-          })
-      } else {
-        resolve(value)
-      }
-    }
-    step()
-  })
+  return sumN(A, n - 1, m - A[i], i + 1, decisions.concat(A[i])) || sumN(A, n, m, i + 1, decisions)
 }

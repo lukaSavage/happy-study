@@ -87,31 +87,21 @@
 
     </script>
     <script>
-        // Promise.resolve('1')
-        //     .then(res => {
-        //         console.log(res)
-        //     })
-        //     .finally(() => {
-        //         console.log('finally')
-        //     })
-        // Promise.resolve('2')
-        //     .finally(() => {
-        //         console.log('finally2')
-        //         return '我是finally2返回的值'
-        //     })
-        //     .then(res => {
-        //         console.log('finally2后面的then函数', res)
-        //     })
-        // var a = 2;
-        // console.log(a++ + ++a + a + a++);
-        // // 旧值      3     4    4   5 
-        // // 新值      2     4    4   4      = 14
-        // console.log(a)    // 5
-        var a = 7;
-        console.log(a.toString(2));
-        console.log(a << 2); 011100 = 2^4 + 2^3 + 2^2
-        console.log(a >> 2); 0001
+        function co(gen) {
+            return new Promise((resolve, reject) => {
+                function step(data) {
+                    const { value, done } = gen.next()
+                    if (!done) {
+                        Promise.resolve(value).then(data => { resolve(data) }).catch(e => { reject(e) })
+                    } else {
+                        resolve(value)
+                    }
+                }
+            })
+            step()
+        }
     </script>
 </body>
+
 
 </html>
