@@ -879,8 +879,13 @@
     5) webpack中es6是如何转换成commonjs的？
         如果一个exports对象的__esModule=true说明它是从es module模块编译过来的，那么内部会通过Object.defineProperty配合Symbol.toStringTag用来转换
         Symbol.toStringTag 是供 Object.prototype.toString 调用，这段代码作用是标识 exports 为模块，即 Object.prototype.toString.call(exports) === '[object Module]'
-
-
+    6) webpack热更新原理？
+        1) 通过webpack-dev-server创建两个服务器：提供静态资源的服务（express）和Socket服务
+        2) express server 负责直接提供静态资源的服务（打包后的资源直接被浏览器请求和解析）
+        3) socket server 是一个 websocket 的长连接，双方可以通信
+        4) 当 socket server 监听到对应的模块发生变化时，会生成两个文件.json（manifest文件）和.js文件（update chunk）
+        5) 通过长连接，socket server 可以直接将这两个文件主动发送给客户端（浏览器）
+        6) 浏览器拿到两个新的文件后，通过HMR runtime机制，加载这两个文件，并且针对修改的模块进行更新
 
 
 
