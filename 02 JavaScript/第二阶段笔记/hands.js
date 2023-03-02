@@ -192,7 +192,7 @@ function valid(str) {
   }
   return temp.length === 0
 }
-console.log(valid('{[]}'))
+// console.log(valid('{[]}'))
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
@@ -274,6 +274,22 @@ function co(gen) {
  * @param {string} str 类似a=xxx&b=123&c=['2','b']
  */
 function parse(str) {
+  function deep_set(o, path, value) {
+    let i = 0
+    for (; i < path.length - 1; i++) {
+      if (o[path[i]] === undefined) {
+        if (path[i + 1].match(/^\d+$/)) {
+          o[path[i]] = []
+        } else {
+          o[path[i]] = {}
+        }
+      }
+      o = o[path[i]]
+    }
+    // { name: fox }
+    o[path[i]] = decodeURIComponent(value)
+  }
+
   return str.split('&').reduce((res, item) => {
     const [key, value] = item.split('=')
     if (!value) return res
@@ -286,38 +302,42 @@ function parse(str) {
   }, {})
 }
 
-function deep_set(o, path, value) {
-  let i = 0
-  for (; i < path.length - 1; i++) {
-    if (o[path[i]] === undefined) {
-      if (path[i + 1].match(/^\d+$/)) {
-        o[path[i]] = []
-      } else {
-        o[path[i]] = {}
-      }
-    }
-    o = o[path[i]]
-  }
-  // { name: fox }
-  o[path[i]] = decodeURIComponent(value)
-}
-
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 16.给定一个不重复的正整数集合，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
- * 举例：
-    sumN([1,3,8,5,2], 2, 11)        // [3, 8]
-    sumN([1,3,8,5,2], 4, 3)         // null
+ * 16.给定一个不重复的正整数集合A，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
+ * 举例：https://blog.csdn.net/weixin_34130269/article/details/91382220
+    search([1,3,8,5,2], 2, 11)        // [3, 8]
+    search([1,3,8,5,2], 4, 3)         // null
  * @param {Array} A  代表正整数集合
  * @param {Number} n  代表N
  * @param {Number} m  代表M
  */
-function sumN(A, n, m, i = 0, decisions = []) {
-  if (m === 0) {
-    return decisions // 说明直接找到了，返回
+function search(A, N, M) {
+  const n = num => {
+    let count = 0
+    while (num) {
+      num &= num - 1
+      count++
+    }
+    return count
   }
-  if (i === A.length || n === 0 || m < 0) {
-    return null
+
+  let res = [],
+    len = A.length,
+    bit = 1 << len
+
+  for (let i = 1; i < bit; i++) {
+    if (n(i) === N) {
+      let s = 0,
+        temp = []
+      for (let j = 0; j < len; j++) {
+        if ((i & (1 << j)) !== 0) {
+          s += A[j]
+          temp.push(A[j])
+        }
+      }
+      if (s === M) res.push(temp)
+    }
   }
-  return sumN(A, n - 1, m - A[i], i + 1, decisions.concat(A[i])) || sumN(A, n, m, i + 1, decisions)
+  return res
 }
