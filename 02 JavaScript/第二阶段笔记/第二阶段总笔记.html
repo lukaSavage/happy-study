@@ -2508,6 +2508,15 @@
         ④Map实例的属性
             1)size      获取Map对象键值对的个数
     拓展：WeakMap对象
+        WeakMap是ES6中新增的一种集合类型，叫做'弱映射'。它和Map是兄弟关系，与Map的区别在于这个弱字，API还是Map那套API
+        特点：
+            1、只接受对象作为键名(null除外)，不接受其它类型的值作为键名
+            2、WeakMap的键名引用的对象是弱引用 
+        与Map对象的区别？
+            1、Map的键可以是任意类型，WeakMap只接受对象作为键，不接受其它类型的值作为键
+            2、Map的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键；WeakMap的键是弱引用，
+                键所指向的对象是可以被垃圾回收，此时键是无效的。
+            3、Map可以被遍历，WeakMap不能被遍历
 十三、iterator 迭代器/遍历器
     ·iterator对象
         0.背景
@@ -3034,10 +3043,10 @@ function scrollMove(event) {
         return result;
     }
 拓展7.tcp的三次握手(以下S代表服务器，C代表客户端)
-    （1）第一次握手：建立连接时，客户端A发送SYN包（seq=0）到服务器B，并进入SYN_SEND状态，等待服务器B确认。
-    （2）第二次握手：服务器B收到SYN包，必须确认客户A的SYN（seq=0,ack=1），同时自己也发送一个SYN包（SYN=k），
+    （1）第一次握手：建立连接时，客户端A发送SYN包（seq=x）到服务器B，并进入SYN_SEND状态，等待服务器B确认。
+    （2）第二次握手：服务器B收到SYN包，必须确认客户A的SYN（seq=y,ack=x+1），同时自己也发送一个SYN包（SYN=k），
         即SYN+ACK包，此时服务器B进入SYN_REVD状态。
-    （3）第三次握手：客户端A收到服务器B的SYN＋ACK包，向服务器B发送确认包ACK（seq=1,ack=1），此包发送完毕，
+    （3）第三次握手：客户端A收到服务器B的SYN＋ACK包，向服务器B发送确认包ACK（seq=x+1,ack=y+1），此包发送完毕，
         客户端A和服务器B进入ESTABLISHED状态，完成三次握手。
 
     完成三次握手，客户端与服务器开始传送数据。
