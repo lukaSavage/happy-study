@@ -241,10 +241,10 @@ function compose(...fns) {
  * @param {Function*} gen generator函数
  * @returns
  */
-function co(gen) {
+function co(iterator) {
   return new Promise((resolve, reject) => {
     function step(data) {
-      const { value, done } = gen.next()
+      const { value, done } = iterator.next()
       if (!done) {
         Promise.resolve(value)
           .then(data => {
@@ -341,3 +341,31 @@ function search(A, N, M) {
   }
   return res
 }
+
+/* ----------------------------------------------------分割线-------------------------------------------- */
+
+/**
+ * 重复的最长子串
+ * @param {*} s 
+ * @returns 
+ */
+function longStr2(s) {
+  // 存储最长子串
+  let maxStr = ''
+  // 滑动窗口遍历字符串
+  for (let i = 0; i < s.length; i++) {
+      // 窗口宽度为当前子串长度
+      for (let j = i + maxStr.length + 1; j < s.length; j++) {
+          // 截取当前窗口内子串
+          let curStr = s.slice(i, j)
+          // 查询左指针后面是否存在相同子串
+          if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
+          // 左指针后面不存在相同子串则跳出循环
+          else break
+      }
+  }
+  // 返回结果
+  return maxStr
+}
+
+console.log(longStr2("banana"));

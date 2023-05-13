@@ -15,14 +15,35 @@
 // type ConstructorParameters<T extends Constructor> = T extends new (...args: infer P) => any ? P : never;
 // type InstanceType<T extends Constructor> = T extends new (...args: any[]) => infer R ? R : any;
 interface Person {
-    name: string;
-    age: number;
-    married: boolean
+  name: string
+  age: number
+  married: boolean
 }
-type A = Overw<string, string>
-let eg: A = {
-    name: '战三',
-    age: 22, // 报错，不是string类型
-    married: 1 // 报错，不是string类型
+type E = Overw<string, string>
+let eg: E = {
+  name: '战三',
+  age: 22, // 报错，不是string类型
+  married: 1 // 报错，不是string类型
 }
 
+type Arr = Array<string | number>
+type get<T> = T extends Array<infer U> ? U : T
+// type B = get<Arr>
+
+type A = 'a' | 'b'
+type B = 'b' | 'c'
+
+type C = A & B
+
+type TrimLeft<T extends string> = T extends `${infer R} ` ? TrimLeft<R> : T;
+type TrimRight<T extends string> = T extends ` ${infer R}` ? TrimRight<R> : T;
+
+type Trim<T extends string> = TrimLeft<TrimRight<T>>
+
+type Test = Trim<'   hello  '>
+
+type Pick<T extends unknown, R extends keyof T> = {
+  [K in R]: T[K]
+}
+const person = {name: 'zhangsan', age: 12}
+type XXX = Pick<typeof person, 'age'>

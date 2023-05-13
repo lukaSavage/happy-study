@@ -259,6 +259,9 @@
                     用法：让a标签无法跳转：<a href="javascript:void(0)">不能点了</a>
                     其他无法跳转方法：①、<a href="javascript:">不能点了</a>
                              ②、<a href="javascript:">不能点了</a>
+                    拓展：void关键词
+                        首先，void 操作符指定要计算或运行一个表达式，但是不返回值。
+                        用法：void(func()) 或 void func()
                 ④ typeof  用于数据类型判断 一元
                     ·typeof(num)和typeof num 的区别(虽然用法不同，但效果是一样的)
                        ·typeof(num)   此时的typeof是一个函数 
@@ -2883,7 +2886,15 @@
         1. 借助于JSON  
             * JSON.parse(JSON.stringify(obj));
                 优点：实现了深度克隆
-                缺点：无法拷贝方法，适合于纯数据对象
+                缺点：
+                    ①、当值为Function、undefined、Symbol时，键值对消失
+                    ②、当值为NaN，Infinity（含-Infinity），JSON序列化后的结果会是null
+                    ③、当值为Date对象时，转化后会变成字符串。如 '1970-01-01T00:00:00.000Z'
+                    ④、转换的数据包含RegExp 引用类型序列化之后会变成空对象{}。
+                    ⑤、无法序列化不可枚举属性。
+                    ⑥、无法序列化对象的循环引用，（例如: obj[key] = obj)。
+                    ⑦、无法序列化对象的原型链。
+                参考：https://blog.csdn.net/weixin_44514665/article/details/115444273
         // 2. 递归函数实现
         2. 定义函数 获取对象的构造函数（类）名
         function getObjectClass(obj) {

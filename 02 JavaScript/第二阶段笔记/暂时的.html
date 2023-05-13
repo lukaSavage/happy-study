@@ -20,14 +20,42 @@
             // console.log(iterator.next('cValue')) ==> 返回{value: 111, done: true};
         }
 
-        const iterator = generator()
-        console.log(iterator.next('0Value'))
-        console.log(iterator.next('1Value'))
-        console.log(iterator.next('2Value'))
-        console.log(iterator.next('3Value'))
-        let arr = [1,2,3]
-        const a = arr.splice(1,0,1,2,3);
-        console.log(a, arr);
+        function longStr2(s) {
+            // 存储最长子串
+            let maxStr = ''
+            // 滑动窗口遍历字符串
+            for (let i = 0; i < s.length; i++) {
+                // 窗口宽度为当前子串长度
+                for (let j = i + maxStr.length + 1; j < s.length; j++) {
+                    // 截取当前窗口内子串
+                    let curStr = s.slice(i, j)
+                    // 查询左指针后面是否存在相同子串
+                    if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
+                    // 左指针后面不存在相同子串则跳出循环
+                    else break
+                }
+            }
+            // 返回结果
+            return maxStr
+        }
+        // console.log(longStr2("bananac"));
+
+        function aaa() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('呵呵')
+                }, 1000);
+            })
+        }
+        async function test() {
+            const result = await aaa()
+            console.log(111);
+            console.log(result);
+            console.log(222);
+        }
+
+        test()
+        console.log('外面的');
     </script>
 </body>
 

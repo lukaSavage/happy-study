@@ -204,7 +204,9 @@
             2)当我们需要在数据变化时执行异步或开销较大的操作时，应该使用 watch，使用 watch 选项允许我们执行异步操作 ( 访问一个 API )，
                 限制我们执行该操作的频率，并在我们得到最终结果前，设置中间状态。这些都是计算属性无法做到的。
             3)简单的说：computed具有缓存特性，只能执行同步，而watch是可以执行异步操作的
-
+        computed、watch、create的执行顺序？
+            ①、在watch设置immediate为true的时候，watch => create => computed
+            ②、在watch没有设置immediate为true的时候, create => watch => computed
 六、vue中的样式操作
     ·class操作
         1.直接定义(★项目用的最多)
