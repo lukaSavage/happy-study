@@ -1,0 +1,56 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/rank/rank",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/remark/remark",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#08e",
+		"backgroundColor": "#F8F8F8"
+	},
+    "tabBar": {
+        "color": "#222",
+        "selectedColor": "#08e",
+        "backgroundColor": "#eee",
+        "position": "bottom",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/remark/remark",
+                "text": "评论",
+                "iconPath": "",
+                "selectedIconPath": ""
+            },
+            {
+                "pagePath": "pages/index/index",
+                "text": "Home",
+                "iconPath": "",
+                "selectedIconPath": ""
+            },
+            {
+                "pagePath": "pages/rank/rank",
+                "text": "排名",
+                "iconPath": "",
+                "selectedIconPath": ""
+            }
+        ]
+    }
+    
+}
