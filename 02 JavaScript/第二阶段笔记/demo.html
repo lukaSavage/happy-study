@@ -8,89 +8,113 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            html,
+            body {
+                height: 200%;
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        html,
-        body {
-            height: 200%;
-        }
+            .a > ul > li {
+                color: #f90;
+            }
 
-        .a>ul>li {
-            color: #f90;
-        }
+            .a ul li.one {
+                color: #08e;
+            }
 
-        .a ul li.one {
-            color: #08e;
-        }
+            #dd {
+                width: 100px;
+                height: 100px;
+                /* background-color: #f00; */
+                margin-top: 100px;
+                margin-left: 200px;
+            }
 
-        #dd {
-            width: 100px;
-            height: 100px;
-            /* background-color: #f00; */
-            margin-top: 100px;
-            margin-left: 200px;
-        }
+            #mask {
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-color: rgba(0, 0, 0, 0.6);
+                border-style: solid;
+                z-index: 1111;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
 
-        #mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-color: rgba(0, 0, 0, .6);
-            border-style: solid;
-            z-index: 1111;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="a" id="a">
-        <ul>
-            <li class="one">我是第1个li</li>
-            <li>我是第2个li</li>
-            <li>我是第3个li</li>
-        </ul>
-        <input type="text" id="ipt">
-        <div id="dd">fsdf</div>
-    </div>
-    <div id="mask"></div>
-    <script>
-        /**
-         * 手写parse，要求满足以下所有条件
-            console.log(parse('a=1&b=&c=5&f=hello'))
-            console.log(parse('a&b&c'))
-            console.log(parse('a[name]=fox&a[company]=tecent&b=why'))
-            console.log(parse('color=Deep%20Blue'))
-            console.log(parse('a[0]=1&a[1]=2'))
-         * 
-         * @param {string} str 类似a=xxx&b=123&c=['2','b']
-         */
-        // { name: '张三', like: { eat: 'fruit', drink: 'water' } }
-        // console.log('offsetRight:' + dd.offsetRight, 'offsetBottom' + dd.offsetBottom);
-        // console.log(document.body.offsetHeight);
-        // const offsetTop = dd.offsetTop;
-        // const offsetLeft = dd.offsetLeft;
-        // const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
-        // const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
-        // mask.style.height = document.body.offsetHeight + 'px';
-        // mask.style.width = document.body.offsetWidth + 'px';
-        // mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
-        // console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
-        a.onclick = function (e) {
-            console.log(e.target);
-        }
-
-    </script>
-    <script>
-        
-
-    </script>
-</body>
-
-
+    <body>
+        <div class="a" id="a">
+            <ul>
+                <li class="one">我是第1个li</li>
+                <li>我是第2个li</li>
+                <li>我是第3个li</li>
+            </ul>
+            <input type="text" id="ipt" />
+            <div id="dd">fsdf</div>
+        </div>
+        <div id="mask"></div>
+        <script>
+            /**
+   * 手写parse，要求满足以下所有条件
+      console.log(parse('a=1&b=&c=5&f=hello'))
+      console.log(parse('a&b&c'))
+      console.log(parse('a[name]=fox&a[company]=tecent&b=why'))
+      console.log(parse('color=Deep%20Blue'))
+      console.log(parse('a[0]=1&a[1]=2'))
+   * 
+   * @param {string} str 类似a=xxx&b=123&c=['2','b']
+   */
+            // { name: '张三', like: { eat: 'fruit', drink: 'water' } }
+            // console.log('offsetRight:' + dd.offsetRight, 'offsetBottom' + dd.offsetBottom);
+            // console.log(document.body.offsetHeight);
+            // const offsetTop = dd.offsetTop;
+            // const offsetLeft = dd.offsetLeft;
+            // const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
+            // const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
+            // mask.style.height = document.body.offsetHeight + 'px';
+            // mask.style.width = document.body.offsetWidth + 'px';
+            // mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
+            // console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
+            // a.onclick = function (e) {
+            //     console.log(e.target);
+            // }
+        </script>
+        <script>
+            function search(A, N, M) {
+                const n = num => {
+                    let count = 0
+                    while (num) {
+                        num &= num - 1
+                        count++
+                    }
+                    return count
+                }
+                let res = [],
+                    len = A.length,
+                    bit = 1 << len
+                // 1.先取出所有可能
+                for (let i = 1; i < bit.length; i++) {
+                    if (n(i) === N) {
+                        let s = 0,
+                            temp = []
+                        for (let j = 0; j < len.length; j++) {
+                            //
+                            if ((i & (1 << j)) !== 0) {
+                                s += A[j]
+                                temp.push(A[j])
+                            }
+                        }
+                        if (s === M) res.push(temp)
+                    }
+                }
+                return res
+            }
+            console.log(search([1, 2, 3, 4], 2, 5))
+        </script>
+    </body>
 </html>

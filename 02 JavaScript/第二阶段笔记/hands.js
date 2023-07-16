@@ -305,7 +305,7 @@ function parse(str) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
  * 16.给定一个不重复的正整数集合A，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
- * 举例：https://blog.csdn.net/weixin_34130269/article/details/91382220
+ * 举例：https://juejin.cn/post/6844903792555589639?searchId=202307132358251F0550E958D472BF4C54#heading-16
     search([1,3,8,5,2], 2, 11)        // [3, 8]
     search([1,3,8,5,2], 4, 3)         // null
  * @param {Array} A  代表正整数集合
@@ -345,27 +345,27 @@ function search(A, N, M) {
 /* ----------------------------------------------------分割线-------------------------------------------- */
 
 /**
- * 重复的最长子串
- * @param {*} s 
- * @returns 
+ * 17.重复的最长子串
+ * @param {*} s
+ * @returns
  */
 function longStr2(s) {
   // 存储最长子串
   let maxStr = ''
   // 滑动窗口遍历字符串
   for (let i = 0; i < s.length; i++) {
-      // 窗口宽度为当前子串长度
-      for (let j = i + maxStr.length + 1; j < s.length; j++) {
-          // 截取当前窗口内子串
-          let curStr = s.slice(i, j)
-          // 查询左指针后面是否存在相同子串
-          if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
-          // 左指针后面不存在相同子串则跳出循环
-          else break
-      }
+    // 窗口宽度为当前子串长度
+    for (let j = i + maxStr.length + 1; j < s.length; j++) {
+      // 截取当前窗口内子串
+      let curStr = s.slice(i, j)
+      // 查询左指针后面是否存在相同子串
+      if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
+      // 左指针后面不存在相同子串则跳出循环
+      else break
+    }
   }
   // 返回结果
   return maxStr
 }
 
-console.log(longStr2("banana"));
+console.log(longStr2('banana'))

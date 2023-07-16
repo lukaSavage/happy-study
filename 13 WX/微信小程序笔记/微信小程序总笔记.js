@@ -800,7 +800,7 @@
     ·getCurrentPages  获取当前的页面栈
 
 
-拓展：小程序性能优化方案：
+拓展：小程序性能优化方案：(https://blog.csdn.net/wu_xianqiang/article/details/108037685)
     1）.清理无用代码
 　　2）.采用分包策略
 　　3）.压缩图片，使用适当图片格式

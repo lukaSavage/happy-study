@@ -836,6 +836,8 @@
                     2.foreach不会生成数组副本，而map可以
                     3.map可以return，foreach既不能return，也不能break。
                     4.map可以链式调用，foreach不行
+                    forEach如何中断？
+                    使用trycatch包裹的同时，throw一个错误进行中断
             2.filter   过滤数组，检测数值元素，并返回符合条件所有元素的数组。
                 ★注意：该方法有返回值，并且返回的是布尔类型，返回true则不对数组处理，返回false删除数组的元素或者属性★
                 var result = arr.filter(function(items,index){       

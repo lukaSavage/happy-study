@@ -6,7 +6,7 @@
     <!-- #ifdef MP-WEIXIN -->
     <view>我希望只在微信小程序页面中看见</view>
     <!-- #endif -->
-    <navigator url="/pages/index/index" open-type="switchTab">跳转到首页</navigator>
+    <!-- <navigator url="pages/Detail/index" open-type="switchTab">跳转到首页</navigator> -->
   </view>
 </template>
 

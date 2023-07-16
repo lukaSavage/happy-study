@@ -886,6 +886,10 @@
         4) 当 socket server 监听到对应的模块发生变化时，会生成两个文件.json（manifest文件）和.js文件（update chunk）
         5) 通过长连接，socket server 可以直接将这两个文件主动发送给客户端（浏览器）
         6) 浏览器拿到两个新的文件后，通过HMR runtime机制，加载这两个文件，并且针对修改的模块进行更新
+    7) tree-shaking原理
+        ①、标记出模块导出值哪些没有被用过
+        ②、使用Terser删除掉没有被用到的导出语句
+    
 
 
 

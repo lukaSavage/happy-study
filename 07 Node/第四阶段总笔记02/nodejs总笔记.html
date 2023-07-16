@@ -289,7 +289,13 @@
             commonjs模块与ES6模块的区别？
                 1.commonjs输出的，是一个值的拷贝，而es6输出的是值的引用
                 2.commonjs是运行时加载，es6是编译时输出接口
-
+            require是同步还是异步
+                结论：
+                    require(['../ccc.js'],function(){})是异步加载
+                    require('../ccc.js') 同步加载
+                    require参数只是一个路径时，是同步，参数是一个数组时就是异步加载
+                参考文章：
+                    https://blog.csdn.net/uniquepeng/article/details/129951643
 
 四、包和包管理器
     1.package包和package.json
@@ -352,7 +358,18 @@
             如果返回https://registry.npm.taobao.org，说明镜像配置成功
         *使用cnpm
             如：cnpm install jquery@1.12.24
-
+    5.pnpm(可以参考文章：https://juejin.cn/post/7114117329687937032#heading-9)
+        *特点
+            1、速度快、节约磁盘空间、非常适合 monorepos、安全性高……
+            2、用作 Node.js 版本管理器，请参阅pnpm 环境使用
+        *安装
+            npm install -g pnpm
+        
+        面试题：
+            pnpm快的原因？
+                1）npm2 是通过嵌套的方式管理 node_modules 的，会有同样的依赖复制多次的问题。
+                2）npm3+ 和 yarn 是通过铺平的扁平化的方式来管理 node_modules，解决了嵌套方式的部分问题，但是引入了幽灵依赖的问题，并且同名的包只会提升一个版本的，其余的版本依然会复制多次。
+                3）pnpm 则是用了另一种方式，不再是复制了，而是都从全局 store 硬连接到 node_modules/.pnpm，然后之间通过软链接来组织依赖关系。这样不但节省磁盘空间，也没有幽灵依赖问题，安装速度还快，从机制上来说完胜 npm 和 yarn。
     
 六、核心模块
     1.path

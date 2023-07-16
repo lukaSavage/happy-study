@@ -1,27 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        function* test() {
-            console.log('进来了');
-            const a = yield 1;
-            console.log('a',a);
-            const b = yield 2;
-            const c = yield 3;
-            const d = yield 4;
-        }
-        let p = test();
-        console.dir(p.next());
-        console.dir(p.next('想要值吗'));
-    </script>
-</body>
+      function* test() {
+        console.log('进来了')
+        const a = yield 1
+        console.log('a', a)
+        const b = yield 2
+        const c = yield 3
+        const d = yield 4
+      }
+      let p = test()
+      console.dir(p.next())
+      console.dir(p.next('想要值吗'))
 
+      async function async1() {
+        console.log("async1 start");
+        await async2();
+        console.log("async1 end");
+        setTimeout(() => {
+            console.log('timer1')
+        }, 0)
+        }
+        async function async2() {
+        setTimeout(() => {
+            console.log('timer2')
+        }, 0)
+        console.log("async2");
+        }
+        async1();
+        setTimeout(() => {
+        console.log('timer3')
+        }, 0)
+        console.log("start")
+
+
+    </script>
+  </body>
 </html>

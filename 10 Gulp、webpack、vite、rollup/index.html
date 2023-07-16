@@ -1,38 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        const p = new Promise((resolve, reject) => {
-            console.log(0)
-            reject()
-            console.log(1)
-            resolve()
-            console.log(2)
-        })
-        p.then(res => {
-            console.log(3)
-        }).then(res => {
-            console.log(4)
-        }).then(res => {
-            console.log('aaaaaaaaaaaaaa')
-        }).catch(res => {
-            console.log(5)
-        }).then(res => {
-            console.log(6)
-        }).catch(res => {
-            console.log(7)
-        }).then(res => {
-            console.log(8)
-        })
-    </script>
-</body>
+      // const p = new Promise((resolve, reject) => {
+      //     console.log(0)
+      //     reject()
+      //     console.log(1)
+      //     resolve()
+      //     console.log(2)
+      // })
+      // p.then(res => {
+      //     console.log(3)
+      // }).then(res => {
+      //     console.log(4)
+      // }).then(res => {
+      //     console.log('aaaaaaaaaaaaaa')
+      // }).catch(res => {
+      //     console.log(5)
+      // }).then(res => {
+      //     console.log(6)
+      // }).catch(res => {
+      //     console.log(7)
+      // }).then(res => {
+      //     console.log(8)
+      // })
 
+      // 请编写一个名为 "convertTemperature" 的 JavaScript 函数，该函数接受两个参数：一个表示温度的数值，一个表示当前温度单位的字符串（'C' 表示摄氏度，'F' 表示华氏度）。
+      // 该函数应将给定的温度转换为另一个单位（摄氏度转华氏度或反之），并将结果四舍五入为最接近的整数。请确保您的代码易于阅读、文档完善，且遵循变量命名和函数设计的最佳实践。
+
+      /*
+            华氏度：
+            Fahrenheit=Celsius×1.80+32.00；
+
+        */
+      function convertTemperature(temperature, str) {
+        if (str === 'C') {
+          return Math.round(temperature * 1.8 + 32.0)
+        } else if (str === 'F') {
+          return Math.round((temperature - 32.0) / 1.8)
+        }
+      }
+
+      /*
+        请编写一个名为 "groupArrayElements" 的 JavaScript 函数，该函数接受两个参数：一个整数数组和一个正整数 n。该函数应尽可能将数组元素分组为 n 个大小相等的子数组。如果数组无法平均分割，最后一个子数组应包含剩余元素。请确保您的代码易于阅读、文档完善，且遵循变量命名和函数设计的最佳实践。
+
+        示例输入和输出：
+
+        groupArrayElements([1, 2, 3, 4, 5], 2) // 输出: [[1, 2, 3], [4, 5]]
+
+        groupArrayElements([1, 2, 3, 4, 5, 6], 4) // 输出: [[1, 2], [3, 4], [5], [6]]
+
+      */
+
+      function groupArrayElements(arr, n) {
+        let size = Math.ceil(arr.length / n)
+        const res = []
+        for (let i = 0; i < arr.length; i += size) {
+          const group = arr.slice(i, i + size)
+          if (n - res.length === arr.length - i) {
+            size = 1
+            res.push(arr.slice(i, i + 1))
+          } else {
+            res.push(group)
+          }
+        }
+        return res
+      }
+      console.log(groupArrayElements([1, 2, 3, 4, 5], 2))
+      console.log(groupArrayElements([1, 2, 3, 4, 5, 6, 7], 4))
+    </script>
+  </body>
 </html>

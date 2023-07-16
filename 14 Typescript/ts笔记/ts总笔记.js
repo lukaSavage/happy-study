@@ -863,7 +863,19 @@
                     myname:string
                 }
             }
+九、三斜线指令
+    ·介绍
+        三斜线引用告诉编译器在编译过程中要引入的额外的文件。
+    ·用途
+        ·倒入声明文件
+        ·倒入第三方包
 
+        如果对比 import 的功能，我们可以写出如下的等式：
+        /// <reference path="..." /> == import filename.xxx
+        /// <reference types="..." /> == import lodash from "lodash"
+    详情请参考：
+        官网：https://www.tslang.cn/docs/handbook/triple-slash-directives.html
+        博客：https://www.jianshu.com/p/e0912df68c3e
 
 
 
