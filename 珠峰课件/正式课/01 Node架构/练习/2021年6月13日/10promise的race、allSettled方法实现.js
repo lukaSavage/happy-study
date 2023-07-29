@@ -129,7 +129,7 @@ class Promise {
             } catch (error) {
               reject(error)
             }
-          }, 0)
+          })
         })
         this.onRejectedCallbacks.push(() => {
           setTimeout(() => {
@@ -245,19 +245,23 @@ class Promise {
     })
   }
 
-  /* race方法的实现 */
+  /**
+   * rece是赛跑机制，要看最先的promise子实例是成功还是失败。
+   * @param {*} promises promises数组
+   * @returns 
+   */
   static race(promises) {
     return new Promise((resolve, reject) => {
       for (const item of promises) {
-        if (item && typeof item.then === 'function') {
-          item.then(resolve, reject)
-        } else {
-          // 说明是一个值类型
-          resolve(item)
-        }
+        Promise.resolve(item).then(resolve, reject);
       }
     })
   }
+  /**
+   * any方法是有一个子实例成功就算成功，全部子实例失败才算失败。
+   * @param {*} promises promises数组
+   * @returns 
+   */
   static any(promises) {
     return new Promise((resolve, reject) => {
       let result = [],

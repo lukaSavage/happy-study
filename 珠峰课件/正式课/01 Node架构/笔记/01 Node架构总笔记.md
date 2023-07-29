@@ -459,7 +459,7 @@ Promise.deferred = function () {
 module.exports = Promise;
 ```
 
-### 五、generator生成器
+## 五、generator生成器
 
 生成器就是生成遍历器的函数
 
@@ -494,7 +494,7 @@ function co(generator) {
 
 #### 					2.实现async await
 
-### 七、浏览器事件环
+## 七、浏览器事件环
 
 #### 		7.1 宏任务与微任务分类
 
@@ -597,7 +597,7 @@ Promise.resolve().then(()=>{
    └───────────────────────────┘
 ```
 
-### 九、Node中的基本概念
+## 九、Node中的基本概念
 
 #### 9.1 Node组成及基本概念
 
@@ -758,15 +758,15 @@ const event = new EventEmitter();
 
 ​	略~~~
 
-### 九、文件的可读流与可写流
+#### 9.9 文件的可读流与可写流
 
-###  十、链表
+##  十、链表
 
   1. 介绍
 
      链表一种线性的数据结构，通过指针将一个个零散的内存块连接起来，链表的每个内存块称为结点。
 
-### 十一、OSI七层模型（open System Interconnection）
+## 十一、OSI七层模型（open System Interconnection）
 
 #### 1.概念
 
@@ -788,6 +788,6 @@ const event = new EventEmitter();
 
 > 七层模型倒着看的，下层是为了上层服务的。可以简单记忆为<font color="#08e">物数网传会表应</font>
 
-### 十二、TCP/IP参考模型（五层模型）
+## 十二、TCP/IP参考模型（五层模型）
 
-### 十三、koa的实现
+## 十三、koa的实现
