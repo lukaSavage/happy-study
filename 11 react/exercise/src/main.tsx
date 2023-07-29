@@ -7,6 +7,7 @@ const counter = atom({
     default: 0
 })
 
+
 const App = () => {
     let [count, setCount] = useRecoilState(counter)
     return <div>
