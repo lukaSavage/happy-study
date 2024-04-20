@@ -304,7 +304,7 @@ function parse(str) {
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
 /**
- * 16.给定一个不重复的正整数集合A，从中取N个数字，使他们的和为M，写一个函数，求这个N个数字。如果有多个，只需要返回一个
+ * 16.给定一个不重复的正整数集合A，从中取N个数字，使他们的和为M的所有可能。
  * 举例：https://juejin.cn/post/6844903792555589639?searchId=202307132358251F0550E958D472BF4C54#heading-16
     search([1,3,8,5,2], 2, 11)        // [3, 8]
     search([1,3,8,5,2], 4, 3)         // null
@@ -313,6 +313,11 @@ function parse(str) {
  * @param {Number} m  代表M
  */
 function search(A, N, M) {
+  /**
+   * 用于计算二进制中1的数量
+   * @param {number} num 当前二进制对应的数字 
+   * @returns 
+   */
   const n = num => {
     let count = 0
     while (num) {
@@ -368,4 +373,4 @@ function longStr2(s) {
   return maxStr
 }
 
-console.log(longStr2('banana'))
+console.log(search([1,3,8,4,2], 2, 5));
