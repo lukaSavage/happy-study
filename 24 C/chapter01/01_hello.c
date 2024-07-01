@@ -3,15 +3,12 @@
 //
 
 #include <stdio.h>
+#include <stdbool.h>
+
+#define PI 3.14
 
 int main(void)
 {
-    /**
-     * 这么好用的东西吗，vscode，永远的神！！！
-     *
-     */
-    int a;
-    // printf("你好，世界!%d\n", a);
-    printf("你好%d\n", a);
-    return 0;
+    int *a;
+    printf("a的地址：%p\n", *a);
 }
