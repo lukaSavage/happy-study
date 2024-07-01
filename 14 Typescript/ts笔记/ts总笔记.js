@@ -62,11 +62,12 @@
         ②、如果声明一个void类型的变量，只能为他赋值于null或者undefined，其他的会报错
             function demo():void{
                 console.log('呵呵')
+                // 返回值不写、或者返回值为null和undefined
             }
     ·never类型
         ①、代表那些永不存在值的类型，如下
             1)抛出异常的函数
-            2)不会有返回值的函数表达式
+            2)不会有返回值的函数表达式(死循环函数)
             3)使用type声明一个交叉类型，如 type Ss = number & string;    ===>结果拿到的是never
         ②、never类型是任何类型的子类型(包括null和undefined)，也可以赋值给任何类型：如下案例：
             var a:never;
@@ -78,45 +79,34 @@
     ·object类型
         表示非原始类型，也就是除number、string、boolean、symbol之外的类型
         在编写类声明文件(.d.ts后缀)时，object类型就有很大的作用
+        {} 完全等效于 Object ！！！
+        非严格模式下，null和undefined都可以赋值给Object或者object
         拓展：
-            ①、大 Object代表所有拥有 toString、hasOwnProperty 方法的类型所以所有原始类型、非原始类型都可以赋给 Object(严格模式下 null 和 undefined 不可以)
-                let ObjectCase: Object;
-                ObjectCase = 1; // ok
-                ObjectCase = "a"; // ok
-                ObjectCase = true; // ok
-                ObjectCase = null; // error
-                ObjectCase = undefined; // error
-                ObjectCase = {}; // ok
-            ②、{} 空对象类型和大 Object 一样 也是表示原始类型和非原始类型的集合
-                let simpleCase: {};
-                simpleCase = 1; // ok
-                simpleCase = "a"; // ok
-                simpleCase = true; // ok
-                simpleCase = null; // error
-                simpleCase = undefined; // error
-                simpleCase = {}; // ok
+            ①、严格模式下，Object 表示除 null 和 undefined 外的所有值，包含了原始类型和非原始类型
+            ②、严格模式下，表示非原始类型。即除 number ， string ， boolean ， symbol ， null ， undefined 之外的所有类型。
+        Object和object的具体对比如下↓
+            操作类型                  {}        Object            object             {[key:string]: any}
+            obj = {prop: 0}          ✅          ✅               ✅                    ✅
+            obj.prop                 ❌️          ❌️               ❌️                    ✅
+            obj.constructor          ✅          ✅               ✅                    ✅
+            obj = []                 ✅          ✅               ✅                    ✅
+            obj.toString()           ✅          ✅               ✅                    ✅
+            obj = 1                  ✅          ✅               ❌️                    ❌️
+            obj.toFixed()            ❌️          ❌️               ❌️                    ✅
+            obj = 'string'           ✅          ✅               ❌️                    ❌️
+            obj = false              ✅          ✅               ❌️                    ❌️
+            obj = null               ❌️          ❌️               ❌️                    ❌️
+            obj = undefined          ❌️          ❌️               ❌️                    ❌️
+            
     ·unknown类型（ts3.0新增）
         对照于any，unknown是类型安全的。 任何值都可以赋给unknown，但是当没有类型断言或基于控制流的类型细化时unknown不可以赋值给
         其它类型，除了它自己和any外。 同样地，在unknown没有被断言或细化到一个确切类型之前，是不允许在其上进行任何操作的(例如调用属性或方法)
-        解决该问题的办法是使用类型断言或者类型保护
-        示例：
-            type T00 = unknown & null;                 // null
-            type T01 = unknown & undefined;            // undefined
-            type T02 = unknown & null & undefined;     // null & undefined (which becomes never)
-            type T03 = unknown & string;               // string
-            type T04 = unknown & string[];             // string[]
-            type T05 = unknown & unknown;              // unknown
-            type T06 = unknown & any;                  // any
-
-            // In a union an unknown absorbs everything
-
-            type T10 = unknown | null;                  // unknown
-            type T11 = unknown | undefined;             // unknown
-            type T12 = unknown | null | undefined;      // unknown
-            type T13 = unknown | string;                // unknown
-            type T14 = unknown | string[];              // unknown
-            type T15 = unknown | unknown;               // unknown
-            type T16 = unknown | any;                   // any
+        解决该问题的办法是使用类型断言或者类型保护。
+        重要结论：
+            1) unkonw和any一样不受类型的限制,但是unknow不能赋值给除any和unknow的其他类型。
+            2) unknow类型的变量不能访问属性和方法
+            3) unknown类型变量能够进行的运算是有限的，只能进行比较运算（运算符==、===、!=、!==、||、&&、?） 、取反运算（运算符!）、typeof运算符和instanceof运算符这几种， 其他运算都会报错。
+        
 
 三、类型断言
     ·介绍
@@ -208,7 +198,7 @@
                 currentTime: Date;
                 constructor(h: number, m: number) { }
             }
-        6）定义一个泛型
+        6）定义一个泛型函數
             interface Func {
                 <T>(name: T, sex: T): T;
             }
@@ -873,6 +863,7 @@
         如果对比 import 的功能，我们可以写出如下的等式：
         /// <reference path="..." /> == import filename.xxx
         /// <reference types="..." /> == import lodash from "lodash"
+        /// <reference lib="es2019.array" />  （引入lib文件，了解即可）
     详情请参考：
         官网：https://www.tslang.cn/docs/handbook/triple-slash-directives.html
         博客：https://www.jianshu.com/p/e0912df68c3e
