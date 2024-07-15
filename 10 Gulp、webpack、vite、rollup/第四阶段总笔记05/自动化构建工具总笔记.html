@@ -623,10 +623,10 @@
                     ①、先下载
                         npm i optimize-css-assets-webpack-plugin -D
                     ②、再引入
-                        const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+                        const OptimizeCSSAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
                     ③、放入到plugins中
                         plugins: [
-                            new OptimizeCSSAssetsPlugin({}),
+                            new OptimizeCSSAssetsWebpackPlugin({}),
                         ]
         ②、清除build再重新设置的插件
             clean-webpack-plugin，一个webpack插件，可以打包前先清空输出目录
@@ -782,7 +782,7 @@
             将css文件单独打包引入
         ③、cleanWebpackPlugin
             清除build再重新打包
-        ④、OptimizeCSSAssetsPlugin
+        ④、OptimizeCSSAssetsWebpackPlugin
             将css文件压缩成一行代码
     3）webpack优化有哪些？
         ①、HMR热模块替换
@@ -803,7 +803,7 @@
                         module.hot.accept('./module3', () => {
                         });
                     }
-        ①、oneof配置(rules的优化)
+        ②、oneof配置(rules的优化)
             介绍：
                 配置前：会将rule数组都加载一遍再进行匹配
                 配置后：在rule中查询到与之匹配的loader之后，立马跳出
@@ -883,9 +883,9 @@
         1) 通过webpack-dev-server创建两个服务器：提供静态资源的服务（express）和Socket服务
         2) express server 负责直接提供静态资源的服务（打包后的资源直接被浏览器请求和解析）
         3) socket server 是一个 websocket 的长连接，双方可以通信
-        4) 当 socket server 监听到对应的模块发生变化时，会生成两个文件.json（manifest文件）和.js文件（update chunk）
+        4) 当 socket server 监听到对应的模块发生变化时，会生成两个文件xxx.hot-update.json和xxx.hot-update.js文件
         5) 通过长连接，socket server 可以直接将这两个文件主动发送给客户端（浏览器）
-        6) 浏览器拿到两个新的文件后，通过HMR runtime机制，加载这两个文件，并且针对修改的模块进行更新
+        6) 浏览器拿到两个新的文件后，通过HMR runtime机制，加载这两个文件，并触发module.hot.accept()方法，并且针对修改的模块进行更新
     7) tree-shaking原理
         ①、标记出模块导出值哪些没有被用过
         ②、使用Terser删除掉没有被用到的导出语句

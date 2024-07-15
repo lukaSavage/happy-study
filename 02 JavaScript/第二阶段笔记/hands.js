@@ -315,8 +315,8 @@ function parse(str) {
 function search(A, N, M) {
   /**
    * 用于计算二进制中1的数量
-   * @param {number} num 当前二进制对应的数字 
-   * @returns 
+   * @param {number} num 当前二进制对应的数字
+   * @returns
    */
   const n = num => {
     let count = 0
@@ -373,4 +373,10 @@ function longStr2(s) {
   return maxStr
 }
 
-console.log(search([1,3,8,4,2], 2, 5));
+// console.log(search([1,3,8,4,2], 2, 5));
+const a = new Map([
+  [1, 2],
+  [3, 4]
+])
+const b = new Set([1, 2, 3, 4])
+console.log(a, b)

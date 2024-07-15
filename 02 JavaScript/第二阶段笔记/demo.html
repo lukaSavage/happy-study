@@ -107,12 +107,13 @@
       //   p.like.aaa = 'heheh';
       p[0] = 'hehehe'
       console.log(data)
+      console.log('--------------------------');
       function A(name) {
         this.name = name;
       }
       const a = new A('张三');
-      console.log(a.prototype);
-      console.log(a.__proto__);
+      console.log(a.prototype, A.prototype.__proto__ === Object.prototype);
+      console.log(A.__proto__);
       console.log(A.prototype.prototype, Object.prototype.prototype);
       console.log(A.__proto__ === Function.prototype);
       console.log(Function.__proto__ === Function.prototype);

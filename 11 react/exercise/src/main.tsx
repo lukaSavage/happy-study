@@ -7,13 +7,20 @@ const counter = atom({
     default: 0
 })
 
-
 const App = () => {
     let [count, setCount] = useRecoilState(counter)
-    return <div>
-        <h1>{count}</h1>
-        <button onClick={()=> setCount(++count)}>点我加1</button>
-    </div>
+    return (
+        <div>
+            <h1>{count}</h1>
+            <button
+                onClick={() => {
+                    setCount(++count)
+                }}
+            >
+                点我加1
+            </button>
+        </div>
+    )
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
