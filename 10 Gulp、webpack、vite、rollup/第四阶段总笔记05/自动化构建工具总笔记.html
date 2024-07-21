@@ -1155,6 +1155,9 @@
                 "vite-cli": "./bin/vite.js"   // 会全局注册一个命令：vite-cli , 并执行命令: ./bin/vite.js
             }
             // 以此我们可以通过全局命令 vite-cli xxx 执行脚本了。
+    ·面试题：vite比webpack快的原因？
+    ①、webpack是先打包再启动服务器，vite则是直接打包，按需编译依赖文件
+    ②、webpack是基于node.js实现的，vite则使用esbuild预构建依赖，速快快了10~100倍
             
             
 

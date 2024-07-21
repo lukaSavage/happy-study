@@ -161,12 +161,64 @@ class Promise {
 
     return promise2
   }
+
+  catch(failCallback) {
+    return this.then(null, failCallback)
+  }
+  finally(cb) {
+    return this.then(
+      y => {
+        return Promise.resolve(db()).then(() => y)
+      },
+      r => {
+        return Promise.reject(cb()).then(() => {
+          throw r
+        })
+      }
+    )
+  }
+  static resolve(value) {
+    return new Promise((resolve, reject) => {
+      resolve(value)
+    })
+  }
+  static reject(reason) {
+    return new Promise((resolve, reject) => {
+      reject(reason)
+    })
+  }
+  static all(promises) {
+    return new Promise((resolve, reject) => {
+      let arr = [],
+        index = 0
+
+      function process(item, i) {
+        arr[i] = item
+        if (++index === promises.length) {
+          resolve(arr)
+        }
+      }
+
+      for (let i = 0; i < promises.length; i++) {
+        const item = promises[i]
+        if (item.then && typeof item.then === 'function') {
+          item.then(() => {
+            process(item, i)
+          }, reject)
+        } else {
+          resolve(item)
+        }
+      }
+    })
+  }
 }
 
-Promise.deferred = function() {
+
+
+Promise.deferred = function () {
   let dfd = {}
-  dfd.promise = new Promise((resolve, reject)=>{
-    dfd.resolve = resolve;
+  dfd.promise = new Promise((resolve, reject) => {
+    dfd.resolve = resolve
     dfd.reject = reject
   })
   return dfd

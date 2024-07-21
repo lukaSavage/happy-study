@@ -38,25 +38,82 @@
             // 返回结果
             return maxStr
         }
-        // console.log(longStr2("bananac"));
-
-        function aaa() {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve('呵呵')
-                }, 1000);
-            })
-        }
-        async function test() {
-            const result = await aaa()
-            console.log(111);
-            console.log(result);
-            console.log(222);
+        
+        // let arr = [1, [2,3]];
+        // const res = arr.concat([33])
+        // console.log(res);
+        // const res = [].concat(...arr)
+        // console.log(res);
+        Function.prototype.myCall = function(target, ...args) {
+            target.__proto__._fn = this
+            const result = target._fn(...args)
+            delete target.__proto__._fn
+            return result
         }
 
-        test()
-        console.log('外面的');
-    </script>
+        Function.prototype.myBind = function(target, ...args) {
+            const _this = this
+            return function(...arg) {
+                return _this.call(target, ...args, ...arg)
+            }
+        }
+
+        function debounce(fn, time) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer)
+                timer = setTimeout(() => {
+                    fn.call(this, ...args)
+                }, time);
+            }
+        }
+
+        function throttle(fn, time) {
+            let start = 0;
+            return function(...args) {
+                let end = Date.now();
+                if(end - start < time) return
+                fn.call(this, ...args)
+                start = end
+            }
+        }
+
+        let string = 'safwefjiewfs'
+        function longString(string) {
+            let temp =[], max = 0, maxStr = ''
+            for (let i = 0; i < string.length; i++) {
+                let item = string[i]
+                let index = temp.indexOf(item)
+                if(index !== -1) {
+                    temp.splice(0, index + 1)
+                }
+                temp.push(item)
+                max = Math.max(max, temp.length)
+                if(temp.length > maxStr.length) {
+                    maxStr = temp.join('')
+                } 
+            }
+            return {
+                max,
+                maxStr
+            }
+        }
+        console.log(longString(string));
+        let obj = {
+            name: '张三',
+            age: 15
+        }
+
+        obj[Symbol.iterator] = function * () {
+            for (let i in obj) {
+                yield [i, obj[i]];
+            }
+        }
+
+        for (const i of obj) {
+            console.log(111, i);
+        }
+    </script> 
 </body>
 
 </html>

@@ -3,11 +3,14 @@
  * @param {array} array 冒泡传递的数组
  */
 function bubbleSort(array) {
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 0; j < array.length - 1 - i; j++) {
-      array[j] > array[j + 1] && ([array[j], array[j + 1]] = [array[j + 1], array[j]])
+  // 浅拷贝一份
+  let arr = [...array]
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+      arr[j] > arr[j + 1] && ([arr[j], arr[j + 1]] = [arr[j + 1], arr[j]])
     }
   }
+  return array
 }
 
 /* ----------------------------------------------------分割线-------------------------------------------- */
@@ -116,11 +119,18 @@ function deepClone(target) {
 
 /**
  * 8.手写flat
- * @param {*} array
+ * @param {Array} arr 多维数组
+ * @param {number} level 层级
+ * @returns 
  */
-function myFlat(arr) {
+function myFlat(arr, level = 1) {
   while (arr.some(item => Array.isArray(item))) {
-    arr = [].concat(...arr)
+    if (level) {
+      level--
+      arr = [].concat(...arr)
+    } else {
+      break
+    }
   }
   return arr
 }
@@ -160,7 +170,7 @@ function longStr(str) {
     }
     temp.push(str[i])
     if (temp.length > maxStr.length) {
-      maxStr = temp.join().replace(/,/g, '')
+      maxStr = temp.join('')
     }
     max = Math.max(max, temp.length)
   }
@@ -373,10 +383,6 @@ function longStr2(s) {
   return maxStr
 }
 
-// console.log(search([1,3,8,4,2], 2, 5));
-const a = new Map([
-  [1, 2],
-  [3, 4]
-])
-const b = new Set([1, 2, 3, 4])
-console.log(a, b)
+
+let arr = [1,2,3]
+console.log(arr.keys(),arr.values());

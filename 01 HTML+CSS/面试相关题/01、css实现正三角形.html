@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #box {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-bottom-color: aqua;
+      border-top-width: 173.2px;
+      border-bottom-width: 173.2px;
+    }
+  </style>
+</head>
+<body>
+  <div id="box"></div>
+  <hr noshade>
+  <script>
+    console.log(typeof Promise.resolve(3));
+    Promise.resolve(1).then(2).then(Promise.resolve(3)).then(console.log)
+  </script>
+</body>
+</html>

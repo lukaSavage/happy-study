@@ -2877,8 +2877,9 @@
         数组Array:
         1. [...arr]
         2. arr.concat()  不写参数 数组合并方式
-        3. arr.splice(0)  数组截取方式
+        3. arr.splice(0,arr.length, ...arr)  数组截取方式
         4.arr.slice()
+        5.Array.from(arr)
         字符串String:
         1. str.substring(0)
         2. str.substr(0)
@@ -2925,7 +2926,7 @@
         2. Object.keys()、Object.value()、Object.entries()    自身的属性，属性名是symbol类型不可以
         3. Object.getOwnPropertyNames()     自身属性名的集合， 属性名是symbol类型不可以
         4. Object.getOwnPropertySymbols()   自身属性名时symbol类型的属性名的集合
-        5. Reflec.ownKeys()    自身所有的属性名的集合 （字符串和symbol都可以）
+        5. Reflect.ownKeys()    自身所有的属性名的集合 （字符串和symbol都可以）
 ---------------------------完结散花-------------------------------------------------------------  
 参考案例地址：      
 ★★★★★   example.fuming.site     ★★★★★

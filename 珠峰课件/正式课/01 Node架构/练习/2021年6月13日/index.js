@@ -145,7 +145,7 @@ class Promise {
           index = 0;
         temp[i] = item;
         if (++index === temp.length) {
-          resolve();
+          resolve(temp);
         }
       }
 
