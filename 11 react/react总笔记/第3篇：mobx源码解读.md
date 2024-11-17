@@ -82,12 +82,8 @@ npm i mobx mobx-react
 import {observable,reaction} from 'mobx';
 let obj = {name:'1'}
 let proxyObj = observable(obj);
-console.log(proxyObj);
-
-/*
-打印结果
-1
-*/
+console.log(proxyObj); // Proxy(Object)
+console.log(proxyObj.name) // 1
 ```
 
 ### 1.3.3 reactions（概念）

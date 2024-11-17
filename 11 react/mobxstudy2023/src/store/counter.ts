@@ -9,11 +9,15 @@ class Counter {
     }
     increment() {
         this.count++
-        console.log(this.count);
-        
+        console.log(this.count)
+    }
+    async incrementAsync() {
+        setTimeout(() => {
+            this.increment()
+        }, 1000)
     }
     *fetch(): Generator<any, any, any> {
-        const response = yield new Promise((resolve) => setTimeout(() => resolve(5), 1000))
+        const response = yield new Promise(resolve => setTimeout(() => resolve(5), 1000))
         this.count = response
     }
 }

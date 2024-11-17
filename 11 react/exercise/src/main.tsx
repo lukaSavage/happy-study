@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { atom, RecoilRoot, useRecoilState } from 'recoil'
+import ZustandDemo from './components/ZustandDemo'
 
 const counter = atom({
     key: 'demo',
@@ -19,6 +20,7 @@ const App = () => {
             >
                 点我加1
             </button>
+            <ZustandDemo />
         </div>
     )
 }
