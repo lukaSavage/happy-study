@@ -15,9 +15,9 @@
 // type ConstructorParameters<T extends Constructor> = T extends new (...args: infer P) => any ? P : never;
 // type InstanceType<T extends Constructor> = T extends new (...args: any[]) => infer R ? R : any;
 interface Person {
-    name: string
-    age: number
-    married: boolean
+  name: string
+  age: number
+  married: boolean
 }
 
 type Arr = Array<string | number>
@@ -37,11 +37,21 @@ type Trim<T extends string> = TrimLeft<TrimRight<T>>
 type Test = Trim<'   hello  '>
 
 type MyPick<T extends unknown, R extends keyof T> = {
-    [K in R]: T[K]
+  [K in R]: T[K]
 }
 const person = { name: 'zhangsan', age: 12 }
 type XXX = Pick<typeof person, 'age'>
 
 type YourPick<T extends unknown, R extends keyof T> = {
-    [K in R]: T[K]
+  [K in R]: T[K]
 }
+
+type YourExclude<T, U> = T extends U ? never : T
+
+type D = YourExclude<1 | 2 | 3, 1 | 3>
+
+type YourPick<T, U extends keyof T> = {
+  [K in U]: T[k]
+}
+
+type AA = YourPick<{ name: string; age: number }, 'age'>

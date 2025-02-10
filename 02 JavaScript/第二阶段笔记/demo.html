@@ -85,47 +85,36 @@
             // }
         </script>
         <script>
-            //   let data = {
-            //     name: '张三',
-            //     like: {
-            //       aaa: 1,
-            //       bbb: 2
-            //     }
-            //   }
-            let data = [1, 2, 3]
-            let p = new Proxy(data, {
-                get(target, key) {
-                    console.log('获取值:', key)
-                    return target[key]
-                },
-                set(target, key, value) {
-                    console.log('修改值:', key, value)
-                    target[key] = value
-                    return true
-                }
-            })
-            //   p.like.aaa = 'heheh';
-            p[0] = 'hehehe'
-            console.log(data)
-            console.log('--------------------------')
-            function A(name) {
-                this.name = name
+            let obj = {
+                a: 1,
+                b: 1
             }
-            const a = new A('张三')
-            console.log(a.prototype, A.prototype.__proto__ === Object.prototype)
-            console.log(A.__proto__, Function.prototype)
-            console.log(A.prototype.prototype, Object.prototype.prototype)
-            console.log(A.__proto__ === Function.prototype)
-            console.log(Function.__proto__ === Function.prototype)
-
-            class Demo {
-                constructor(name) {
-                    console.log(this, name)
+            obj.c = obj
+            function deepClone(target, cache = new WeakMap()) {
+                // console.log(cache.has(target));
+                if (cache.has(target)) {
+                    return cache.get(target)
                 }
+                const type = Object.prototype.toString.call(target).slice(8, -1)
+                let res = null
+                if (type === 'Object') {
+                    res = {}
+                } else if (type === 'Array') {
+                    res = []
+                } else {
+                    return target
+                }
+                cache.set(target, res)
+                for (const i in target) {
+                    if (Object.hasOwnProperty.call(target, i)) {
+                        res[i] = deepClone(target[i], cache)
+                    }
+                }
+                return res
             }
-
-            const demo = new Demo('张三')
-            console.log('实例对象', demo);
+            const copy = deepClone(obj)
+            copy.c = 'aaaaaa'
+            console.log(copy, obj);
         </script>
     </body>
 </html>

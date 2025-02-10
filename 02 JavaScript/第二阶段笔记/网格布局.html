@@ -3,29 +3,28 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Document</title>
         <style>
             * {
                 padding: 0;
                 margin: 0;
             }
-            #wrap {
-                /* width: 30%; */
-                /* height: 600px; */
+            .grid {
+                width: 100vw;
+                height: 100vh;
                 display: grid;
-                background: #f90;
-                grid-template-columns: 100px 100px 100px;
-                grid-template-rows: 100px 100px 100px;
-                grid-auto-flow: column;
+                grid-template-columns: repeat(3, minmax(200px, 1fr));
+                grid-template-rows: repeat(auto-fill, 100px);
+                gap: 10px;
             }
-            .item:nth-child(1) {
+            .item {
+                background: #f00;
+                box-sizing: border-box;
             }
         </style>
     </head>
-
     <body>
-        <div id="wrap">
+        <div class="grid">
             <div class="item">1</div>
             <div class="item">2</div>
             <div class="item">3</div>
@@ -35,9 +34,6 @@
             <div class="item">7</div>
             <div class="item">8</div>
             <div class="item">9</div>
-            <div class="item">10</div>
         </div>
-
-        <script></script>
     </body>
 </html>

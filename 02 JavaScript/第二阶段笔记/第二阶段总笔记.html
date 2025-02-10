@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<script>
-/*
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            /*
 ★★★★★★★★★★★★★★   1.ECMAscript基础    ★★★★★★★★★★★★★★★★★★★★★★★★★★
 零、Js编程语言的分类
     1.机器语言
@@ -400,7 +400,7 @@
                 ①，当splice()写一个参数n时，表示从索引n开始(包括自己)及后面的元素全部删除,返回值是一个由删除的元素形成的数组，原数组变为删除之后遗留下的元素形成的数据
                 ②，当splice()写两个参数时，例如splice(m,n)中m表示索引，n表示长度，即把数组的索引m开始(包括自己)删除n个,返回值是删除的数组，原数组变为删除后的数组
                 ③，当splice()写三个参数或者三个以上时，例如splice(x,y,z,m,n)即表示将从索引x开始，在索引为x的参数前面将y个参数替换为{z,m,n},
-                    如果y为0，则相当于在索引x的前面添加参数，返回值是被替换的元素所组成的数组(原先数组的元素，而不是即将替换的元素,如果y=0,返回值为[])，原数组变为被替换后的数据
+                    如果y为0，则相当于在索引x的前面添加参数，返回值是原数组被替换的元素(例如：数组[1,2,3]被即将替换的元素是[2,3],那么返回的数值也是[2,3])，原数组变为被替换后的数据
             pop()	删除数组的最后一个元素
             shift()	删除数组从第一个元素
             reverse()	翻转数组
@@ -709,7 +709,7 @@
         4.原型是实例对象的原型，而不是构造函数的原型，构造函数通过prototype找到原型
         注意：在构造函数中，person1.__proto__==Person.prototype 
     ·原型链
-        实例对象与原型之间的引用关系所产生的的联调叫做原型链，原型链的尽头为 null
+        实例对象与原型之间的引用关系所产生的的链条叫做原型链，原型链的尽头为 null
     ·判断属性和方法是否为对象自身的还是属于原型的  是自身的返回true 不是返回false
         用法：hasOwnProperty('属性名');
             eg：arr.hasOwnProperty('push');  //false
@@ -3282,6 +3282,8 @@ function scrollMove(event) {
         // 3.如果构造器没有手动返回对象，则返回第一步的对象
         return typeof result === 'object' ? result : child
     }
+拓展15：axios如何取消请求？(参考：https://juejin.cn/post/7401060368087728166?searchId=2024112912295444F3B46A025AFF26778B)
+
         
             
 
@@ -3337,7 +3339,7 @@ function scrollMove(event) {
 
 
 
-*/ 
-</script>
-</body>
+*/
+        </script>
+    </body>
 </html>

@@ -187,33 +187,54 @@ class Promise {
       reject(reason)
     })
   }
+  // static all(promises) {
+  //   return new Promise((resolve, reject) => {
+  //     let arr = [],
+  //       index = 0
+
+  //     function process(item, i) {
+  //       arr[i] = item
+  //       if (++index === promises.length) {
+  //         resolve(arr)
+  //       }
+  //     }
+
+  //     for (let i = 0; i < promises.length; i++) {
+  //       const item = promises[i]
+  //       if (item.then && typeof item.then === 'function') {
+  //         item.then(() => {
+  //           process(item, i)
+  //         }, reject)
+  //       } else {
+  //         resolve(item)
+  //       }
+  //     }
+  //   })
+  // }
   static all(promises) {
     return new Promise((resolve, reject) => {
-      let arr = [],
+      let result = [],
         index = 0
-
       function process(item, i) {
-        arr[i] = item
-        if (++index === promises.length) {
-          resolve(arr)
+        result[i] = item
+        if (++index === result.length) {
+          resolve(result)
         }
       }
 
       for (let i = 0; i < promises.length; i++) {
         const item = promises[i]
-        if (item.then && typeof item.then === 'function') {
-          item.then(() => {
-            process(item, i)
+        if (item && typeof item === 'function') {
+          item.then(res => {
+            process(res, i)
           }, reject)
         } else {
-          resolve(item)
+          process(item, i)
         }
       }
     })
   }
 }
-
-
 
 Promise.deferred = function () {
   let dfd = {}

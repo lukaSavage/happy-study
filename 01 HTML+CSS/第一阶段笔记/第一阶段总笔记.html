@@ -8,15 +8,15 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>第一阶段笔记</title>
-</head>
-<body>
-<script>
-/*
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>第一阶段笔记</title>
+    </head>
+    <body>
+        <script>
+            /*
 
 ★★★★★★★★★★★★★★★★★★★★★★★★ 第一部分、HTML4 ★★★★★★★★★★★★★★★★★★★★★★★★
 一、HTML(Hypertext Markup language)的认识
@@ -1329,7 +1329,7 @@
         align-items: center;
         //或者 margin: auto;
     }
-五十六、伸缩布局flex(注意：safari浏览器要加前缀-webkit- ie10及以下需要加-ms- 详情：https://www.jianshu.com/p/967dcacf0220)
+五十六、伸缩布局flex(注意：safari浏览器要加前缀-webkit- ie10及以下需要加-ms- 详情：https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
     ·默认效果：
         1、所有项目元素依次从左至右 在主轴上排列
         2、所有项目默认高度充满容器
@@ -1432,7 +1432,54 @@
             auto：默认值，查找父元素的align-items值，如果没有则取值为stretch
             其他值同align-items
             (注意：align-self的优先级大于align-items和align-content)
-五十七、字体图标
+五十七、网格布局grid(详情可参考：https://ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
+    ★grid 作用于！容器！上的属性介绍
+        ·display
+            grid: 指定一个容器采用网格布局
+            inline-grid：默认情况下，容器元素都是块级元素，但也可以设成行内元素
+            注意：注意，设为网格布局以后，容器子元素（项目）的float、display: inline-block、display: table-cell、vertical-align和column-*等设置都将失效。
+        ·grid-template-rows 属性定义每一列的列宽
+        ·grid-template-columns 属性定义每一行的行高
+            写法：
+                ①、可以直接写px，例如：
+                    grid-template-columns: 100px 100px 100px;
+                    grid-template-rows: 100px 100px 100px;
+                    上面代码指定了一个三行三列的网格，列宽和行高都是100px。如果出现第10个元素，则第10个元素的高度自适应
+                ②、设置百分比：
+                    grid-template-columns: 33.33% 33.33% 33.33%;
+                    grid-template-rows: 33.33% 33.33% 33.33%;
+                    如果设置成百分比且纵轴只设置三行，出现第10个元素，第10个元素不会算入总高度里面
+                ③、repeat函数
+                    ★接受两个参数，第一个参数是重复的次数（上例是3），第二个参数是所要重复的值。★
+                    ·有时候，重复写同样的值非常麻烦，尤其网格很多时。这时，可以使用repeat()函数，简化重复的值。上面的代码用repeat()改写如下。
+                    ·有时候，单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充
+                        除了auto-fill，还有一个关键字auto-fit，两者的行为基本是相同的。只有当容器足够宽，可以在一行容纳所有单元格，并且单元格宽度不固定的时候，才会有行为差异：
+                        auto-fill会用空格子填满剩余宽度，auto-fit则会尽量扩大单元格的宽度。  
+                    ·为了方便表示比例关系，网格布局提供了fr关键字（fraction 的缩写，意为"片段"）。如果两列的宽度分别为1fr和2fr，就表示后者是前者的两倍。   
+                        grid-template-columns: 1fr 1fr; // 相当于两列评分   
+                    ·minmax()函数产生一个长度范围，表示长度就在这个范围之中。它接受两个参数，分别为最小值和最大值。
+                        grid-template-columns: 1fr 1fr minmax(100px, 1fr);
+                    ·auto关键字表示由浏览器自己决定长度。
+                    ·使用方括号，指定每一根网格线的名字，方便以后的引用。
+                        grid-template-columns: [c1] 100px [c2] 100px [c3] auto [c4];
+                        grid-template-rows: [r1] 100px [r2] 100px [r3] auto [r4];     
+                        上面代码指定网格布局为3行 x 3列，因此有4根垂直网格线和4根水平网格线。方括号里面依次是这八根线的名字。
+                        网格布局允许同一根线有多个名字，比如[fifth-line row-5]
+        ·grid-row-gap 属性，grid-column-gap 属性，grid-gap 属性
+            用于设置横纵轴的间隙
+        ·grid-template-areas(了解即可，貌似没啥用？)
+            网格布局允许指定"区域"（area），一个区域由单个或多个单元格组成。grid-template-areas属性用于定义区域。
+        ·grid-auto-flow(相当于flex布局里面的flex-direction)
+            划分网格以后，容器的子元素会按照顺序，自动放置在每一个网格。默认的放置顺序是"先行后列"，即先填满第一行，再开始放入第二行
+        ·justify-items 属性，align-items 属性，place-items 属性
+            justify-items: start | end | center | stretch;
+            align-items: start | end | center | stretch;
+                说明：
+                    start：对齐单元格的起始边缘。
+                    end：对齐单元格的结束边缘。
+                    center：单元格内部居中。
+                    stretch：拉伸，占满单元格的整个宽度（默认值）。
+        
 五十八、less的一些简单用法
     ·less介绍：less是一种动态样式语言，属于css与处理器的范畴
     ·食用方法：
@@ -1721,6 +1768,6 @@
 
 
 */
-</script>  
-</body>
+        </script>
+    </body>
 </html>

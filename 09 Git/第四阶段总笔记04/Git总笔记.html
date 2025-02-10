@@ -183,7 +183,16 @@
 
             3.可以测试下：ssh git@github.com如果输出Hi xxx! You've successfully authenticated, 
             but GitHub does not # provide shell access. Connection to github.com closed.说明成功了
-四、在公司中具体如何使用git？
+四、高频面试题
+    ·git fetch 和git pull的区别？（参考：https://blog.csdn.net/hutaotaotao/article/details/141405776 ）
+        Git fetch：
+            Git fetch命令用于从远程仓库获取最新的代码，并将其保存到本地仓库中，但不会自动合并或修改当前的工作目录。
+            它会将远程仓库的最新提交记录下载到本地仓库的一个单独的分支（通常是远程跟踪分支，如origin/master）中。
+            使用Git fetch后，你可以通过比较本地分支和远程跟踪分支的差异，来决定是否进行合并。
+        Git pull：
+        Git pull命令实际上是Git fetch和Git merge的组合。
+            它首先从远程仓库获取最新的代码（与Git fetch相同），然后自动将本地仓库的当前分支与远程仓库上对应的分支进行合并。
+            如果合并过程中发生冲突，Git pull会停止合并并提示用户解决冲突。
     
 
 

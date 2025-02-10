@@ -299,7 +299,7 @@
                     age: number
                 }
                 interface User {
-                    sex: string
+                    sex: stringd
                 }
                 ------相当于以下声明↓↓↓
                     User 接口为 {
@@ -702,7 +702,7 @@
                 1）1是 1 | 2 的子类型，所以得到的结果是never
                 2）2是 1 | 2 的子类型，所以得到的结果是never
                 3）3不是 1 | 2 的子类型，所以得到的结果是 3
-                最终R的类型为 never | never | never | 3,即 type R = 3
+                最终R的类型为 never | never | 3,即 type R = 3
         
     ·Extract<T, U> -- 提取T中可以赋值给U的类型。
         和Exclude接口相反
