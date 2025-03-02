@@ -44,6 +44,21 @@
                 z-index: 1111;
                 box-sizing: border-box;
             }
+            #demo {
+                width: 100px;
+                height: 100px;
+                padding: 10px;
+                margin: 10px;
+                border: 5px solid #000;
+                background-color: #fcc;
+                overflow: hidden;
+            }
+            #son {
+                border: 5px solid #ccc;
+                width: 500px;
+                height: 100%;
+                background-color: #f00;
+            }
         </style>
     </head>
 
@@ -56,6 +71,7 @@
             </ul>
             <input type="text" id="ipt" />
             <div id="dd">fsdf</div>
+            <div id="demo"><div id="son"></div></div>
         </div>
         <div id="mask"></div>
         <script>
@@ -115,6 +131,8 @@
             const copy = deepClone(obj)
             copy.c = 'aaaaaa'
             console.log(copy, obj);
+
+            console.log('=======demo',demo.clientWidth, demo.offsetWidth, demo.scrollWidth);
         </script>
     </body>
 </html>

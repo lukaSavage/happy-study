@@ -1142,7 +1142,7 @@
     ·元素的尺寸(只读！)
         1)offsetWidth / offsetHeight   元素尺寸(内容宽高+内边距宽高+边框)
         2)clientWidth / clientHeihgt   元素尺寸（内容宽高+内边距宽高）
-        3)scrollWidth / scrollHeight   元素尺寸（如果子元素没有溢出，同client系列；如果子元素溢出：父元素的一边的内边距+子元素一边的margin+子元素的总(宽度/高度)）
+        3)scrollWidth / scrollHeight   元素尺寸（如果子元素没有溢出，同client系列；如果子元素溢出：内边距宽高 + 溢出的元素offset宽高）
         4)getBoundingClientRect()       获得元素尺寸和位置的一个方法，方法调用后返回的是一个对象 （IE9+ 对象中包含width和height属性）                                     
             有如下属性：
                 width       同offsetWidth
