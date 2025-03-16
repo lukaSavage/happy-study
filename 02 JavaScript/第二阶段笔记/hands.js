@@ -100,7 +100,8 @@ function throttle(fn, time) {
  * 7.手写深度克隆
  * @param {*} target
  */
-function deepClone(target) {
+function deepClone(target, cache = new WeakMap()) {
+  if(cache.has(target)) return cache.get(target)
   const type = Object.prototype.toString.call(target).slice(8, -1)
   let res = null
   if (type === 'Object') {
@@ -110,6 +111,7 @@ function deepClone(target) {
   } else {
     return target
   }
+  cache.set(target, res)
   for (const i in target) {
     res[i] = deepClone(target[i])
   }

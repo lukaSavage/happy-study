@@ -888,6 +888,11 @@
         6) 浏览器拿到两个新的文件后，通过HMR runtime机制，加载这两个文件，并触发module.hot.accept()方法，并且针对修改的模块进行更新
     7) tree-shaking原理
         ①、标记出模块导出值哪些没有被用过
+            // 分三步走↓
+            ·Make 阶段，收集导出变量并记录到模块依赖图ModuleGraph 变量中。
+            ·Seal 阶段，遍历ModuleGraph 标记模块导出变量有没有被使用
+            ·生成产物时，若变量没有被其他模块使用时则删除对应的导出语句
+            注意：标记功能需要配置 optimization.useExports = true 开启
         ②、使用Terser删除掉没有被用到的导出语句
     
 
