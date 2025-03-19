@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.4.0",
-    "vue": "^3.2.45"
+    "ace-builds": "^1.39.0",
+    "vue": "^3.2.45",
+    "vue3-ace-editor": "^2.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
