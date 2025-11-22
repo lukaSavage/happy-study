@@ -8,74 +8,74 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <style>
-            html,
-            body {
-                height: 200%;
-            }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        height: 200%;
+      }
 
-            .a > ul > li {
-                color: #f90;
-            }
+      .a > ul > li {
+        color: #f90;
+      }
 
-            .a ul li.one {
-                color: #08e;
-            }
+      .a ul li.one {
+        color: #08e;
+      }
 
-            #dd {
-                width: 100px;
-                height: 100px;
-                /* background-color: #f00; */
-                margin-top: 100px;
-                margin-left: 200px;
-            }
+      #dd {
+        width: 100px;
+        height: 100px;
+        /* background-color: #f00; */
+        margin-top: 100px;
+        margin-left: 200px;
+      }
 
-            #mask {
-                position: absolute;
-                top: 0;
-                left: 0;
-                border-color: rgba(0, 0, 0, 0.6);
-                border-style: solid;
-                z-index: 1111;
-                box-sizing: border-box;
-            }
-            #demo {
-                width: 100px;
-                height: 100px;
-                padding: 10px;
-                margin: 10px;
-                border: 5px solid #000;
-                background-color: #fcc;
-                overflow: hidden;
-            }
-            #son {
-                border: 5px solid #ccc;
-                width: 500px;
-                height: 100%;
-                background-color: #f00;
-            }
-        </style>
-    </head>
+      #mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-color: rgba(0, 0, 0, 0.6);
+        border-style: solid;
+        z-index: 1111;
+        box-sizing: border-box;
+      }
+      #demo {
+        width: 100px;
+        height: 100px;
+        padding: 10px;
+        margin: 10px;
+        border: 5px solid #000;
+        background-color: #fcc;
+        overflow: hidden;
+      }
+      #son {
+        border: 5px solid #ccc;
+        width: 500px;
+        height: 100%;
+        background-color: #f00;
+      }
+    </style>
+  </head>
 
-    <body>
-        <div class="a" id="a">
-            <ul>
-                <li class="one">我是第1个li</li>
-                <li>我是第2个li</li>
-                <li>我是第3个li</li>
-            </ul>
-            <input type="text" id="ipt" />
-            <div id="dd">fsdf</div>
-            <div id="demo"><div id="son"></div></div>
-        </div>
-        <div id="mask"></div>
-        <script>
-            /**
+  <body>
+    <div class="a" id="a">
+      <ul>
+        <li class="one">我是第1个li</li>
+        <li>我是第2个li</li>
+        <li>我是第3个li</li>
+      </ul>
+      <input type="text" id="ipt" />
+      <div id="dd">fsdf</div>
+      <div id="demo"><div id="son"></div></div>
+    </div>
+    <div id="mask"></div>
+    <script>
+      /**
    * 手写parse，要求满足以下所有条件
       console.log(parse('a=1&b=&c=5&f=hello'))
       console.log(parse('a&b&c'))
@@ -85,54 +85,57 @@
    * 
    * @param {string} str 类似a=xxx&b=123&c=['2','b']
    */
-            // { name: '张三', like: { eat: 'fruit', drink: 'water' } }
-            // console.log('offsetRight:' + dd.offsetRight, 'offsetBottom' + dd.offsetBottom);
-            // console.log(document.body.offsetHeight);
-            // const offsetTop = dd.offsetTop;
-            // const offsetLeft = dd.offsetLeft;
-            // const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
-            // const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
-            // mask.style.height = document.body.offsetHeight + 'px';
-            // mask.style.width = document.body.offsetWidth + 'px';
-            // mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
-            // console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
-            // a.onclick = function (e) {
-            //     console.log(e.target);
-            // }
-        </script>
-        <script>
-            let obj = {
-                a: 1,
-                b: 1
-            }
-            obj.c = obj
-            function deepClone(target, cache = new WeakMap()) {
-                // console.log(cache.has(target));
-                if (cache.has(target)) {
-                    return cache.get(target)
-                }
-                const type = Object.prototype.toString.call(target).slice(8, -1)
-                let res = null
-                if (type === 'Object') {
-                    res = {}
-                } else if (type === 'Array') {
-                    res = []
-                } else {
-                    return target
-                }
-                cache.set(target, res)
-                for (const i in target) {
-                    if (Object.hasOwnProperty.call(target, i)) {
-                        res[i] = deepClone(target[i], cache)
-                    }
-                }
-                return res
-            }
-            const copy = deepClone(obj)
-            copy.c = 'aaaaaa'
-            console.log(copy, obj);
+      // { name: '张三', like: { eat: 'fruit', drink: 'water' } }
+      // console.log('offsetRight:' + dd.offsetRight, 'offsetBottom' + dd.offsetBottom);
+      // console.log(document.body.offsetHeight);
+      // const offsetTop = dd.offsetTop;
+      // const offsetLeft = dd.offsetLeft;
+      // const offsetRight = document.body.offsetWidth - offsetLeft - dd.offsetWidth;
+      // const offsetBottom = document.body.offsetHeight - offsetTop - dd.offsetHeight;
+      // mask.style.height = document.body.offsetHeight + 'px';
+      // mask.style.width = document.body.offsetWidth + 'px';
+      // mask.style.borderWidth = `${offsetTop}px ${offsetRight}px ${offsetBottom}px ${offsetLeft}px`;
+      // console.log(offsetTop, offsetRight, offsetBottom, offsetLeft, dd.offsetParent);
+      // a.onclick = function (e) {
+      //     console.log(e.target);
+      // }
+    </script>
+    <script>
+      let obj = {
+        a: 1,
+        b: 1
+      }
+      obj.c = obj
+      function deepClone(target, cache = new WeakMap()) {
+        // console.log(cache.has(target));
+        if (cache.has(target)) {
+          return cache.get(target)
+        }
+        const type = Object.prototype.toString.call(target).slice(8, -1)
+        let res = null
+        if (type === 'Object') {
+          res = {}
+        } else if (type === 'Array') {
+          res = []
+        } else {
+          return target
+        }
+        cache.set(target, res)
+        for (const i in target) {
+          if (Object.hasOwnProperty.call(target, i)) {
+            res[i] = deepClone(target[i], cache)
+          }
+        }
+        return res
+      }
+      const copy = deepClone(obj)
+      copy.c = 'aaaaaa'
+      console.log(copy, obj)
 
-            console.log('=======demo',demo.clientWidth, demo.offsetWidth, demo.scrollWidth);
-        </script>
-    </body>
+      console.log('%c [  ]-136', 'font-size:13px; background:#235b0c; color:#679f50;', 'a' in obj)
+
+      console.log('=======demo', demo.clientWidth, demo.offsetWidth, demo.scrollWidth)
+
+    </script>
+  </body>
 </html>

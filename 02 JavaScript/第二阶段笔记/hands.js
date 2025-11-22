@@ -101,7 +101,7 @@ function throttle(fn, time) {
  * @param {*} target
  */
 function deepClone(target, cache = new WeakMap()) {
-  if(cache.has(target)) return cache.get(target)
+  if (cache.has(target)) return cache.get(target)
   const type = Object.prototype.toString.call(target).slice(8, -1)
   let res = null
   if (type === 'Object') {
@@ -123,7 +123,7 @@ function deepClone(target, cache = new WeakMap()) {
  * 8.手写flat
  * @param {Array} arr 多维数组
  * @param {number} level 层级
- * @returns 
+ * @returns
  */
 function myFlat(arr, level = 1) {
   while (arr.some(item => Array.isArray(item))) {
