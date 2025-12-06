@@ -1,5 +1,5 @@
 # 1、最基本的打印 print(*objects, sep=' ', end='\n', file=sys.stdout)
-# print("Hello World")           # Hello World
+print("Hello World")           # Hello World
 # print(100)                     # 100
 # print(3.14)                    # 3.14
 # print(True)                    # True
