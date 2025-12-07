@@ -14,7 +14,7 @@ while count <= 3:
 # else:
 #     print("循环正常结束（不是通过break退出）")
 
-a=1
-b='1'
+a = 1
+b = "1"
 
 print(a == b)
