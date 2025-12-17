@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { atom, RecoilRoot, useRecoilState } from 'recoil'
 import ZustandDemo from './components/ZustandDemo'
@@ -10,19 +10,20 @@ const counter = atom({
 })
 
 const App = () => {
-  let [count, setCount] = useRecoilState(counter)
+  // let [count, setCount] = useRecoilState(counter)
+  const [count, setCount] = useState(0)
   return (
     <div>
-      {/* <h1>{count}</h1>
-            <button
-                onClick={() => {
-                    setCount(++count)
-                }}
-            >
-                点我加1
-            </button> */}
+      <h1>{count}</h1>
+      <button
+        onClick={() => {
+          setCount(count + 1)
+        }}
+      >
+        点我加1
+      </button>
       {/* <ZustandDemo /> */}
-      <Flip />
+      {/* <Flip /> */}
     </div>
   )
 }

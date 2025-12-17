@@ -41,7 +41,7 @@ function createDOM(vdom) {
 
 ## 二、函数组件与类组件
 
-- 函数组件与类组件的类型同为`function`，那么它们是如何区分的？
+- 函数组件与类组件的类型同为 `function`，那么它们是如何区分的？
 
   ```js
   // React.Component类中有一个静态属性isReactComponent,专门用于区分这两种组件的
@@ -53,8 +53,8 @@ function createDOM(vdom) {
   		this.updater = new Updater(this);
   	}
   }
-  
-  
+
+
   function createDOM(vdom) {
   	if (type === REACT_TEXT) {
           ...
@@ -71,14 +71,13 @@ function createDOM(vdom) {
   	return dom;
   }
   ```
-
 - 组件更新原理？
 
   1. 初次挂载的时候，已经在页面上放置了一个div容器，我们可以称之为‘父容器’。
   2. 更新的时候，拿到新的state状态，重新调用render方法返回新的虚拟DOM，进而生成新的真实DOM
   3. 用新的真实DOM替换掉老的div就实现更新了
 
-  <font color="#f00">代码示例如下↓</font>
+  `<font color="#f00">`代码示例如下↓`</font>`
 
   ```js
   forceUpdate() {
@@ -89,7 +88,7 @@ function createDOM(vdom) {
       compareTwoVdom(oldDOM.parentNode, oldRenderVdom, newVdom);
       this.oldRenderVdom = newVdom;
   }
-  
+
   /**
    * 进行DOM-DIFF对比
    * @param {*} parentDOM 父真实DOM节点
@@ -110,16 +109,16 @@ function createDOM(vdom) {
 
 > 我们都知道，setState在类组件中，即是同步的也是异步的，分为两种情况
 >
-> <font color="#08e">①、setState在自定义合成事件和钩子函数中是<font color='#f00'>`异步`</font>的</font>
+> `<font color="#08e">`①、setState在自定义合成事件和钩子函数中是`<font color='#f00'>异步``</font>`的`</font>`
 >
-> <font color="#08e">①、在原生DOM事件和定时器中是<font color='#f00'>`同步`</font>的</font>
+> `<font color="#08e">`①、在原生DOM事件和定时器中是`<font color='#f00'>同步``</font>`的`</font>`
 
 同时，我们也发现，setState是批量更新的，这主要是为了解决render函数频繁被调用导致的性能浪费而考虑的。
 
 ### 1.2 setState批量更新机制
 
-1. React.Component类中有一个更新器，名为`updateQueue`,大致有`isBatchingUpdate`、`updates`、`batchUpdate`函数
-2. <font color='#f00'>`isBatchingUpdate`</font>用于判断是否批量，如果是则把要更新的属性存入到updates中，如果不是，立马调用`batchUpdate`函数
+1. React.Component类中有一个更新器，名为 `updateQueue`,大致有 `isBatchingUpdate`、`updates`、`batchUpdate`函数
+2. `<font color='#f00'>isBatchingUpdate``</font>`用于判断是否批量，如果是则把要更新的属性存入到updates中，如果不是，立马调用 `batchUpdate`函数
 3. `updates`用于收集setstate传递过来的对象或者函数
 4. `batchUpdate`做的事情主要是区分setState传递来的是函数还是对象，然后通过三点运算符将原state合并一起，并进行强制更新视图
 
@@ -145,15 +144,15 @@ export let updateQueue = {
 
 ## 四、虚拟DOM diff算法
 
-> 虚拟dom diff的对比，总共有三种diff，即<font color='#f00'>`Tree Diff`</font>、<font color='#f00'>`Component Diff`</font>、<font color='#f00'>`Element Diff`</font>,其中最为核心的当属第三种。
+> 虚拟dom diff的对比，总共有三种diff，即`<font color='#f00'>Tree Diff``</font>`、`<font color='#f00'>Component Diff``</font>`、`<font color='#f00'>Element Diff``</font>`,其中最为核心的当属第三种。
 
 对比步骤如下↓
 
-1. 如果新、旧vdom都没有，什么都不做，直接`return`
+1. 如果新、旧vdom都没有，什么都不做，直接 `return`
 2. 如果老的有，新的没有，删除老的vdom
 3. 如果老的没有，新的有，插入即可
 4. 如果新旧vdom都有，但是类型不一样，删除老的，插入新的
-5. 如果新旧vdom都有，并且类型一样，开始走`Element-Diff`
+5. 如果新旧vdom都有，并且类型一样，开始走 `Element-Diff`
 
 ```js
 export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
@@ -193,8 +192,6 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
 	}
 }
 ```
-
-
 
 ### 4.1 Element-Diff详细流程
 
@@ -281,11 +278,9 @@ function updateChildren(parentDOM, oldVChildren, newVChildren) {
 
 ### 4.3流程说明
 
-
-
 ## 五、React生命周期
 
->所谓生命周期，其原理就是在编译过程中在合适的地方判断并插入某些函数。
+> 所谓生命周期，其原理就是在编译过程中在合适的地方判断并插入某些函数。
 
 ### 5.1 旧版生命周期
 
@@ -339,9 +334,9 @@ export default react;
 具体实现步骤如下↓
 
 1. 首先createContext本省是一个函数，它返回一个变量作为全局变量，方便子组件读取属性
-2. 返回的context是一个循环引用变量，其中有两个特殊的组件，即<font color='#f00'>`Prrovider`</font>、<font color='#f00'>`Consumer`</font>。我们需要针对于这两个组件进行特殊处理
-3. 通过`<xxxContext.provide />`组件获取用户传递过来的value,赋值给`context._currentValue`
-4. 在渲染`<xxxContext.Customer>`组件时，<font color='#f00'>它会将你的children当做函数调用，并传递`context._currentValue`</font>值，所以这也是为什么需要写成一个函数的原因。
+2. 返回的context是一个循环引用变量，其中有两个特殊的组件，即`<font color='#f00'>Prrovider``</font>`、`<font color='#f00'>Consumer``</font>`。我们需要针对于这两个组件进行特殊处理
+3. 通过 `<xxxContext.provide />`组件获取用户传递过来的value,赋值给 `context._currentValue`
+4. 在渲染 `<xxxContext.Customer>`组件时，`<font color='#f00'>`它会将你的children当做函数调用，并传递 `context._currentValue</font>`值，所以这也是为什么需要写成一个函数的原因。
 
 ```js
 function createDOM(vdom) {
@@ -354,7 +349,7 @@ function createDOM(vdom) {
 	}
     ...
 }
-    
+  
 function mountProviderComponent(vdom) {
 	const { type, props } = vdom; // type = {$$typeof: Symbol(react.provider), _context: context}
 	const context = type._context; // { $$typeof: Symbol(react.context), _context: context }
@@ -378,7 +373,7 @@ function mountContextComponent(vdom) {
 
 ### 7.1 React.PureComponent
 
-`React.PureComponent` 继承于[`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 。两者的区别在于 [`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 并未实现 [`shouldComponentUpdate()`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate)，而 `React.PureComponent` 中<font color='#f00'>以浅层对比 prop 和 state 的方式来实现了该函数。即改写了`shouldComponentUpdate`方法。</font>以下为浅比较函数↓
+`React.PureComponent` 继承于[`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 。两者的区别在于 [`React.Component`](https://zh-hans.reactjs.org/docs/react-api.html#reactcomponent) 并未实现 [`shouldComponentUpdate()`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate)，而 `React.PureComponent` 中`<font color='#f00'>`以浅层对比 prop 和 state 的方式来实现了该函数。即改写了 `shouldComponentUpdate`方法。`</font>`以下为浅比较函数↓
 
 ```js
 export function shallowEqual(obj1, obj2) {
@@ -398,7 +393,7 @@ export function shallowEqual(obj1, obj2) {
   if (keys1.length !== keys2.length) {
     return false;
   }
-    
+  
   // 遍历属性的值是否相等
   for (let key of keys1) {
     if (!obj2.hasOwnProperty(key) || obj1[key] !== obj2[key]) {
@@ -419,9 +414,9 @@ class PureComponent extends Component {
 ### 7.2 React.memo()
 
 - 如果你的组件在相同 props 的情况下渲染相同的结果，那么你可以通过将其包装在 `React.memo` 中调用，以此通过记忆组件渲染结果的方式来提高组件的性能表现。这意味着在这种情况下，React 将跳过渲染组件的操作并直接复用最近一次渲染的结果。
-- `React.memo` <font color='#f90'>仅检查 props 变更</font>。如果函数组件被 `React.memo` 包裹，且其实现中拥有 [`useState`](https://zh-hans.reactjs.org/docs/hooks-state.html)，[`useReducer`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer) 或 [`useContext`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usecontext) 的 Hook，当 state 或 context 发生变化时，它仍会重新渲染。
+- `React.memo` `<font color='#f90'>`仅检查 props 变更`</font>`。如果函数组件被 `React.memo` 包裹，且其实现中拥有 [`useState`](https://zh-hans.reactjs.org/docs/hooks-state.html)，[`useReducer`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer) 或 [`useContext`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usecontext) 的 Hook，当 state 或 context 发生变化时，它仍会重新渲染。
 
-> <font color='#f00'>注意：</font>`React.memo` 仅检查 props 变更。如果函数组件被 `React.memo` 包裹，且其实现中拥有 [`useState`](https://zh-hans.reactjs.org/docs/hooks-state.html)，[`useReducer`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer) 或 [`useContext`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usecontext) 的 Hook，当 state 或 context 发生变化时，它仍会重新渲染。
+> `<font color='#f00'>`注意：`</font>React.memo` 仅检查 props 变更。如果函数组件被 `React.memo` 包裹，且其实现中拥有 [`useState`](https://zh-hans.reactjs.org/docs/hooks-state.html)，[`useReducer`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer) 或 [`useContext`](https://zh-hans.reactjs.org/docs/hooks-reference.html#usecontext) 的 Hook，当 state 或 context 发生变化时，它仍会重新渲染。
 >
 > 与 class 组件中 [`shouldComponentUpdate()`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate) 方法不同的是，如果 props 相等，`areEqual` 会返回 `true`；如果 props 不相等，则返回 `false`。这与 `shouldComponentUpdate` 方法的返回值相反。
 

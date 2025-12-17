@@ -3381,11 +3381,116 @@
             }, [baseComputed, add, handle])
     3)当处理 props 的方法为异步时，useMemo 将不再适用，需要借用 useEffect 内部支持执行 async 函数的特性转化一步：
         详情请见浏览器收藏，嘤嘤嘤~
+三十一、React 18新特性
+    ·React 并发新特性
+        在v18之前：
+            const root = document.getElementById('app')
+            ReactDOM.render(<App/>,root)
+        在v18中我们可以通过createRootApi手动创建root节点。
+            const root = ReactDOM.createRoot(document.getElementById('app'))
+            root.render(<App/>,root)
+    ·Automatic batching 自动批处理优化
+        在v18之前
+             // React 17 及之前的版本不会批处理以下的 state:
+            setCount((c) => c + 1) // 重新渲染
+            setFlag((f) => !f) // 二次重新渲染
+        在v18之后
+            setCount((c) => c + 1)  
+            setFlag((f) => !f) // 合并为一次重新渲染
+    ·useTransition
+        介绍：
+            用于在不阻塞用户界面的情况下更新状态，提升应用的响应性。它通常在并发模式下使用，允许将某些状态更新标记为低优先级的“过渡”（transition），
+            从而避免高优先级的交互（如点击或输入）被延迟。‌
+        使用：import { useState, useTransition } from 'react';
 
+            function TabContainer() {
+                const [isPending, startTransition] = useTransition();
+                const [tab, setTab] = useState('about');
 
+                function selectTab(nextTab) {
+                    startTransition(() => {
+                    setTab(nextTab);
+                    });
+                }
 
+                // 使用 isPending 来显示过渡状态（如加载指示器）
+                return (
+                    <div>
+                    {isPending && <span className="pending">切换中...</span>}
+                    <button onClick={() => selectTab('posts')}>Posts</button>
+                    <button onClick={() => selectTab('contact')}>Contact</button>
+                    </div>
+                );
+            }
+    ·useDefferdValue
+        介绍：
+            React 可以通过 useDefferdValue 允许变量延时更新，同时接受一个可选的延迟更新的最大值。React 将尝试尽快更新延迟值，如果在给定的 timeoutMs 期限内未能完成，它将强制更新
+        使用：
+            // useDefferdValue 能够很好的展现并发渲染时优先级调整的特性，可以用于延迟计算逻辑比较复杂的状态，让其他组件优先渲染I，等待这个状态更新完毕之后再渲染。
+            const defferValue = useDeferredValue(value, { timeoutMs: 1000 })
+三十二、React 19新特性（参考：https://blog.csdn.net/2401_89241768/article/details/153647348）
+    1、一个API use
+        use Hook 允许你在组件渲染过程中有条件地读取资源（如 Promise 或 Context）的值。
+        使用：
+            import { use, Suspense } from 'react';
 
-        
+            // 一个模拟的数据获取函数，返回 Promise
+            function fetchComments() {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                    resolve(['Great post!', 'Thanks for sharing.']);
+                    }, 1000);
+                });
+            }
+
+            function Comments({ commentsPromise }) {
+                // 使用 use Hook 来解析 Promise
+                // 需要与 Suspense 配合使用以显示加载状态
+                const comments = use(commentsPromise);
+                return comments.map((comment, index) => <p key={index}>{comment}</p>);
+            }
+
+            function BlogPost() {
+                // 将 Promise 作为 prop 传递给 Comments 组件
+                return (
+                    <div>
+                    <h1>My Blog Post</h1>
+                    <Suspense fallback={<div>Loading comments...</div>}>
+                        <Comments commentsPromise={fetchComments()} />
+                    </Suspense>
+                    </div>
+                );
+            }
+    2、三个hook useActionState, useFormStatus（已被合并到useActionState）, useOptimistic
+        ①、useActionState
+            介绍：
+                useActionState 是一个可以根据某个表单动作的结果更新 state 的 Hook。
+            使用：
+                参考官网：https://zh-hans.react.dev/reference/react/useActionState
+        ②、useOptimistic
+            介绍：
+                useOptimistic 是一个 React Hook，它可以帮助你更乐观地更新用户界面。（PS:乐观更新是指在服务器确认操作成功之前，就先在 UI 上显示预期的结果，以提升用户体验）
+            使用：
+                参考官网：https://zh-hans.react.dev/reference/react/useOptimistic
+    3、React编译器
+        自动优化渲染，减少手动记忆化（如 useMemo）需求
+        参考官网：https://zh-hans.react.dev/learn/react-compiler/introduction
+    4、ref可作为props传递
+        示例：
+            // React 19 之前：需要 forwardRef
+            const MyInput = React.forwardRef((props, ref) => {
+                return <input {...props} ref={ref} />;
+            });
+
+            // React 19：直接作为 prop 使用
+            function MyInput({ ref, ...props }) {
+                return <input {...props} ref={ref} />;
+            }
+
+            function App() {
+                const inputRef = useRef(null);
+                return <MyInput ref={inputRef} />;
+            }
 ★★附件、常见react面试题★★
     1）你是如何理解react单向数据流的？vue的单向数据流双向数据绑定的？
         1.数据的流向只能通过props由外层到内层 一层一层往里传递。这样有利于让我们找到数据的根源。
