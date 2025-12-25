@@ -55,3 +55,24 @@ type YourPick<T, U extends keyof T> = {
 }
 
 type AA = YourPick<{ name: string; age: number }, 'age'>
+
+type IExclude<T, U> = T extends U ? never : T
+type IExtract<T, U> = T extends U ? T : never
+
+type Demo = IExclude<1 | 2 | 3, 1 | 3>
+
+let arr = [32, undefined, null, 'hehe', false]
+
+type Get<T> = T extends Array<infer U> ? U : T
+
+type IArr = Get<typeof arr>
+
+type IPartial<T> = {
+  [K in keyof T]?: T[K]
+}
+
+type IRecord<K extends keyof any, T> = {
+  [P in K]: T
+}
+type DemoE = IRecord<'name' | 'age', string>
+

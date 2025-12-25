@@ -1,119 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <body>
+        <script>
+            function* generator() {
+                // const iterator = generator();   ==>返回一个遍历器/迭代器
+                const a = yield 111 // console.log(iterator.next('1Value')) ==> 返回{value: 111, done: false}; 下面的代码不执行
+                console.log(a) // 1value
+                const b = yield 222 // console.log(iterator.next('2Value')) ==> 返回{value: 111, done: false}; 打印出a的值为1Value
+                console.log(b) // 2Value
+                const c = yield 333 // console.log(iterator.next('3Value')) ==> 返回{value: 111, done: false}; 此时将bValue赋值给变量b
+                console.log(c) // 3Value
+                // console.log(iterator.next('cValue')) ==> 返回{value: 111, done: true};
+            }
 
-<body>
-    <script>
-        function* generator() {            // const iterator = generator();   ==>返回一个遍历器/迭代器
-            const a = yield 111;           // console.log(iterator.next('1Value')) ==> 返回{value: 111, done: false}; 下面的代码不执行
-            console.log(a);  // 1value                
-            const b = yield 222;            // console.log(iterator.next('2Value')) ==> 返回{value: 111, done: false}; 打印出a的值为1Value
-            console.log(b);  // 2Value
-            const c = yield 333;            // console.log(iterator.next('3Value')) ==> 返回{value: 111, done: false}; 此时将bValue赋值给变量b
-            console.log(c);   // 3Value                               
-            // console.log(iterator.next('cValue')) ==> 返回{value: 111, done: true};
-        }
+            function longStr2(s) {
+                // 存储最长子串
+                let maxStr = ''
+                // 滑动窗口遍历字符串
+                for (let i = 0; i < s.length; i++) {
+                    // 窗口宽度为当前子串长度
+                    for (let j = i + maxStr.length + 1; j < s.length; j++) {
+                        // 截取当前窗口内子串
+                        let curStr = s.slice(i, j)
+                        // 查询左指针后面是否存在相同子串
+                        if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
+                        // 左指针后面不存在相同子串则跳出循环
+                        else break
+                    }
+                }
+                // 返回结果
+                return maxStr
+            }
 
-        function longStr2(s) {
-            // 存储最长子串
-            let maxStr = ''
-            // 滑动窗口遍历字符串
-            for (let i = 0; i < s.length; i++) {
-                // 窗口宽度为当前子串长度
-                for (let j = i + maxStr.length + 1; j < s.length; j++) {
-                    // 截取当前窗口内子串
-                    let curStr = s.slice(i, j)
-                    // 查询左指针后面是否存在相同子串
-                    if (s.indexOf(curStr, i + 1) > -1) maxStr = curStr
-                    // 左指针后面不存在相同子串则跳出循环
-                    else break
+            // let arr = [1, [2,3]];
+            // const res = arr.concat([33])
+            // console.log(res);
+            // const res = [].concat(...arr)
+            // console.log(res);
+            Function.prototype.myCall = function (target, ...args) {
+                target.__proto__._fn = this
+                const result = target._fn(...args)
+                delete target.__proto__._fn
+                return result
+            }
+
+            Function.prototype.myBind = function (target, ...args) {
+                const _this = this
+                return function (...arg) {
+                    return _this.call(target, ...args, ...arg)
                 }
             }
-            // 返回结果
-            return maxStr
-        }
-        
-        // let arr = [1, [2,3]];
-        // const res = arr.concat([33])
-        // console.log(res);
-        // const res = [].concat(...arr)
-        // console.log(res);
-        Function.prototype.myCall = function(target, ...args) {
-            target.__proto__._fn = this
-            const result = target._fn(...args)
-            delete target.__proto__._fn
-            return result
-        }
 
-        Function.prototype.myBind = function(target, ...args) {
-            const _this = this
-            return function(...arg) {
-                return _this.call(target, ...args, ...arg)
+            function debounce(fn, time) {
+                let timer
+                return function (...args) {
+                    clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        fn.call(this, ...args)
+                    }, time)
+                }
             }
-        }
 
-        function debounce(fn, time) {
-            let timer;
-            return function(...args) {
-                clearTimeout(timer)
-                timer = setTimeout(() => {
+            function throttle(fn, time) {
+                let start = 0
+                return function (...args) {
+                    let end = Date.now()
+                    if (end - start < time) return
                     fn.call(this, ...args)
-                }, time);
-            }
-        }
-
-        function throttle(fn, time) {
-            let start = 0;
-            return function(...args) {
-                let end = Date.now();
-                if(end - start < time) return
-                fn.call(this, ...args)
-                start = end
-            }
-        }
-
-        let string = 'safwefjiewfs'
-        function longString(string) {
-            let temp =[], max = 0, maxStr = ''
-            for (let i = 0; i < string.length; i++) {
-                let item = string[i]
-                let index = temp.indexOf(item)
-                if(index !== -1) {
-                    temp.splice(0, index + 1)
+                    start = end
                 }
-                temp.push(item)
-                max = Math.max(max, temp.length)
-                if(temp.length > maxStr.length) {
-                    maxStr = temp.join('')
-                } 
             }
-            return {
-                max,
-                maxStr
+
+            let string = 'safwefjiewfs'
+            function longString(string) {
+                let temp = [],
+                    max = 0,
+                    maxStr = ''
+                for (let i = 0; i < string.length; i++) {
+                    let item = string[i]
+                    let index = temp.indexOf(item)
+                    if (index !== -1) {
+                        temp.splice(0, index + 1)
+                    }
+                    temp.push(item)
+                    max = Math.max(max, temp.length)
+                    if (temp.length > maxStr.length) {
+                        maxStr = temp.join('')
+                    }
+                }
+                return {
+                    max,
+                    maxStr
+                }
             }
-        }
-        console.log(longString(string));
-        let obj = {
-            name: '张三',
-            age: 15
-        }
-
-        obj[Symbol.iterator] = function * () {
-            for (let i in obj) {
-                yield [i, obj[i]];
+            console.log(longString(string))
+            let obj = {
+                name: '张三',
+                age: 15
             }
-        }
 
-        for (const i of obj) {
-            console.log(111, i);
-        }
-    </script> 
-</body>
+            obj[Symbol.iterator] = function* () {
+                for (let i in obj) {
+                    yield [i, obj[i]]
+                }
+            }
 
+            for (const i of obj) {
+                console.log(111, i)
+            }
+
+            let demoArr = [1, 2, 3, 4, 5]
+            console.log(demoArr.splice(1, 2))
+            console.log(demoArr)
+
+            function Suibian() {
+                this.name = 'zhangsan'
+            }
+            const p = new Suibian()
+            console.log('%c [  ]-124', 'font-size:13px; background:#33375b; color:#777b9f;', Suibian.prototype)
+            console.log(
+                '%c [  ]-125',
+                'font-size:13px; background:#6994f5; color:#add8ff;',
+                Suibian.__proto__ === Function.__proto__
+            )
+            console.log('%c [  ]-126', 'font-size:13px; background:#dea46e; color:#ffe8b2;', Suibian.prototype.__proto__)
+            console.log('%c [  ]-128', 'font-size:13px; background:#16ca82; color:#5affc6;', Function.__proto__)
+
+            const filledArray = Array.from(Array(3), (i, idx) => {
+                return idx + 1
+            })
+            const demoArrOf = new Map([['hehe', 2],['hehe', 3]])
+            console.log('%c [  ]-139', 'font-size:13px; background:#10adb9; color:#54f1fd;', filledArray)
+            console.log('%c [  ]-141', 'font-size:13px; background:#3d22cf; color:#8166ff;', demoArrOf)
+        </script>
+    </body>
 </html>

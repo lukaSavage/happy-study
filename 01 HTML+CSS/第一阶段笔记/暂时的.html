@@ -14,12 +14,13 @@
                 /* width: 30%; */
                 /* height: 600px; */
                 display: grid;
-                background: #f90;
-                grid-template-columns: 100px 100px 100px;
+                /* background: #f90; */
+                grid-template-columns: repeat(3, 1fr);
                 grid-template-rows: 100px 100px 100px;
                 grid-auto-flow: column;
+                place-items: center;
             }
-            .item:nth-child(1) {
+            .item {
             }
         </style>
     </head>
@@ -35,9 +36,11 @@
             <div class="item">7</div>
             <div class="item">8</div>
             <div class="item">9</div>
-            <div class="item">10</div>
+            <!-- <div class="item">10</div> -->
         </div>
 
-        <script></script>
+        <script>
+            
+        </script>
     </body>
 </html>

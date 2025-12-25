@@ -706,6 +706,7 @@
         
     ·Extract<T, U> -- 提取T中可以赋值给U的类型。
         和Exclude接口相反
+            type IExtract<T, U> = T extends U ? T : never
         例如：
             type R = Extract<1 | 2 | 3 , 1 | 2>
             // R = 1 | 2
@@ -797,7 +798,7 @@
                 age: 22, // 报错，不能将类型“number”分配给类型“string”。
                 married: 1 // 报错，不能将类型“number”分配给类型“string”。
             }
-七、模块与命名空间(了解)
+十二、模块与命名空间(了解)
     命名空间主要解决命名变量的冲突而创造的，用的很少
     namespace A {
         export class Dog {    //需要暴露才能使用
@@ -826,7 +827,7 @@
             Numbers.b = 2;
             Numbers.c = 3;
         })(Numbers || (Numbers = {}));
-八、类型声明
+十三、类型声明
     ·介绍
         声明文件可以让我们不需要将js重构为ts。只需要加上声明文件就可以使用的系统
         类型声明在编译的时候会删除，不会影响源代码
@@ -853,7 +854,7 @@
                     myname:string
                 }
             }
-九、三斜线指令
+十四、三斜线指令
     ·介绍
         三斜线引用告诉编译器在编译过程中要引入的额外的文件。
     ·用途
