@@ -113,7 +113,7 @@ function deepClone(target, cache = new WeakMap()) {
   }
   cache.set(target, res)
   for (const i in target) {
-    res[i] = deepClone(target[i])
+    res[i] = deepClone(target[i], cache)
   }
   return res
 }
@@ -385,6 +385,16 @@ function longStr2(s) {
   return maxStr
 }
 
-
-let arr = [1,2,3]
-console.log(arr.keys(),arr.values());
+/**
+ * 18.斐波那契数列
+  斐波那契数列（Fibonacci sequence），又称黄金分割数列。它是由意大利数学家列昂纳多·斐波那契在13世纪时提出的一个数列。
+  该数列从0和1开始，后面的每一项数字都是前面两项数字之和。即：
+ * @param {*} n 表示要生成多少项
+ * @returns 
+ */
+function fibonacci(n) {
+  if (n <= 1) {
+    return n // 当n小于等于1时，直接返回n
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2) // 当n大于1时，返回前两项的和
+}

@@ -106,36 +106,26 @@
         b: 1
       }
       obj.c = obj
-      function deepClone(target, cache = new WeakMap()) {
-        // console.log(cache.has(target));
-        if (cache.has(target)) {
-          return cache.get(target)
-        }
-        const type = Object.prototype.toString.call(target).slice(8, -1)
-        let res = null
-        if (type === 'Object') {
+      // let validStr = '{[{]}'
+      function deepClone(source, cache = new WeakMap()) {
+        if(cache.has(source)) return cache.get(source)
+        const type = Object.prototype.toString.call(source).slice(8, -1)
+        let res = null;
+        if(type === 'Object') {
           res = {}
-        } else if (type === 'Array') {
+        } else if(type === 'Array') {
           res = []
         } else {
-          return target
+          return source
         }
-        cache.set(target, res)
-        for (const i in target) {
-          if (Object.hasOwnProperty.call(target, i)) {
-            res[i] = deepClone(target[i], cache)
+        cache.set(source, res)
+        for (let key in source) {
+          if (source.hasOwnProperty(key)) {
+            res[key] = deepClone(source[key], cache)
           }
         }
         return res
       }
-      const copy = deepClone(obj)
-      copy.c = 'aaaaaa'
-      console.log(copy, obj)
-
-      console.log('%c [  ]-136', 'font-size:13px; background:#235b0c; color:#679f50;', 'a' in obj)
-
-      console.log('=======demo', demo.clientWidth, demo.offsetWidth, demo.scrollWidth)
-
+      
     </script>
-  </body>
-</html>
+</html> 

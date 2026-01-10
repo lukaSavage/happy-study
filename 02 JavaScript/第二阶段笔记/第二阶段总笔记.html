@@ -2839,6 +2839,40 @@
 
         const baz = 0 ?? 42;
         console.log(baz);  // 0
+二十三、ES2021新增内容
+    ·String.prototype.replaceAll()
+        replaceAll() 方法返回一个新字符串，表示用某些值替换所有匹配的模式后的字符串。
+    ·逻辑赋值操作符 ??=、&&=、 ||=
+二十四、ES2022新增内容
+    ·Object.hasOwn()
+        Object.hasOwn() 方法返回一个布尔值，指示对象是否具有指定的自身属性。
+    ·顶级 await
+        在模块的顶层作用域中使用 await 关键字，而无需将其包装在异步函数中。
+二十五、ES2023新增内容
+    ·数组的 findLast() 和 findLastIndex() 方法
+        findLast() 方法返回数组中满足提供的测试函数的最后一个元素的值。否则返回 undefined。
+        findLastIndex() 方法返回数组中满足提供的测试函数的最后一个元素的索引。否则返回 -1。
+    ·数组的不可变操作方法
+        toReversed()：返回一个新数组，元素顺序与原数组相反。
+        toSorted()：返回一个新数组，元素按指定的比较函数排序。
+        toSpliced()：返回一个新数组，通过删除或替换现有元素或在指定索引处插入新元素来修改原始数组。
+        with()：返回一个新数组，其中指定索引处的元素被替换为提供的新值。
+    Symbol作为WeakMap键
+        ES2023允许使用Symbol作为WeakMap、WeakSet、WeakRef和FinalizationRegistry的键，扩展了弱引用集合的使用场景。
+二十六、ES2024新增内容（https://blog.csdn.net/weixin_59685936/article/details/149038107）
+    ·Record 和 Tuple 类型（结构化数据）
+        const user = #{
+            name: "Alice",
+            age: 30
+        }; // Record
+        
+        const coords = #[10, 20]; // Tuple
+        user.name = "Bob"; // TypeError（不可修改）
+二十七、ES2025新增内容（https://cloud.tencent.com/developer/article/2568107）
+    ·Promise.try() - 统一同步/异步错误处理
+    ·JSON 模块原生支持 - Import Attributes
+        import config from './config.json' with { type: 'json' };
+    
 十六、总结
     ·ECMAScript中数据类型
         原始类型（值类型）： string、number、boolean、null、undefined、symbol、bigint
@@ -3284,6 +3318,11 @@ function scrollMove(event) {
     }
 拓展15：axios如何取消请求？(参考：https://juejin.cn/post/7401060368087728166?searchId=2024112912295444F3B46A025AFF26778B)
 
+拓展16：正向代理和反向代理的区别(https://baijiahao.baidu.com/s?id=1763970559392417697&wfr=spider&for=pc)
+
+拓展17：说说你对项目工程化的理解？（https://blog.csdn.net/qq_37212162/article/details/146324484）
+    前端工程化就是把前端开发与规范通过工具体系化，做到可重复、可自动化、可度量，从而提高交付速度、代码质量与可维护性。 
+    常见手段包括：构建与打包、静态检查、自动化测试、CI/CD、性能优化及监控等.
         
             
 
