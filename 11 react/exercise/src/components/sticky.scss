@@ -1,0 +1,24 @@
+.sticky-wrap {
+  .sticky-main {
+    height: 200vh;
+    background: #eee;
+    h1 {
+      position: sticky;
+      display: flex;
+      top: 50%;
+      justify-content: center;
+      align-items: center;
+      color: #09f;
+
+      /* 初始样式，JS 会更新 transform 与 opacity */
+      transform: translateY(-50%) scale(1);
+      transform-origin: center center;
+      will-change: transform, opacity;
+      font-size: 2rem;
+    }
+  }
+  .sticky-aside {
+    height: 1500px;
+    background: #f90;
+  }
+}

@@ -4,6 +4,7 @@ import { atom, RecoilRoot, useRecoilState } from 'recoil'
 import ZustandDemo from './components/ZustandDemo'
 import Flip from './components/Flip'
 import Test from './components/Test'
+import Sticky from './components/Sticky'
 
 const counter = atom({
   key: 'demo',
@@ -15,7 +16,8 @@ const App = () => {
   const [count, setCount] = useState(0)
   return (
     <div>
-      <Test />
+      <Sticky />
+      {/* <Test /> */}
       {/* <h1>{count}</h1>
       <button
         onClick={() => {
