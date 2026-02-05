@@ -114,5 +114,6 @@
 # print(f"\n高级数学函数:")
 # print(f"2的3次方: {pow(2, 3)}")               # 8
 # print(f"四舍五入: {round(3.14159, 2)}")       # 3.14
-# print(f"向上取整: {math.ceil(3.14)}")         # 4
-# print(f"向下取整: {math.floor(3.14)}")         # 3
+# import math
+# print(f"向上取整: {math.ceil(3.54)}")         # 4
+# print(f"向下取整: {math.floor(3.54)}")         # 3

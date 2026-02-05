@@ -55,20 +55,20 @@
 # # print(f'{text[-1:]}')
 
 # print("切片操作:")
-# # print(f"原始字符串: '{text}'")
-# # print(f"text[0:5]: '{text[0:5]}'")  # Hello
-# # print(f"text[6:12]: '{text[6:12]}'")  # Python
-# # print(f"text[:5]: '{text[:5]}'")  # Hello (从开始到索引5)
-# # print(f"text[13:]: '{text[13:]}'")  # Programming (从索引13到结束)
-# # print(f"text[-11:]: '{text[-11:]}'")  # Programming (从倒数第11个到结束)
+# print(f"原始字符串: '{text}'")
+# print(f"text[0:5]: '{text[0:5]}'")  # Hello
+# print(f"text[6:12]: '{text[6:12]}'")  # Python
+# print(f"text[:5]: '{text[:5]}'")  # Hello (从开始到索引5)
+# print(f"text[13:]: '{text[13:]}'")  # Programming (从索引13到结束)
+# print(f"text[-11:]: '{text[-11:]}'")  # Programming (从倒数第11个到结束)
 
-# # # 步长切片
-# # print(f"text[::2]: '{text[::2]}'")  # HloPto rgamn (步长为2)
-# # print(f"text[1::2]: '{text[1::2]}'")  # el yhnPormig (从索引1开始，步长为2)
-# # print(f"text[::-1]: '{text[::-1]}'")  # gnimmargorP nohtyP olleH (反转)
+# 步长切片
+#  print(f"text[::2]: '{text[::2]}'")  # HloPto rgamn (步长为2)
+#  print(f"text[1::2]: '{text[1::2]}'")  # el yhnPormig (从索引1开始，步长为2)
+#  print(f"text[::-1]: '{text[::-1]}'")  # gnimmargorP nohtyP olleH (反转)
 
-# # # 复杂的切片
-# # print(f"text[0:10:2]: '{text[0:10:2]}'")  # HloPt (0到10，步长2)
+# 复杂的切片
+# print(f"text[0:10:2]: '{text[0:10:2]}'")  # HloPt (0到10，步长2)
 # print(f'步长测试`：{text2[::3]}')
 # print(f'步长测试2：{text2[:2]}')
 
@@ -115,7 +115,6 @@
 # # 检查大小写
 # print(f"是否全大写: {text.isupper()}")     # False
 # print(f"是否全小写: {text.islower()}")     # False
-# print(f"HELLO是否全大写: {'HELLO'.isupper()}") # True
 
 
 # 3.2.查找和替换
@@ -132,7 +131,7 @@
 # print(f"查找'World'位置: {text.find('World')}")        # 6
 # print(f"查找'Python'位置: {text.find('Python')}")      # 24
 # print(f"查找不存在的: {text.find('Java')}")            # -1
-# print(f"从右边查找: {text.rfind('World')}")            # 31
+# print(f"从右边查找: {text.rfind('World,')}")            # 31
 
 # print(f"索引查找: {text.index('World')}")              # 6
 # # print(text.index('Java'))  # 会抛出ValueError
@@ -347,7 +346,7 @@ text = "Hello Python"
 # print(f"负索引 - text[-6]: '{text[-6]}'")   # P
 
 # text = "Hello Python Programming"
-text2 = '0123456789'
+text2 = "0123456789"
 # print("切片操作:")
 # print(f"原始字符串: '{text}'")
 # print(f"text[0:5]: '{text[0:5]}'")  # Hello
@@ -380,4 +379,14 @@ text = "hello World of python"
 # print(f"HELLO是否全大写: {'HELLO'.isupper()}") # True
 
 
-print(text.rsplit(' '))
+# print(text.rsplit(' '))
+# lines = "第一行\n第二行\n第三行"
+# print(lines.splitlines())
+print(''.join(['a', 'b', 'c']))
+print(lines.split('\n', 1))
+print(f"{3.535:.2f}")  # 3.54
+"""
+    搞什么
+    这是字符串还是
+
+"""

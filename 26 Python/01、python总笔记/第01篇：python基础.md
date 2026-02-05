@@ -56,49 +56,56 @@ int(10)
 
 ### 1.2.2大小写转换
 
-1. upper()：全部转为大写
-2. lower()：全部转为小写
-3. capitalize()：首字母大写，其余小写
-4. title()：每个单词首字母大写
-5. swapcase()：大小写互换
+1. str.upper()：全部转为大写
+2. str.lower()：全部转为小写
+3. str.capitalize()：首字母大写，其余小写
+4. str.title()：每个单词首字母大写
+5. str.swapcase()：大小写互换
 
 ### 1.2.3查找和替换
 
-1. find(sub)：查找子串，返回索引，找不到返回-1
-2. rfind(sub)：从右侧查找
-3. index(sub)：查找子串，找不到抛异常
-4. count(sub)：统计子串出现次数
-5. replace(old, new, count)：替换子串(替换所有)，找不到抛异常
+1. str.find(sub)：查找子串，返回索引，找不到返回-1
+2. str.rfind(sub)：从右侧查找
+3. str.index(sub)：查找子串，找不到抛异常
+4. str.count(sub)：统计子串出现次数
+5. str.replace(old, new, count)：替换子串(替换所有)，找不到抛异常
 
 ### 1.2.3 字符串检查方法（xx.xx写在字符串后面的）
 
-1. isalpha()：是否全为字母
-2. isdigit()：是否全为数字
-3. isalnum()：是否全为字母或数字
-4. isspace()：是否全为空白字符（如空格、制表符等）
-5. istitle()：是否为标题格式（每个单词首字母大写）
-6. isupper()：是否全为大写字母
-7. islower()：是否全为小写字母
-8. startswith(): 是否以指定子串开头
-9. endswith(): 是否以指定子串结尾
+1. str.isalpha()：是否全为字母
+2. str.isdigit()：是否全为数字
+3. str.isalnum()：是否全为字母或数字
+4. str.isspace()：是否全为空白字符（如空格、制表符等）
+5. str.istitle()：是否为标题格式（每个单词首字母大写）
+6. str.isupper()：是否全为大写字母
+7. str.islower()：是否全为小写字母
+8. str.startswith('a'): 是否以指定子串开头
+9. str.endswith('a'): 是否以指定子串结尾
 
 ### 1.2.4 去除空格和填充
 
-1. strip()：去除字符串两端的空白字符（包括空格、制表符、换行等）
-2. lstrip()：去除左侧空白
-3. rstrip()：去除右侧空白-
-4. strip([chars]) 也可以去除指定字符（如'*'、'0'等）-
-5. center(width, fillchar)：内容居中，两侧用fillchar填充
-6. ljust(width, fillchar)：内容左对齐，右侧用fillchar填充
-7. rjust(width, fillchar)：内容右对齐，左侧用fillchar填充
-8. zfill(width)：左侧用0填充，常用于数字字符串
+1. str.strip()：去除字符串两端的空白字符（包括空格、制表符、换行等）
+2. str.lstrip()：去除左侧空白
+3. str.rstrip()：去除右侧空白-
+4. str.strip('***') 也可以去除指定字符（如'*'、'0'等）-
+5. str.center(width, fillchar)：内容居中，两侧用fillchar填充
+6. str.ljust(width, fillchar)：内容左对齐，右侧用fillchar填充
+7. str.rjust(width, fillchar)：内容右对齐，左侧用fillchar填充
+8. str.zfill(width)：左侧用0填充，常用于数字字符串
 
 ### 1.2.5 分割和连接
 
-1. split(sep)：按分隔符切割为列表
-2. rsplit(sep)：从右侧切割
-3. splitlines(keepends=False) 按行分割字符串，返回每一行组成的列表，`keepends`为 `True`时保留换行符。
-4. join(iterable)：用指定分隔符连接序列
+1. str.split(sep)：按分隔符切割为列表
+2. str.rsplit(sep)：从右侧切割
+3. str.splitlines(keepends=False) 按行分割字符串，返回每一行组成的列表，`keepends`为 `True`时保留换行符。
+4. str.join(iterable)：用指定分隔符连接序列
+   ```python
+   # 按行分割
+   lines = "第一行\n第二行\n第三行"
+   print(lines.splitlines())
+
+   print('-'.join(['a', 'b', 'c']))
+   ```
 
 ## 1.3 列表方法汇总
 

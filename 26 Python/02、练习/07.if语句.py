@@ -3,3 +3,6 @@ if age >= 18:
     print("成年了")
 else:
     print("没有成年")
+
+
+print(f'{'hehe' in ['hehe', 'haha']}')

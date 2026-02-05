@@ -12,6 +12,8 @@ print("Hello World")           # Hello World
 # # 可以混合不同类型
 # print("数字:", 42, "布尔:", True, "浮点:", 3.14)
 # # 数字: 42 布尔: True 浮点: 3.14
+print('张三', '李四', sep='&', end='\n---')
+print('第二行')
 
 # # 3.1.sep - 分隔符
 # # 使用逗号分隔
