@@ -972,7 +972,7 @@ export default function Page() {
         priority  // 禁用懒加载，立即加载
         quality={90}
       />
-    
+  
       {/* ✅ 懒加载非关键图片 */}
       <Image
         src="/thumb.jpg"
@@ -983,7 +983,7 @@ export default function Page() {
         placeholder="blur"  // 模糊占位
         blurDataURL="data:image/jpeg;base64,..."  // 模糊占位数据
       />
-    
+  
       {/* ✅ 响应式图片 */}
       <Image
         src="/responsive.jpg"
@@ -992,7 +992,7 @@ export default function Page() {
         height={600}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
-    
+  
       {/* ❌ 避免：使用普通 img 标签 */}
       <img src="/image.jpg" alt="Not optimized" />
     </div>
@@ -1068,11 +1068,11 @@ export default function Page() {
   return (
     <div>
       <h1>页面标题</h1>
-    
+  
       <Suspense fallback={<div>加载图表中...</div>}>
         <HeavyChart />
       </Suspense>
-    
+  
       <Suspense fallback={<div>加载评论中...</div>}>
         <Comments />
       </Suspense>
@@ -1104,7 +1104,7 @@ export default function Dashboard() {
       <button onClick={() => setShowAnalytics(true)}>
         显示分析
       </button>
-    
+  
       {Analytics && (
         <Suspense fallback={<div>加载中...</div>}>
           <Analytics />
@@ -1115,7 +1115,6 @@ export default function Dashboard() {
 }
 
 ```
-
 
 ## 3. 缓存策略
 
@@ -1176,7 +1175,6 @@ export async function createProduct(formData: FormData) {
 }
 
 ```
-
 
 ## 4. 静态生成（SSG）和增量静态再生（ISR）
 
@@ -1333,7 +1331,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```
 
-
 ## 7. 性能监控
 
 使用web Vitals
@@ -1379,7 +1376,6 @@ export async function POST(request: Request) {
 
 ```
 
-
 ## 8. 资源优化
 
 ### 8.1 预加载关键资源
@@ -1392,17 +1388,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* DNS 预解析 */}
         <link rel="dns-prefetch" href="//cdn.example.com" />
-      
+    
         {/* 预连接 */}
         <link rel="preconnect" href="https://api.example.com" />
-      
+    
         {/* 预加载关键 CSS */}
         <link 
           rel="preload" 
           href="/styles/critical.css" 
           as="style"
         />
-      
+    
         {/* 预加载字体 */}
         <link 
           rel="preload" 
@@ -1419,7 +1415,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```
 
-
 ### 8.2 脚本优化
 
 ```tsx
@@ -1430,25 +1425,25 @@ export default function Page() {
   return (
     <div>
       {/* ✅ 策略选择 */}
-    
+  
       {/* afterInteractive: 尽快执行（默认） */}
       <Script 
         src="https://example.com/analytics.js"
         strategy="afterInteractive"
       />
-    
+  
       {/* lazyOnload: 页面空闲时执行 */}
       <Script 
         src="https://example.com/chat-widget.js"
         strategy="lazyOnload"
       />
-    
+  
       {/* beforeInteractive: 页面渲染前执行 */}
       <Script 
         src="https://example.com/critical.js"
         strategy="beforeInteractive"
       />
-    
+  
       {/* inlineScript: 内联脚本 */}
       <Script id="inline-script" strategy="afterInteractive">
         {`console.log('Inline script')`}
@@ -1458,7 +1453,6 @@ export default function Page() {
 }
 
 ```
-
 
 ## 9. CDN 和 Edge Runtime
 
@@ -1500,7 +1494,6 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-
 ## 10. 数据获取优化
 
 ```tsx
@@ -1541,11 +1534,11 @@ export default function Page() {
       <Suspense fallback={<div>加载产品...</div>}>
         <Products />
       </Suspense>
-    
+  
       <Suspense fallback={<div>加载用户...</div>}>
         <Users />
       </Suspense>
-    
+  
       <Suspense fallback={<div>加载统计...</div>}>
         <Stats />
       </Suspense>
@@ -1554,7 +1547,6 @@ export default function Page() {
 }
 
 ```
-
 
 ## 11. 减少包体积
 
@@ -1598,7 +1590,6 @@ export default withBundleAnalyzer({
 
 ```
 
-
 ## 12. 性能配置
 
 ```tsx
@@ -1640,7 +1631,6 @@ const nextConfig: NextConfig = {
 export default nextConfig
 
 ```
-
 
 ## 性能优化检查清单
 
@@ -1800,7 +1790,6 @@ async function getProduct(id: string) {
 
 ```
 
-
 ## 10.2. 结构化数据（Schema.org）
 
 ```tsx
@@ -1851,7 +1840,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   return (
     <div>
       <StructuredData data={productSchema} />
-    
+  
       <article>
         <h1>{product.name}</h1>
         <p>{product.description}</p>
@@ -1861,7 +1850,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 }
 
 ```
-
 
 ### 多种结构化数据类型
 
@@ -1921,7 +1909,6 @@ const organizationSchema = {
 }
 
 ```
-
 
 ## 10.3. 站点地图
 
@@ -1988,7 +1975,6 @@ async function getPosts() {
 
 ```
 
-
 ### robots.txt
 
 ```tsx
@@ -2017,7 +2003,6 @@ export default function robots(): MetadataRoute.Robots {
 
 ```
 
-
 ## 10.4. 性能优化 SEO
 
 ### 图片优化
@@ -2041,7 +2026,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         priority
         quality={90}
       />
-    
+  
       {/* 图库 - 懒加载 */}
       <div className="gallery">
         {product.gallery.map((img: string, index: number) => (
@@ -2062,7 +2047,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
 ```
 
-
 ### 核心网页指标优化
 
 ```tsx
@@ -2079,7 +2063,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
-      
+    
         {/* Web Vitals 监控 */}
         <Script id="web-vitals" strategy="afterInteractive">
           {`
@@ -2107,7 +2091,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```
 
-
 ## 10.5. 内容优化
 
 ### 语义化 HTML
@@ -2132,12 +2115,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </span>
         </address>
       </header>
-    
+  
       {/* 主要内容 */}
       <main>
         <div itemProp="articleBody" dangerouslySetInnerHTML={{ __html: post.content }} />
       </main>
-    
+  
       {/* 相关内容 */}
       <section>
         <h2>相关文章</h2>
@@ -2151,7 +2134,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </ul>
         </nav>
       </section>
-    
+  
       {/* 面包屑导航 */}
       <nav aria-label="面包屑导航">
         <ol itemScope itemType="https://schema.org/BreadcrumbList">
@@ -2178,7 +2161,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 }
 
 ```
-
 
 ### 面包屑导航组件
 
@@ -2227,7 +2209,6 @@ export default function Breadcrumbs({ items }: { items: Breadcrumb[] }) {
 />
 
 ```
-
 
 ## 10.6. 国际化 SEO
 
@@ -2284,7 +2265,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 }
 
 ```
-
 
 ## SEO 优化检查清单
 

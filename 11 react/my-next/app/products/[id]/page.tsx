@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2026-02-07 11:41:46
  * @LastEditors: lukasavage
- * @LastEditTime: 2026-02-07 12:44:41
+ * @LastEditTime: 2026-02-09 23:33:26
  * @FilePath: \happy-study\11 react\my-next\app\products\[id]\page.tsx
  */
 // import { useRouter } from 'next/navigation';
